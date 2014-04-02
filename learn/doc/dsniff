@@ -1,0 +1,4 @@
+安装dsniff-2.3.tar.gz需要：
+libpcap-0.8.3.tar.gz
+libnet-1.0.2a.tar.gz
+libnids-1.18.tar.gz

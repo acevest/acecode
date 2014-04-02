@@ -1,0 +1,16 @@
+sudo install bison gcc libc6-dev ed gawk make
+
+sudo install hg
+
+vim ~/.bashrc
+export GOROOT=$HOME/Go
+export GOOS=linux
+export GOARCH=386
+export GOBIN=/usr/bin
+
+hg clone -r release https://go.googlecode.com/hg/ $GOROOT
+
+cd $GOROOT/src
+
+sudo ./all.bash
+

@@ -1,0 +1,8 @@
+#!/usr/bin/perl
+# -------------------------------------
+#   File Name:	cls
+#      Author:	Zhao Yanbai
+#             	Sun Sep 19 16:21:52 2010
+# Description:	none
+# -------------------------------------
+system clear;

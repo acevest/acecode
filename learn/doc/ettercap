@@ -1,0 +1,4 @@
+安装ettercap-0.7.4.1.tar.gz需要:
+libpcap-1.2.1.tar.gz
+libnet-1.1.5.tar.gz
+libnids-1.24.tar.gz

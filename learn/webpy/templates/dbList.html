@@ -1,0 +1,11 @@
+$def with (users)
+<table border="1">
+$for user in users :
+	<!-- 在循环体内就算是HTML代码也要遵守对齐的规定 -->
+	<tr>
+		<td>$user.ID</td>
+		<td>$user.NickName</td>
+		<td>$user.Pwd</td>
+	</tr>
+
+</table>

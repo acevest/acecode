@@ -1,0 +1,11 @@
+#INCLUDES = -I$(top_srcdir)/
+#LDADD = $(top_builddir)/src/libppy.a
+noinst_PROGRAMS = Singleton Exception Mutex TcpSocketServer TcpSocketClient
+Singleton_SOURCES = Singleton.cc
+Exception_SOURCES = Exception.cc
+Mutex_SOURCES = Mutex.cc
+TcpSocketServer_SOURCES = TcpSocketServer.cc
+TcpSocketClient_SOURCES = TcpSocketClient.cc
+#AM_LDFLAGS= -lppy
+LIBS = -lppy
+Mutex_LDADD = -lpthread

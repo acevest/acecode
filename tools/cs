@@ -1,0 +1,130 @@
+#!/usr/bin/env perl
+# ------------------------------------------------------------------------
+#   File Name:	cs
+#      Author:	Zhao Yanbai
+#             	Mon Feb 13 15:54:13 2012
+# Description:	Create Source Code
+# ------------------------------------------------------------------------
+use strict;
+
+my $filename    = "  File Name: ";
+my $author      = "     Author: Zhao Yanbai\n";
+my $timestr     = "             ";
+my $description = "Description: none\n";
+
+use constant DIVIDE_LINE => "-" x 72 . "\n";
+use constant CSTYLE =>  env=>"", 
+                        cmb=>"/*\n",
+                        cme=>" */\n",
+                        lts=>" * ",
+                        dvl=>DIVIDE_LINE,
+                        mod=>0644;
+
+use constant SSTYLE =>  cmb=>"",
+                        cme=>"",
+                        lts=>"# ",
+                        dvl=>DIVIDE_LINE,
+                        mod=>0755;
+
+my %s = ("c"        => {CSTYLE},
+         "cc"       => {CSTYLE},
+         "cpp"      => {CSTYLE},
+         "h"        => {CSTYLE},
+         "pl"       => {env=>"#!/usr/bin/env perl\n",   SSTYLE},
+         "py"       => {env=>"#!/usr/bin/env python\n# -*- coding: utf-8 -*-\n", SSTYLE}
+        );
+
+my $default_index = "default";
+my $create_main = 0;
+if(substr(@ARGV[0], 0, 1) eq "-") {
+    my $tags = shift @ARGV;
+    $tags = substr($tags,1);
+    if($tags eq "m") {
+        $create_main = 1;
+    }else {
+        $default_index = $tags;
+    }
+
+}
+
+foreach my $file (@ARGV) {
+    if(-e $file) {
+        print "Error: $file already exists!\n";
+        next;
+    }
+
+    open    SFH, ">", $file;
+
+    $_ = lc($file);
+    my $index = $default_index;
+    if(m#.+\.+(\w+)#) {
+        $index = $1 if($s{$1});
+    }
+
+    goto close_file if($index eq "default");
+
+    my $ptr = $s{$index};
+    my %items = %$ptr;
+    print SFH build_str($file, %items);
+
+    my $as;
+    if($index eq "c") {
+        $as .= "#include<stdio.h>\n\n";
+        $as .= "int main(int argc, char *argv[]){\n\n";
+        $as .= "\treturn 0;\n";
+        $as .= "}";
+        $as = "" unless($create_main);
+    } elsif($index eq "cc" || $index eq "cpp") {
+        $as .= "#include<iostream>\n";
+        $as .= "using namespace std;\n\n";
+        $as .= "int main(int argc, char *argv[]) {\n\n";
+        $as .= "\treturn 0;\n";
+        $as .= "}";
+        $as = "" unless($create_main);
+    } elsif($index eq "h") {
+        my $f = $file;
+        $f =~ s/\./_/g;
+        $f = "H_" . uc($f) . "__";
+        $as .= "\n#pragma once\n";
+    } elsif($index eq "py") {
+    } elsif($index eq "pl") {
+        $as .= "use strict;";
+    }
+
+    print SFH $as;
+
+    chmod($items{mod}, $file);
+
+close_file:
+    close SFH;
+}
+
+sub build_str{
+    my $file = shift @_;
+    my %t = @_;
+    my $s;
+
+    $s .= $t{env};
+    $s .= $t{cmb};
+    $s .= $t{lts};
+    $s .= $t{dvl};
+
+    $s .= $t{lts};
+    $s .= $filename . $file . "\n";
+
+    $s .= $t{lts};
+    $s .= $author;
+    
+    $s .= $t{lts};
+    $s .= $timestr . localtime() . "\n";
+    
+    $s .= $t{lts};
+    $s .= $description;
+
+
+    $s .= $t{lts};
+    $s .= $t{dvl};
+    $s .= $t{cme};
+
+    return $s;
+}
