@@ -15,7 +15,7 @@ OBJS = $(patsubst %.c,%.o,$(SOUCE_FILES))
 	$(CC) -c $(CFLAGS) $< -o $@
 
 $(TARGET): $(OBJS)
-	gcc -o $@ $^ -lnids -lnet -lpcap  -lgthread-2.0
+	gcc -o $@ $^ -lnids -lnet -lpcap -lpthread
 
 .PHONY:clean
 clean:

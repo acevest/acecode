@@ -11,8 +11,8 @@ DST	= /usr/local/bin/
 
 .PHONY:every
 every: $(BINS)
-	sudo cp $(BINS) $(DST)
-	sudo cp $(SCRIPTS) $(DST)
+	cp $(BINS) $(DST)
+	cp $(SCRIPTS) $(DST)
 .PHONY:clean
 clean:
 	rm $(BINS) -f
