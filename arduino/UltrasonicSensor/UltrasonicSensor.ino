@@ -19,7 +19,10 @@ void loop()
   delayMicroseconds(10);
   digitalWrite(TrigPin, LOW);
   
-  dist = pulseIn(EchoPin, HIGH) / 58.0;
+  // distance = (HIGH_TIME*(340m/s))/2;
+  // pulseIn get us
+  // distance = ((pulseIn/10E6)*340/2)*100
+  dist = pulseIn(EchoPin, HIGH) * 17 / 1000;
   
   Serial.print(dist);
   Serial.println("cm");
