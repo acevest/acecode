@@ -2,20 +2,20 @@
 <head>
 <script src="http://code.jquery.com/jquery-2.0.3.js"> </script>
 <style>
-div {
-    width: 400px;
-    height: 300px;
+.btn {
+    width: 300px;
+    height: 200px;
     color: white;
     border: 1px solid black;
     background:blue;
     margin: 10px;
-    font-size: 96px;
+    font-size: 48px;
     float : left;
 }
 </style>
 <script>
 \$(function() {
-    \$('div').click(function() {
+    \$('.btn').click(function() {
         \$.ajax({
             url: 'Ctrl?action='+\$(this).attr('value')
         });
@@ -24,12 +24,13 @@ div {
 </script>
 </head>
 <body>
-<div value='0'> Forward </div>
-<div value='1'> Backward </div>
-<div value='2'> TurnLeft </div>
-<div value='3'> TurnRight </div>
-<div value='4'> Rotate<br />Left </div>
-<div value='5'> Rotate<br />Right </div>
-<div value='6'> Stop </div>
+<div> ================= Ace's Raspberry Pi ==================</div>
+<div class='btn' value='0'> Forward </div>
+<div class='btn' value='1'> Backward </div>
+<div class='btn' value='2'> TurnLeft </div>
+<div class='btn' value='3'> TurnRight </div>
+<div class='btn' value='4'> Rotate<br />Left </div>
+<div class='btn' value='5'> Rotate<br />Right </div>
+<div class='btn' value='6'> Stop </div>
 </body>
 </html>
