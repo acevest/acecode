@@ -13,6 +13,7 @@ DST	= /usr/local/bin/
 every: $(BINS)
 	cp $(BINS) $(DST)
 	cp $(SCRIPTS) $(DST)
+	rm $(BINS) -f
 .PHONY:clean
 clean:
 	rm $(BINS) -f

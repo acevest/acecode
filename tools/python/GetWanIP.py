@@ -96,7 +96,7 @@ if __name__ == '__main__':
     if OldWanIP != WanIP :
         s = 'WanIP has Changed From ' + OldWanIP + ' To ' + WanIP
         log.info(s)
-        if send_mail(mailto_list,"New WanIP", s):  
+        if send_mail(mailto_list,u'外网IP有变动', s):  
             log.info('发送成功')
             fd = open(TMP_FILE_PATH, 'w+')
             fd.write(WanIP+'\n')
