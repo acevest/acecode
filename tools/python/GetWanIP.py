@@ -10,7 +10,9 @@ import os
 import re,urllib2
 import smtplib  
 import ConfigParser
+import config
 from email.mime.text import MIMEText  
+from utils import * 
 
 '''
     CONFIG FILE SAMPLE
@@ -24,11 +26,11 @@ MAILPOSTFIX= xx.com
 '''
 '''
     CONTAB
-* * * * * root cd /xxx/xxx/xxx/ && python GetWanIP.py >> ./xxx.log 2>&1
+* * * * * root cd /xxx/xxx/xxx/ && python GetWanIP.py
 '''
 
-CONFIG_FILE_PATH = '/etc/GetWanIP.conf'
-TMP_FILE_PATH = './WanIP.txt'
+TMP_FILE_PATH = '/tmp/GetWanIP.txt'
+log = CreateLogger(config.ACE_GLOBAL_LOG_PATH)
   
 mailto_list=[] 
 mail_host=""        #设置服务器
@@ -40,11 +42,14 @@ mail_postfix=""     #发件箱的后缀
 class GetWanIP:
     def GetIP(self):
         try:
-            print "Try ip.qq.com"
-            WanIP = self.Visit("http://ip.qq.com")
+            log.info('Try ip.qq.com')
+            WanIP = self.Visit('http://ip.qq.com')
         except:
-            WanIP = "Failed to Get WanIP!!!"
+            s = 'Failed to Get WanIP!!!'
+            WanIP = s
+            log.error(s)
         return WanIP
+
     def Visit(self,url):
         opener = urllib2.urlopen(url)
         if url == opener.geturl():
@@ -53,7 +58,7 @@ class GetWanIP:
 
 
 def send_mail(to_list,sub,content):                                 #to_list：收件人；sub：主题；content：邮件内容
-    me=user_nick+"<"+mail_user+"@"+mail_postfix+">"                   #这里的hello可以任意设置，收到信后，将按照设置显示
+    me=user_nick+"<"+mail_user+"@"+mail_postfix+">"                 #这里的hello可以任意设置，收到信后，将按照设置显示
     msg = MIMEText(content,_subtype='html',_charset='gb2312')       #创建一个实例，这里设置为html格式邮件
     msg['Subject'] = sub                #设置主题
     msg['From'] = me  
@@ -66,15 +71,12 @@ def send_mail(to_list,sub,content):                                 #to_list：�
         s.close()  
         return True  
     except Exception, e:  
-        print str(e)  
+        log.error(str(e))
         return False  
 if __name__ == '__main__':  
     try :
         fd = open(TMP_FILE_PATH)
-        try :
-            OldWanIP = fd.readline().strip()
-        except :
-            OldWanIP = '0.0.0.0'
+        OldWanIP = fd.readline().strip()
         fd.close()
     except :
         OldWanIP = '0.0.0.0'
@@ -83,7 +85,7 @@ if __name__ == '__main__':
     WanIP = getWanIP.GetIP()
 
     cnfp = ConfigParser.ConfigParser()
-    cnfp.read(CONFIG_FILE_PATH)
+    cnfp.read(config.ACE_GLOBAL_CONF_PATH)
     mailto_list.append(cnfp.get('EMAIL', 'MAILTO'))
     mail_host = cnfp.get('EMAIL', 'MAILHOST')
     mail_user = cnfp.get('EMAIL', 'MAILUSER')
@@ -93,11 +95,11 @@ if __name__ == '__main__':
 
     if OldWanIP != WanIP :
         s = 'WanIP has Changed From ' + OldWanIP + ' To ' + WanIP
-        print s
+        log.info(s)
         if send_mail(mailto_list,"New WanIP", s):  
-            print "发送成功"  
+            log.info('发送成功')
             fd = open(TMP_FILE_PATH, 'w+')
             fd.write(WanIP+'\n')
             fd.close()
         else:  
-            print "发送失败"  
+            log.error('发送失败')
