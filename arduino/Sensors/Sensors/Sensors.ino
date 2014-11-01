@@ -26,11 +26,11 @@ void loop() {
     Serial.print("Temperature Sensor Value: ");
     Serial.println(tv); 
     
-    Serial.print(">Light: ");
-    Serial.println(lv);
-    
-    Serial.print(">Temperature: ");
-    Serial.println(temperature); 
+    Serial.print(">");
+    Serial.print(lv);
+    Serial.print(":");
+    Serial.print(temperature);
+    Serial.println(" ");
   }
   
   if(lv < 400)
