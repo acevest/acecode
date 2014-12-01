@@ -4,6 +4,10 @@ int cnt = 0;
 void setup() {
   Serial.begin(9600);
   pinMode(ledPin, OUTPUT);
+  
+  pinMode(0, INPUT);
+  pinMode(1, INPUT);
+  pinMode(2, INPUT);
 }
 
 void loop() {
