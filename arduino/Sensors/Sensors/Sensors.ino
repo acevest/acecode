@@ -13,6 +13,8 @@ void loop() {
  
   int tv = analogRead(1);  // Temperature
   
+  int bd = analogRead(2);  // Human Body 
+  
   delay(100);
   
   float temperature;
@@ -26,10 +28,15 @@ void loop() {
     Serial.print("Temperature Sensor Value: ");
     Serial.println(tv); 
     
+    Serial.print("Body: ");
+    Serial.println(bd);
+    
     Serial.print(">");
     Serial.print(lv);
     Serial.print(":");
     Serial.print(temperature);
+    Serial.print(":");
+    Serial.print(bd);
     Serial.println(" ");
   }
   
