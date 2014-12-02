@@ -1,5 +1,12 @@
+#include <Servo.h>
+
 const int ledPin = 12;
 int cnt = 0;
+
+Servo servo;
+
+int OldHumanBody = 0;
+
 
 void setup() {
   Serial.begin(9600);
@@ -8,6 +15,8 @@ void setup() {
   pinMode(0, INPUT);
   pinMode(1, INPUT);
   pinMode(2, INPUT);
+  
+  servo.attach(9);
 }
 
 void loop() {
@@ -17,7 +26,7 @@ void loop() {
  
   int tv = analogRead(1);  // Temperature
   
-  int bd = analogRead(2);  // Human Body 
+  int hb = analogRead(2);  // Human Body 
   
   delay(100);
   
@@ -33,14 +42,14 @@ void loop() {
     Serial.println(tv); 
     
     Serial.print("Body: ");
-    Serial.println(bd);
+    Serial.println(hb);
     
     Serial.print(">");
     Serial.print(lv);
     Serial.print(":");
     Serial.print(temperature);
     Serial.print(":");
-    Serial.print(bd);
+    Serial.print(hb);
     Serial.println(" ");
   }
   
@@ -53,5 +62,24 @@ void loop() {
     digitalWrite(ledPin, LOW);
   }
   
+  int degree = map(hb, 0, 1023, 0, 179);
+  
+  /*
+  Serial.print("fffffffffffffffffffffffffffffffffff: ");
+  Serial.print(OldHumanBody);
+  Serial.print("    ");
+  Serial.print(hb);
+  Serial.println(" ");*/
+  
+  if(OldHumanBody ==0 && hb == 0)
+  {
+    
+  }
+  else
+  {
+    servo.write(degree); 
+  }
+ 
+ OldHumanBody = hb; 
 }
 
