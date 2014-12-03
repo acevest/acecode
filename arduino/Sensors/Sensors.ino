@@ -18,6 +18,11 @@ void loop() {
   
   int hb = analogRead(2);  // Human Body 
   
+  if(hb < 10)
+  {
+    hb = 0;
+  }
+  
   digitalWrite(ledPin, hb > 0 ? HIGH : LOW);
 
   delay(100);
