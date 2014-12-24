@@ -14,3 +14,16 @@ cd $GOROOT/src
 
 sudo ./all.bash
 
+
+
+
+========================================
+INSTALL ON RASPBERRY PI
+========================================
+sudo apt-get install -y mercurial gcc libc6-dev
+export GOROOT=/home/pi/go
+export GOARCH=arm
+export GOARM="5"
+cd /home/pi/go/src
+./all.bash
+
