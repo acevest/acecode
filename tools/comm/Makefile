@@ -2,7 +2,7 @@ CC	= gcc
 CPP	= g++
 BINS	= countc htc
 SCRIPTS = cls cs
-DST	= /usr/local/bin/
+DST	= $(HOME)/sys/bin/ 
 
 %.o : %.c
 	$(CC) $< -o $@
@@ -13,8 +13,8 @@ DST	= /usr/local/bin/
 every: $(BINS)
 	cp $(BINS) $(DST)
 	cp $(SCRIPTS) $(DST)
-	rm $(BINS) -f
+	rm -f $(BINS)
 .PHONY:clean
 clean:
-	rm $(BINS) -f
+	rm -f $(BINS)
 

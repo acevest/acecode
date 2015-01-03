@@ -35,12 +35,12 @@ long	total_bytes	= 0;
 int	main(int argc,char *argv[])
 {
 	int	i;
-	if(argc <= 2){printf("parameter error\n");return;}
+	if(argc <= 2){printf("parameter error\n");return -1;}
 	++argv;
 	printf("[line] [ byte ] path\n");
 	if(!strcmp(*argv,"-d"))		count_dir(*++argv);
 	else if(!strcmp(*argv,"-f"))	count_file(*++argv);
-	else{printf("parameter error\n");return;}
+	else{printf("parameter error\n");return -1;}
 	printf("+-------------------------------+\n");
 	printf("| %10d Files.             |\n",file_num);
 	printf("| %10ld Lines.             |\n",total_line);
@@ -112,7 +112,7 @@ void	count_file(char	*path)
 			ch	= fgetc(fp);
 			if(ch == '\n'){total_line++;line++;}
 		}
-		printf("[%4d] [%6d] %-50s\n",line, st.st_size, path);
+		printf("[%4d] [%6lld] %-50s\n",line, st.st_size, path);
 		file_num++;
 		fclose(fp);
 	}
