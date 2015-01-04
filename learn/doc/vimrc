@@ -76,3 +76,17 @@ hi CursorLine ctermbg=lightcyan cterm=BOLD
 "set cursorcolumn
 "hi CursorColumn ctermbg=lightgreen cterm=BOLD
 set viminfo='1000,<500
+
+" 需要安装bundle/vundle vim-go 到~/.vim/
+"filetype off
+"set rtp+=~/.vim/bundle/vundle/
+"call vundle#rc()
+"Bundle 'gmarik/vundle'
+"Plugin 'fatih/vim-go'
+"filetype plugin indent on
+
+" 以下是让mac vim支持中文输入
+set encoding=utf-8  " 默认UTF-8
+set fenc=utf-8      " 默认以UTF-8新建文件
+set fileencodings=utf-8,cp936   " 打开文件编码按顺序匹配
+set nobomb          " 
