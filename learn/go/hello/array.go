@@ -26,4 +26,8 @@ func main() {
 	for i := 0; i < len(e); i++ {
 		fmt.Println(e[i])
 	}
+
+	for i, v := range d {
+		fmt.Println(i, v)
+	}
 }
