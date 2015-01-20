@@ -30,9 +30,9 @@ could |
 has |
 have |
 had |
-go		{ printf("%s: is a verb\n", yytext); }
-[a-zA-Z]+	{ printf("%s: is not a verb\n", yytext); }
-[0-9]+		{ printf("%s: is a num\n", yytext); }
+go		{ printf("%s: is a verb", yytext); }
+[a-zA-Z]+	{ printf("%s: is not a verb", yytext); }
+[0-9]+		{ printf("%s: is a num", yytext); }
 .|\n		{ ECHO; /* 通常的默认状态 */ }
 
 %%
