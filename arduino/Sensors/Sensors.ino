@@ -18,7 +18,7 @@ void loop() {
   
   int hb = analogRead(2);  // Human Body 
   
-  if(hb < 10)
+  if(hb < 100)
   {
     hb = 0;
   }

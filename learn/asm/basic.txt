@@ -1,0 +1,16 @@
+
+pushl %eax  ==  subl    $4, %esp
+                movl    %eax, (%esp)
+
+
+popl %eax   ==  movl    (%esp), %eax
+                addl    $4, %esp
+
+
+
+enter       pushl %ebp
+            movl  %esp, %ebp
+
+
+leave       movl %ebp, %esp
+            popl %ebp

