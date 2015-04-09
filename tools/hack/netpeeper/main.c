@@ -95,11 +95,15 @@ int main(int argc, char *argv[]){
     nids_params.device = argv[1];
     nids_params.promisc = 1;
 
+    printf("init....\n");
     nids_init();
 
+    printf("register tcp....\n");
     nids_register_tcp(tcp_callback);
 
+    printf("nids run....\n");
     nids_run();
 
+    printf("exit....\n");
 	return 0;
 }
