@@ -90,3 +90,5 @@ set encoding=utf-8  " 默认UTF-8
 set fenc=utf-8      " 默认以UTF-8新建文件
 set fileencodings=utf-8,cp936   " 打开文件编码按顺序匹配
 set nobomb          " 
+
+imap jj <esc> " 连续按两次jj表示按ESC，进入命令模式
