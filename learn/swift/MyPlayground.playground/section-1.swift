@@ -33,7 +33,6 @@ var dict = [
 ]
 println(dict)
 
-
 // 创建空数组和空字典
 var EmptyArray = [String]()
 var EmptyDict  = [String:String]()

@@ -6,7 +6,7 @@ int cnt = 0;
 const int ledPin = 12;
 
 void setup() {
-  //Serial.begin(9600);
+  Serial.begin(9600);
   BTSerial.begin(9600);  // HC-06 current bound rate (default 9600)
   pinMode(ledPin, OUTPUT);
   pinMode(0, INPUT);
@@ -59,21 +59,21 @@ void loop() {
     Serial.print("Body: ");
     Serial.println(hb);
     */
-    /*
+    
     Serial.print(">");
     Serial.print(lv);
     Serial.print(":");
-    Serial.print(temperature);
+    Serial.print(tv);
     Serial.print(":");
     Serial.print(hb);
     Serial.print(":");
     Serial.print(hv);
-    Serial.println(" ");*/
+    Serial.println(" ");
     
     BTSerial.write(">");
     BTSerial.write(itos(lv));
     BTSerial.write(":");
-    BTSerial.write(itos(temperature));
+    BTSerial.write(itos(tv));
     BTSerial.write(":");
     BTSerial.write(itos(hb));
     BTSerial.write(":");

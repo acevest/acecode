@@ -7,14 +7,14 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>A1372EDB-125D-4A73-9AE8-955FA3D42EAE</string>
 	<key>IDESourceControlProjectName</key>
-	<string>AceBox</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>BA634633803B1A00DDD2BCDEF5C645E5844F56E6</key>
 		<string>https://github.com/acevest/acecode</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>tools/AceBox/AceBox.xcodeproj</string>
+	<string>tools/AceBox/AceBox.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>BA634633803B1A00DDD2BCDEF5C645E5844F56E6</key>
