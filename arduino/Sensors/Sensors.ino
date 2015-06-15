@@ -1,4 +1,13 @@
 #include <SoftwareSerial.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
+
+#define TEMP_WIRE_BUS 2
+
+OneWire TempWire(TEMP_WIRE_BUS);
+DallasTemperature TempSensors(&TempWire);
+
+
 SoftwareSerial BTSerial(10, 11); // RX | TX
 
 
@@ -13,6 +22,8 @@ void setup() {
   pinMode(1, INPUT);
   pinMode(2, INPUT);
   pinMode(3, INPUT);
+  
+  TempSensors.begin();
 }
 
 char* itos(int n)
@@ -24,14 +35,17 @@ char* itos(int n)
 
 void loop() {
   cnt ++;
+  TempSensors.requestTemperatures();
+  float tv = TempSensors.getTempCByIndex(0);
   
   int lv = analogRead(0);  // Light
  
-  int tv = analogRead(1);  // Temperature
+  //int tv = analogRead(1);  // Temperature
   
   int hb = analogRead(2);  // Human Body 
   
   int hv = analogRead(3);  // humidity
+  
   
   if(hb < 100)
   {
@@ -46,19 +60,8 @@ void loop() {
   if(cnt % 100 == 0)
   {
     float temperature;
-    float resistance = (float)(1023.0-tv)*10000.0/tv;
-    temperature = 1.00000/(log(resistance/10000)/3975+1/298.15) - 273.15;
-
-    /*
-    Serial.print("Light Sensor Value: ");
-    Serial.println(lv);
-  
-    Serial.print("Temperature Sensor Value: ");
-    Serial.println(tv); 
-    
-    Serial.print("Body: ");
-    Serial.println(hb);
-    */
+    //float resistance = (float)(1023.0-tv)*10000.0/tv;
+    //temperature = 1.00000/(log(resistance/10000)/3975+1/298.15) - 273.15;
     
     Serial.print(">");
     Serial.print(lv);
@@ -70,6 +73,7 @@ void loop() {
     Serial.print(hv);
     Serial.println(" ");
     
+#if 0
     BTSerial.write(">");
     BTSerial.write(itos(lv));
     BTSerial.write(":");
@@ -79,6 +83,7 @@ void loop() {
     BTSerial.write(":");
     BTSerial.write(itos(hv));
     BTSerial.write("\n");
+#endif
 
   }
 }
