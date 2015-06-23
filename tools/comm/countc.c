@@ -91,6 +91,7 @@ void	count_file(char	*path)
 	&& !valid_type(path,"py")
 	&& !valid_type(path,"go")
 	&& !valid_type(path,"php")
+	&& !valid_type(path,"swift")
 	)
 	{
 #if 0

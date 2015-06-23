@@ -5,20 +5,20 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>1330DDA2-1B99-4E60-9F3A-B7DE1D7ECB22</string>
+	<string>C6698B6B-E176-4266-9A99-7EA7B71954A4</string>
 	<key>IDESourceControlProjectName</key>
-	<string>MyPlayground</string>
+	<string>project</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>BA634633803B1A00DDD2BCDEF5C645E5844F56E6</key>
 		<string>https://github.com/acevest/acecode.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>learn/swift/MyPlayground.playground</string>
+	<string>learn/AppleSwift/AppleSwift.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>BA634633803B1A00DDD2BCDEF5C645E5844F56E6</key>
-		<string>../../..</string>
+		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/acevest/acecode.git</string>
