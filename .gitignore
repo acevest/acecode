@@ -2,3 +2,4 @@
 *.out
 *.pyc
 ish
+*.DS_Store
