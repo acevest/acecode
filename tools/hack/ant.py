@@ -46,7 +46,8 @@ def ClientEntry() :
                     cs.send(data)
                 elif fd == cs :
                     rsp = DoRecv(cs)
-                    print rsp
+                    sys.stdout.write(rsp)
+                    sys.stdout.flush()
 
     except Exception, e :
         print('[*] Exception! Exiting. {0}'.format(str(e)))
@@ -57,14 +58,13 @@ def ExecuteCommand(cmd) :
     try :
         output = subprocess.check_output(cmd.strip(), stderr=subprocess.STDOUT, shell=True)
     except Exception, e:
-        output = 'Failed to execute command. {0}'.format(str(e))
+        output = 'Failed to execute command. {0}\n'.format(str(e))
     return output
 
 def ClientHandler(cs, ca) :
     global gArgs
     while True :
         if gArgs.shell :
-            print "SendShell"
             cs.send("<ANT#>")
         rs, _, _ = select.select([cs, sys.stdin], [], [])
         for fd in rs :
