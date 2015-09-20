@@ -8,6 +8,7 @@
 # ------------------------------------------------------------------------
 import os
 import sys
+import pty
 import threading
 import socket
 import argparse
@@ -72,14 +73,16 @@ def ClientHandler(cs, ca) :
     global gArgs
 
     if len(gArgs.execute) != 0 :
-        print('[!] Executing {0} for {1}:{2}'.format(gArgs.execute, ca[0], ca[1]))
+        print('[*] Executing {0} for {1}:{2}'.format(gArgs.execute, ca[0], ca[1]))
         if os.fork() == 0 :
             os.dup2(cs.fileno(), sys.stdin.fileno())
             os.dup2(cs.fileno(), sys.stdout.fileno())
             os.dup2(cs.fileno(), sys.stderr.fileno())
-            cs.send('Executing {0} for you {1}:{2}\n'.format(gArgs.execute, ca[0], ca[1]))
-            os.system(gArgs.execute)
-            cs.send('Bye...\n')
+            cs.send('ANT is executing {0} for you {1}:{2}\n'.format(gArgs.execute, ca[0], ca[1]))
+            os.putenv('PS1', 'ant@\W#')
+            pty.spawn(gArgs.execute)
+            #os.system(gArgs.execute)
+            cs.close()
             sys.exit()
         else :
             cs.close()
@@ -87,7 +90,7 @@ def ClientHandler(cs, ca) :
 
     while True :
         if gArgs.shell :
-            cs.send("<ANT#>")
+            cs.send("<ant#>")
         rs, _, es = select.select([cs, sys.stdin], [], [])
         for fd in rs :
             if fd == sys.stdin :
@@ -134,7 +137,7 @@ def ParseArguments() :
     parser.add_argument('host',             help='hostname or host ip')
     parser.add_argument('port', type=int,   help='port')
     parser.add_argument('-l',   '--listen',     action='store_true', help='Bind and listen for incoming connections')
-    parser.add_argument('-e',   '--execute',    action='store',      help='execute the command')
+    parser.add_argument('-e',   '--execute',    action='store',      help='execute the command', default='')
     parser.add_argument('-s',   '--shell',      action='store_true', help='a simple shell. enter exit to exit.')
     parser.add_argument('-u',   '--udp',        action='store_true', help='Use UDP instead of TCP')
     parser.add_argument('-t',   '--transfer',   action='store',      help='Transfer file')
