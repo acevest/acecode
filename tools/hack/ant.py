@@ -17,6 +17,11 @@ import subprocess
 
 gArgs = None
 
+#print(value, ..., sep=' ', end='\n', file=sys.stdout, flush=False)
+def Print(s) :
+    global gArgs
+    if gArgs.debug : print(s)
+
 def DoRecv(s) :
     recvlen = 1
     response= ''
@@ -25,7 +30,7 @@ def DoRecv(s) :
         recvlen = len(data)
         response+= data
 
-        #print('RECV {0}'.format(recvlen))
+        #Print('RECV {0}'.format(recvlen))
 
         if recvlen < 4096 :
             break
@@ -58,12 +63,12 @@ def ClientEntry() :
                     sys.stdout.flush()
 
     except Exception, e :
-        print('[*] Exception! Exiting. {0}'.format(str(e)))
+        Print('[*] Exception! Exiting. {0}'.format(str(e)))
 
 def ExecuteCommand(cmd) :
     try :
         cmd = cmd.strip()
-        print('[*] Execute Command: {0}'.format(cmd))
+        Print('[*] Execute Command: {0}'.format(cmd))
         output = subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
     except Exception, e:
         output = 'Failed to execute command. {0}\n'.format(str(e))
@@ -73,15 +78,15 @@ def ClientHandler(cs, ca) :
     global gArgs
 
     if len(gArgs.execute) != 0 :
-        print('[*] Executing {0} for {1}:{2}'.format(gArgs.execute, ca[0], ca[1]))
+        Print('[*] Executing {0} for {1}:{2}'.format(gArgs.execute, ca[0], ca[1]))
         if os.fork() == 0 :
             os.dup2(cs.fileno(), sys.stdin.fileno())
             os.dup2(cs.fileno(), sys.stdout.fileno())
             os.dup2(cs.fileno(), sys.stderr.fileno())
             cs.send('ANT is executing {0} for you {1}:{2}\n'.format(gArgs.execute, ca[0], ca[1]))
             os.putenv('PS1', 'ant@\W#')
-            pty.spawn(gArgs.execute)
-            #os.system(gArgs.execute)
+            #pty.spawn(gArgs.execute)
+            os.system(gArgs.execute)
             cs.close()
             sys.exit()
         else :
@@ -100,7 +105,7 @@ def ClientHandler(cs, ca) :
                 req = DoRecv(cs)
                 if len(req) == 0 :
                     cs.close()
-                    print('[!] Client {0}:{1} Exit.'.format(ca[0], ca[1]))
+                    Print('[!] Client {0}:{1} Exit.'.format(ca[0], ca[1]))
                     return
                     
                 if gArgs.shell :
@@ -123,13 +128,17 @@ def ServerEntry() :
     s.bind((gArgs.host, gArgs.port))
     s.listen(10)
     s.setblocking(True)
+
     while True :
         cs, ca = s.accept()
-        print('[*] Accept connection from {0}:{1}'.format(ca[0], ca[1]))
+        Print('[*] Accept connection from {0}:{1}'.format(ca[0], ca[1]))
 
 
         client_thread = threading.Thread(target=ClientHandler, args=(cs, ca, ))
         client_thread.start()
+
+        if not gArgs.keepopen :
+            break
 
 def ParseArguments() :
     global gArgs
@@ -140,13 +149,14 @@ def ParseArguments() :
     parser.add_argument('-e',   '--execute',    action='store',      help='execute the command', default='')
     parser.add_argument('-s',   '--shell',      action='store_true', help='a simple shell. enter exit to exit.')
     parser.add_argument('-u',   '--udp',        action='store_true', help='Use UDP instead of TCP')
-    parser.add_argument('-t',   '--transfer',   action='store',      help='Transfer file')
+    parser.add_argument('-k',   '--keepopen',   action='store_true', help='Accept multiple connections in listen mode')
+    parser.add_argument('-d',   '--debug',      action='store_true', help='Debug mode')
     parser.add_argument('-v',   '--version',    action='version', version='%(prog)s 0.1')
     gArgs = parser.parse_args()
 
 
     if gArgs.shell and gArgs.execute != '' :
-        print "parameter error: -s or -e"
+        Print("parameter error: -s or -e")
         sys.exit()
 
     if gArgs.listen :
@@ -155,7 +165,10 @@ def ParseArguments() :
         ClientEntry()
 
 def main() :
-    ParseArguments()
+    try :
+        ParseArguments()
+    except KeyboardInterrupt, e:
+        Print("\n[!] User force to quit.")
 
 
 if __name__ == "__main__" :
