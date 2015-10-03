@@ -3,3 +3,5 @@
 *.pyc
 ish
 *.DS_Store
+*.swp
+dvwa

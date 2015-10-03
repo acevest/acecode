@@ -8,6 +8,7 @@
 # -*- coding: utf-8 -*-
 class Image :
     def __init__(self, width, height, filename="", background="#FFFFFF") :
+        # 以'__'开头的变量名为私有成员变量
         self.__width    = width
         self.__height   = height
         self.__filename = filename

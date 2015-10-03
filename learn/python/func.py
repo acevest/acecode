@@ -77,6 +77,48 @@ print "before swap a =", a, "b =", b;
 swap(a, b);
 print "after swap a =", a, "b =", b;
 
+
+
+
+# 可变参数声明形式是是在参数前面加上'*'
+def Sum(*num) :
+    s = 0
+    for n in num :
+        s += n
+    return s
+
+
+print Sum(1, 2, 3, 4, 5, 6)
+
+# 如果想把一个list or tuple当多个参数传进去只需要在list or tuple前加'*'
+para = [i for i in range(0, 101)]
+print Sum(*para)
+para = (1, 2, 3)
+print Sum(*para)
+
+
+# 两个'*'表示可变关键字参数
+def ListParam(name, age, **kw) :
+    print 'name:', name, 'age:', age, 'other:', kw
+
+ListParam('Name.Ace', 99)
+ListParam('Name.Bob', 7, city='Beijing')
+ListParam('Name.Ada', 24, city='Shenzhen', gender='F', job='Engineer')
+kw = {'city' : 'Chengdu', 'job' : 'IT', 'gender' : 'M'}
+ListParam('Name.Jack', 9, **kw)
+
+
+def Param(a, b, c=0, *args, **kw) :
+    print 'a=', a, 'b=', b, 'c=', c, 'args=', args, 'kw=', kw
+
+Param(1, 2)
+Param(1, 2, c=3)
+Param(1, 2, 3)
+Param(1, 2, 3, 'a', 'b')
+Param(1, 2, 3, 'a', 'b', 'c')
+Param(1, 2, 3, 'a', 'b', 'c', pa='va', pb='vb')
+Param(1, 2, *para, **kw)
+
 # DocString
 def docstring_func(x):
 	'''Print x.
@@ -86,6 +128,6 @@ def docstring_func(x):
 
 docstring_func(1);
 print docstring_func.__doc__;
-help(docstring_func);
+#help(docstring_func);
 
 

@@ -417,6 +417,7 @@
 				50A4F2981AF2154100DB7E36 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		50A4F2991AF2154100DB7E36 /* Build configuration list for PBXNativeTarget "AceBoxTests" */ = {
 			isa = XCConfigurationList;
@@ -425,6 +426,7 @@
 				50A4F29B1AF2154100DB7E36 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

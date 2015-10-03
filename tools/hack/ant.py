@@ -151,22 +151,20 @@ def ParseArguments() :
     parser.add_argument('-u',   '--udp',        action='store_true', help='Use UDP instead of TCP')
     parser.add_argument('-k',   '--keepopen',   action='store_true', help='Accept multiple connections in listen mode')
     parser.add_argument('-d',   '--debug',      action='store_true', help='Debug mode')
-    parser.add_argument('-v',   '--version',    action='version', version='%(prog)s 0.1')
+    parser.add_argument('-v',   '--version',    action='version', version='%(prog)s 0.2')
     gArgs = parser.parse_args()
-
-
-    if gArgs.shell and gArgs.execute != '' :
-        Print("parameter error: -s or -e")
-        sys.exit()
-
-    if gArgs.listen :
-        ServerEntry()
-    else :
-        ClientEntry()
 
 def main() :
     try :
         ParseArguments()
+        if gArgs.shell and gArgs.execute != '' :
+            Print("parameter error: -s or -e")
+            sys.exit()
+
+        if gArgs.listen :
+            ServerEntry()
+        else :
+            ClientEntry()
     except KeyboardInterrupt, e:
         Print("\n[!] User force to quit.")
 

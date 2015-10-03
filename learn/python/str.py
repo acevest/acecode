@@ -52,3 +52,13 @@ Google = 2
 Microsoft = 3
 print "{Apple} {Google} {Microsoft}".format(**locals())
 
+#r'' 表示''内的内容不用转义
+print r'a\nb\tc'
+print r"a\n'b\tc"
+
+print r'''abc
+c\tefghijlk\nfff
+ffff'''
+
+print ord('A')
+print chr(65)

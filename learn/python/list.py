@@ -20,6 +20,7 @@ L.sort()
 print L
 L.reverse()
 print L
+print L[-1]
 
 def printLine(): print "-"*80
 
@@ -73,7 +74,22 @@ print L
 def sum(l) :
     def add(x, y) : return x+y
     return reduce(add, l, 0)
+
+def trans(l) :
+    def mul(x, y) : return x*10 + y
+    return reduce(mul, l)
 print "Sum of L is:", sum(L)
+L = L[:9]
+print L
+print "Translate L to:", trans(L)
+
+print "Filter"
+def isOdd(n) :
+    return n % 2 == 0
+
+L = filter(isOdd, L)
+print L
+
 
 printLine()
 L = ["   abc", "DE ", " FG ", " hi jkl    "]
@@ -98,3 +114,9 @@ for x in range(len(a)) :
 
 a += b
 print a
+
+
+# 按下标循环
+print L
+for i, v in enumerate(L) :
+    print i, v
