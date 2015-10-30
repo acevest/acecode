@@ -6,6 +6,7 @@
 # Description:	Create Source Code
 # ------------------------------------------------------------------------
 use strict;
+use POSIX qw(strftime);
 
 my $filename    = "  File Name: ";
 my $author      = "     Author: Zhao Yanbai\n";
@@ -118,7 +119,7 @@ sub build_str{
     $s .= $author;
     
     $s .= $t{lts};
-    $s .= $timestr . localtime() . "\n";
+    $s .= $timestr . strftime "%Y-%m-%d %H:%M:%S %A %Z\n", localtime;
     
     $s .= $t{lts};
     $s .= $description;

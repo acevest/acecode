@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="applicable-device" content="mobile">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+		<title>手机重力控制测试</title>
+		<style>
+			.garden {
+			  position: relative;
+			  margin: 0 auto;
+			  width : 300px;
+			  height: 300px;
+			}
+
+			.ball {
+			  position: absolute;
+			  top   : 240px;
+			  left  : 240px;
+			  width : 20px;
+			  height: 20px;
+			  background: red;
+			  border-radius: 50%;
+			}
+		</style>
+	</head>
+	<body>
+		<pre class="output"></pre>
+		<div class="garden">
+		  <div class="ball"></div>
+		</div>
+
+		<script>
+			var ball   = document.querySelector('.ball');
+			var garden = document.querySelector('.garden');
+			var output = document.querySelector('.output');
+
+			var maxX = garden.clientWidth  - ball.clientWidth;
+			var maxY = garden.clientHeight - ball.clientHeight;
+			var halfX = garden.clientWidth * 0.5;
+			var halfY = ball.offsetTop;
+
+			Number.prototype.range = function(a, b) {
+				return this > a && this < b;
+			}
+
+			function handleOrientation(event) {
+			  var x = event.alpha | 0;
+			  var y = event.beta | 0;
+			  var z = event.gamma | 0;
+				x = x > 180 ? x - 360 : x;
+
+			  output.innerHTML  = "alpha : " + x + "\n";
+			  output.innerHTML += "beta: " + y + "\n";
+			  output.innerHTML += "gamma: " + z + "\n";
+
+			  
+			  if(x.range(-70, 70)) {
+				//用户想要左右位移
+			    ball.style.left = (- maxX * x / 180 + halfX - 10) + "px";
+			  }
+			  if(y.range(10, 80)) {
+				//用户想要上下位移
+			    ball.style.top  = (- maxY * y / 180 + halfY - 10) + "px";
+			  }else if(y.range(120, 170)) {
+				//用户躺在床上了
+				if(z.range(-60, 60) && x.range(-10, 10)) {
+					//用户躺在床上滚来滚去
+					ball.style.left = (- maxX * z / 180 + halfX - 10) + "px";
+				}
+			  }
+
+			}
+
+			window.addEventListener('deviceorientation', handleOrientation);
+
+		</script>
+	</body>
+</html><!--[if !IE]>|xGv00|2d2b5bc5850877bbd40cbff2397f83cf<![endif]-->
