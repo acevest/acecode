@@ -1,3 +1,7 @@
+#HISTCONTROL=ignoredups  # 连续相同的命令只会记录一次
+#HISTCONTROL=ignorespace # 命令前加空格避免记入历史
+HISTCONTROL=ignoreboth
+
 export PATH=/usr/local/sbin:$PATH
 export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
 export PATH=/Users/Ace/sys/bin:$PATH
@@ -8,4 +12,3 @@ alias ll='ls -lGh'
 alias ls='ls -Gh'
 alias rm='rm -rf'
 alias msf='msfconsole'
-

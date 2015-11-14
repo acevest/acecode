@@ -60,11 +60,17 @@ var xa, xb, xc = true, "xb", 0xDD
 
 
 func main() {
+    // defer 的参数会立刻生成，但是只是在程序结束时调用
 	defer fmt.Println("----------------")
 	rand.Seed(time.Now().UnixNano())
+    n := 0
 	for i := 0; i < rand.Intn(10)+1; i++ {
 		fmt.Println(GetStr())
+        n = i
 	}
+
+    // defer 会逆序调用
+    defer fmt.Println("n:", n)
 
 	PrintType()
 
@@ -101,4 +107,15 @@ func main() {
     // const sd := sa
 
     fmt.Println(BigInt, ConstStr)
+
+
+
+    // 指针, go 语言没有指针运算
+    var pi *int
+    pj := &n
+    pi = pj
+
+    *pj = 123
+
+    fmt.Println(n, *pi, *pj, pi, pj)
 }

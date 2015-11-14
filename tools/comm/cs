@@ -29,6 +29,7 @@ use constant SSTYLE =>  cmb=>"",
 
 my %s = ("c"        => {CSTYLE},
          "cc"       => {CSTYLE},
+         "go"       => {CSTYLE},
          "cpp"      => {CSTYLE},
          "h"        => {CSTYLE},
          "pl"       => {env=>"#!/usr/bin/env perl\n",   SSTYLE},
