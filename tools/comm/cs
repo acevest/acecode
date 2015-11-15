@@ -89,6 +89,15 @@ foreach my $file (@ARGV) {
         $f =~ s/\./_/g;
         $f = "H_" . uc($f) . "__";
         $as .= "\n#pragma once\n";
+    } elsif($index eq "go") {
+        $as .= "package main\n";
+        $as .= "import (\n";
+        $as .= "    \"fmt\"\n";
+        $as .= ")\n\n";
+        $as .= "func main() {\n";
+        $as .= "    defer fmt.Println(\"Program Exited...\")\n\n";
+        $as .= "}";
+        $as = "" unless($create_main);
     } elsif($index eq "py") {
     } elsif($index eq "rb") {
     } elsif($index eq "pl") {

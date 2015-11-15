@@ -5,7 +5,7 @@ import "math/rand"
 import "time"
 
 func GetStr() (string, string) {
-    // 常量可以是数字、字符串、布尔或字符
+	// 常量可以是数字、字符串、布尔或字符
 	const stra = "Hello"
 	const strb string = "World"
 	return stra, strb
@@ -13,8 +13,8 @@ func GetStr() (string, string) {
 
 // 多常量
 const (
-    BigInt  = 1 << 9
-    ConstStr= "HELLO WORLD"
+	BigInt   = 1 << 9
+	ConstStr = "HELLO WORLD"
 )
 
 func PrintType() {
@@ -30,25 +30,21 @@ func PrintType() {
 	fmt.Printf("%T %T %T %T %T %T %T %T\n", a, b, c, d, e, f, g, h)
 }
 
-
 func Add(a int, b int) int {
-    return a+b
+	return a + b
 }
-
 
 // 当两个或多个连续参数是同一类型，除了最后一个类型之外，其它的都可以省略
 func SwapString(a, b string) (string, string) {
-    return b, a
+	return b, a
 }
-
 
 // 返回值可以被命名
 func Split(sum int) (a, b int) {
-    a = sum * 4 / 9
-    b = sum - a
-    return
+	a = sum * 4 / 9
+	b = sum - a
+	return
 }
-
 
 // 定义变量
 var va, vb, vc string
@@ -58,64 +54,59 @@ var ia, ib, ic rune = 1, 0xFAD, 434
 var fa float64 = 2.71828182846
 var xa, xb, xc = true, "xb", 0xDD
 
-
 func main() {
-    // defer 的参数会立刻生成，但是只是在程序结束时调用
+	// defer 的参数会立刻生成，但是只是在程序结束时调用
 	defer fmt.Println("----------------")
 	rand.Seed(time.Now().UnixNano())
-    n := 0
+	n := 0
 	for i := 0; i < rand.Intn(10)+1; i++ {
 		fmt.Println(GetStr())
-        n = i
+		n = i
 	}
 
-    // defer 会逆序调用
-    defer fmt.Println("n:", n)
+	// defer 会逆序调用
+	defer fmt.Println("n:", n)
 
 	PrintType()
 
-    fmt.Println(Add(3, 543))
+	fmt.Println(Add(3, 543))
 
-    fmt.Println(SwapString("Hello", "World"))
+	fmt.Println(SwapString("Hello", "World"))
 
-    fmt.Println(Split(342))
+	fmt.Println(Split(342))
 
+	va = "va"
+	vb = "vb"
+	vc = "vc"
+	fmt.Println(va, vb, vc)
 
-    va = "va"
-    vb = "vb"
-    vc = "vc"
-    fmt.Println(va, vb, vc)
+	fmt.Println(ia, ib, ic)
 
-    fmt.Println(ia, ib, ic)
+	fmt.Println(fa)
 
-    fmt.Println(fa)
+	fmt.Println(xa, xb, xc)
 
-    fmt.Println(xa, xb, xc)
+	// 短声明,只能用在函数内部
+	sa := 34
+	// 类型推导
+	sb := sa
+	fmt.Println(sa, sb)
 
+	// 强制类型转换
+	sc := float64(sa)
+	fmt.Println(sc)
 
-    // 短声明,只能用在函数内部
-    sa := 34
-    // 类型推导
-    sb := sa
-    fmt.Println(sa, sb)
+	// 常量不能用:=语法定义
+	// const sd := sa
 
-    // 强制类型转换
-    sc := float64(sa)
-    fmt.Println(sc)
+	fmt.Println(BigInt, ConstStr)
 
-    // 常量不能用:=语法定义
-    // const sd := sa
+	// 指针, go 语言没有指针运算
+	var pi *int
+	pj := &n
+	pi = pj
 
-    fmt.Println(BigInt, ConstStr)
+	*pj = 123
 
-
-
-    // 指针, go 语言没有指针运算
-    var pi *int
-    pj := &n
-    pi = pj
-
-    *pj = 123
-
-    fmt.Println(n, *pi, *pj, pi, pj)
+	fmt.Println(n, *pi, *pj, pi, pj)
 }
