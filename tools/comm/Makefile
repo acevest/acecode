@@ -2,7 +2,7 @@ CC	= gcc
 CPP	= g++
 BINS	= countc htc
 SCRIPTS = cls cs
-DST	= $(HOME)/sys/bin/ 
+DST	= $(HOME)/.local/bin/ 
 
 %.o : %.c
 	$(CC) $< -o $@
