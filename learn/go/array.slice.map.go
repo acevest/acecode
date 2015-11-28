@@ -1,6 +1,7 @@
 package main
 
 import "fmt"
+import "math/rand"
 
 type Vector struct {
 	x, y uint32
@@ -54,6 +55,10 @@ func main() {
 	e = append(e, "append:d")
 	e = append(e, "append:e", "append:f")
 
+	// 切片复制
+	var f []string
+	copy(f, e)
+
 	for i := 0; i < len(e); i++ {
 		fmt.Println(e[i])
 	}
@@ -76,7 +81,7 @@ func main() {
 	if Map == nil {
 		fmt.Println("Map is nil")
 	}
-	Map = make(map[string]Vector)
+	Map = make(map[string]Vector, 100)
 	if Map == nil {
 		fmt.Println("Map is nil")
 	} else {
@@ -107,21 +112,76 @@ func main() {
 	MapA["Test"] = "USA"
 	fmt.Println(MapA)
 
-	var s string
-	var ok bool
-	s, ok = MapA["Test"]
-	if !ok {
+	if s, ok := MapA["Test"]; !ok {
 		fmt.Printf("Key:Test not in\n")
 	} else {
 		fmt.Printf("Key:Test = %s\n", s)
+	}
+
+	for key, val := range MapA {
+		fmt.Printf("%-10s => %10s\n", key, val)
 	}
 
 	// delete
 	delete(MapA, "Test")
 	fmt.Println(MapA)
 
-	_, ok = MapA["Test"]
-	if !ok {
+	if _, ok := MapA["Test"]; !ok {
 		fmt.Println("Key:Test not in")
+	}
+
+	AboutSlice()
+	AboutMap()
+}
+
+func AboutSlice() {
+	var array [10]int
+	var slice []int = array[2:5]
+
+	for i := 0; i < len(array); i++ {
+		array[i] = i
+	}
+
+	for i := 0; i < len(slice); i++ {
+		fmt.Printf("Slice at %02d is %4d\n", i, slice[i])
+	}
+
+	fmt.Println("The Length of Array is", len(array))
+	fmt.Println("The Length of Slice is", len(slice))
+	fmt.Println("The Capacity of Slice is", cap(slice))
+
+	// grow the slice
+	slice = slice[:4]
+	for i, v := range slice {
+		fmt.Printf("Slice at %02d is %4d\n", i, v)
+	}
+
+	fmt.Println("The Length of Slice is", len(slice))
+	fmt.Println("The Capacity of Slice is", cap(slice))
+
+}
+
+func AboutMap() {
+	{
+		// Version A
+		items := make([]map[int]int, 5)
+		for i := range items {
+			items[i] = make(map[int]int, 1)
+			items[i][rand.Intn(100)] = rand.Intn(100)
+		}
+
+		fmt.Printf("Version A: Value of items: %v\n", items)
+	}
+
+	{
+		// Version B
+		// Invalid Method
+		items := make([]map[int]int, 5)
+		for _, item := range items {
+			item = make(map[int]int, 1)
+			item[rand.Intn(100)] = rand.Intn(100)
+		}
+
+		fmt.Printf("Version B: Value of items: %v (Invalid Method) \n", items)
 	}
 }

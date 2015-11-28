@@ -38,6 +38,11 @@ func main() {
 	str = strings.Replace(str, "example", "示例", -1) // -1表示替换所有
 	fmt.Println(str)
 
+	var words []rune = []rune(str)
+	for i, v := range words {
+		fmt.Printf("[%02d] : %c\n", i, v)
+	}
+
 	var repeat string = "Repeat "
 	fmt.Println("Repeat:", strings.Repeat(repeat, 10))
 	fmt.Println("ToUpper:", strings.ToUpper(repeat))
