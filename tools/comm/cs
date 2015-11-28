@@ -92,10 +92,10 @@ foreach my $file (@ARGV) {
     } elsif($index eq "go") {
         $as .= "package main\n";
         $as .= "import (\n";
-        $as .= "    \"fmt\"\n";
+        $as .= "\t\"fmt\"\n";
         $as .= ")\n\n";
         $as .= "func main() {\n";
-        $as .= "    defer fmt.Println(\"Program Exited...\")\n\n";
+        $as .= "\tdefer fmt.Println(\"Program Exited...\")\n\n";
         $as .= "}";
         $as = "" unless($create_main);
     } elsif($index eq "py") {

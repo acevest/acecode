@@ -7,6 +7,12 @@ import (
 	"time"
 )
 
+func getTwoRandInt() (a, b int) {
+	a = rand.Int()
+	b = rand.Int()
+	return
+}
+
 func main() {
 	rand.Seed(time.Now().UnixNano())
 	fmt.Print("Go runs on ")
@@ -50,4 +56,12 @@ func main() {
 		fmt.Println("Ground")
 	}
 
+	switch a, b := getTwoRandInt(); {
+	case a < b:
+		fmt.Println(a, "<", b)
+	case a == b:
+		fmt.Println(a, "=", b)
+	case a > b:
+		fmt.Println(a, ">", b)
+	}
 }

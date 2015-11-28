@@ -3,6 +3,15 @@ package main
 import "fmt"
 import "math/rand"
 import "time"
+import "os"
+import "unicode"
+import "runtime"
+
+// init 函数是非常特殊的函数，它不能被人为调用，而是在
+// 每个包完成初始化后自动执行，并且执行优先级比main函数高
+func init() {
+	fmt.Println("INIT FUNC")
+}
 
 func GetStr() (string, string) {
 	// 常量可以是数字、字符串、布尔或字符
@@ -56,7 +65,7 @@ var xa, xb, xc = true, "xb", 0xDD
 
 func main() {
 	// defer 的参数会立刻生成，但是只是在程序结束时调用
-	defer fmt.Println("----------------")
+	defer fmt.Println("----------------", runtime.GOOS)
 	rand.Seed(time.Now().UnixNano())
 	n := 0
 	for i := 0; i < rand.Intn(10)+1; i++ {
@@ -109,4 +118,13 @@ func main() {
 	*pj = 123
 
 	fmt.Println(n, *pi, *pj, pi, pj)
+
+	var HOME = os.Getenv("HOME")
+	var USER = os.Getenv("USER")
+	var GOPATH = os.Getenv("GOPATH")
+
+	fmt.Println("HOME", HOME, "USER", USER, "GOPATH", GOPATH)
+
+	var charA, charB, charC rune = 'a', '3', ' '
+	fmt.Println(unicode.IsLetter(charA), unicode.IsDigit(charB), unicode.IsSpace(charC))
 }

@@ -42,4 +42,21 @@ func main() {
 	// 死循环
 	// for {
 	// }
+
+	es := "Go is a beautiful language."
+	fmt.Println("RawStr[", es, "] Length", len(es))
+	for i := 0; i < len(es); i++ {
+		fmt.Printf("   >Character on position %02d is: '%c' \n", i, es[i])
+	}
+
+	us := "Go语言是一个很好的程序设计语言. Absolutely!"
+	fmt.Println("RawStr[", us, "] Length", len(us))
+	for i, r := range us {
+		fmt.Printf("   >Character on position %02d is: '%c' \n", i, r)
+	}
+
+	fmt.Println("---------------------")
+	for i, r := range us {
+		fmt.Printf("   >[%02d] %5d %U '%c'\t% X\n", i, r, r, r, []byte(string(r)))
+	}
 }

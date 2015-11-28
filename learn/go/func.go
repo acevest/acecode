@@ -15,7 +15,6 @@ import (
 	"time"
 )
 
-
 func main() {
 	defer fmt.Println("Program Exited...")
 
@@ -34,14 +33,13 @@ func main() {
 	neg := Adder()
 
 	// NOTICE 十次是两个实例的累计结果，不是独立函数调用结果
-	for i:=0; i<10; i++ {
+	for i := 0; i < 10; i++ {
 		fmt.Printf("Positive: %5d         Negative: %5d\n", pos(i), neg(-i*i))
 	}
 
-
 	// Fibonacci
 	fibonacci := Fibonacci()
-	for i:=0; i<10; i++ {
+	for i := 0; i < 10; i++ {
 		fmt.Printf("%02d - %5d\n", i, fibonacci())
 	}
 }
@@ -60,14 +58,13 @@ func Adder() func(int) int {
 	return innerfunc
 }
 
-
 func Fibonacci() func() int {
 	a := 0
 	b := 1
 	// a, b := 0, 1
 	innerfunc := func() int {
 		t := b
-		b = a+b
+		b = a + b
 		a = t
 		//a, b = b, a+b
 		return a

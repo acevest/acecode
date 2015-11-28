@@ -72,6 +72,8 @@ set tabstop=4     " TAB的宽度
 set shiftwidth=4
 set expandtab     " TAB用空格代替，否则可用 set noexpandtab
 set cursorline
+set paste
+
 "hi CursorLine ctermbg=lightcyan cterm=BOLD
 "set cursorcolumn
 "hi CursorColumn ctermbg=lightgreen cterm=BOLD

@@ -7,17 +7,17 @@
  * ------------------------------------------------------------------------
  */
 package main
+
 import (
-    "fmt"
-    "math"
-    "time"
-    "math/rand"
+	"fmt"
+	"math"
+	"math/rand"
+	"time"
 )
 
 type Vector struct {
 	x, y float64
 }
-
 
 // 不用指针型也可以
 // 此处于C语言同理，用指针能改变则用指针拷贝
@@ -29,8 +29,8 @@ func (v *Vector) Abs() float64 {
 
 // 可以将v换成非指针型对比
 func (v *Vector) Scale(scale float64) {
-	v.x = v.x*scale
-	v.y = v.y*scale
+	v.x = v.x * scale
+	v.y = v.y * scale
 }
 
 // fmt中的一个接口
@@ -42,16 +42,15 @@ func (v Vector) String() string {
 	return fmt.Sprintf("Vector{x:%.4f, y:%.4f}", v.x, v.y)
 }
 
-
 // 根据现有类型定义专用类型
-type FloatType float64;
+type FloatType float64
 
 func (f FloatType) TenTimesInt() int {
-	return int(f*10)
+	return int(f * 10)
 }
 
 func main() {
-    defer fmt.Println("Program Exited...")
+	defer fmt.Println("Program Exited...")
 
 	rand.Seed(time.Now().UnixNano())
 
@@ -69,7 +68,6 @@ func main() {
 
 	fmt.Println(v1.Abs())
 	fmt.Println(v2.Abs())
-
 
 	f := FloatType(rand.Float64())
 	fmt.Printf("Float: %7.4f  Ten Times Integer: %2d\n", f, f.TenTimesInt())

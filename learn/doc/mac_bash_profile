@@ -5,8 +5,11 @@ HISTCONTROL=ignoreboth
 export PATH=/usr/local/sbin:$PATH
 export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
 export PATH=/Users/Ace/.local/bin:$PATH
+export GOBIN=/Users/Ace/.local/bin
 export PATH=/Users/Ace/workspace/github/metasploit-framework:$PATH
 export MSF_DATABASE_CONFIG=/Users/Ace/workspace/github/metasploit-framework/config/database.yml
+#多个GOPATH用';'分隔 go get会存到第一个目录
+export GOPATH=/Users/Ace/workspace/go
 export PS1="\W\$ "
 alias ll='ls -lGh'
 alias ls='ls -Gh'
