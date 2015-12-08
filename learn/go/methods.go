@@ -42,6 +42,7 @@ func (v Vector) String() string {
 	return fmt.Sprintf("Vector{x:%.4f, y:%.4f}", v.x, v.y)
 }
 
+
 // 根据现有类型定义专用类型
 type FloatType float64
 

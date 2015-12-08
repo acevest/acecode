@@ -244,7 +244,9 @@ ExitCode Parser::ExecuteCmd()
 
 	g_redirectInFlag = g_redirectOutFlag = false;
 
+	return 0;
 }
+
 ExitCode Parser::Exp()
 {
 		/*if(m_token != STRING && m_token != GETVAR)

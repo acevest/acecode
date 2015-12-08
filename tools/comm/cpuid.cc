@@ -108,17 +108,47 @@ int	main()
 				"CR4.OSFXSR is available)")
 	TEST_FEATURE(fv, 25, "SSE: SSE Extensions")
 	TEST_FEATURE(fv, 26, "SSE2: SSE2 Extensions")
-	//TEST_FEATURE(fv, 27, "Reserved")
+	TEST_FEATURE(fv, 27, "SS: CPU Cache Supports Self-Snoop")
 	TEST_FEATURE(fv, 28, "Hyper Threading Technology")
 	TEST_FEATURE(fv, 29, "TM: Thermal Monitor")
-	//TEST_FEATURE(fv, 30, "Reserved")
+	TEST_FEATURE(fv, 30, "IA64 Processor Emulating X86")
 	TEST_FEATURE(fv, 31, "PBE: Pending Break Enable")
 
 
-
-	
-
-
+	fv = r.ecx;
+	printf("-------------\n");
+	TEST_FEATURE(fv, 0, "SSE3: Prescott New Instructions-SSE3 (PNI)")
+	TEST_FEATURE(fv, 1, "PCLMULQDQ Support")
+	TEST_FEATURE(fv, 2, "64Bit Debug Store (EDX Bit21)")
+	TEST_FEATURE(fv, 3, "MONITOR and MWAIT Instructions (SSE3)")
+	TEST_FEATURE(fv, 4, "CPL Qualified Debug Store")
+	TEST_FEATURE(fv, 5, "VMX: Virtual Machine eXtensions")
+	TEST_FEATURE(fv, 6, "SMX: Safer Mode Extensions")
+	TEST_FEATURE(fv, 7, "EST: Enhanced SpeedStep")
+	TEST_FEATURE(fv, 8, "TM2: Thermal Monitor 2")
+	TEST_FEATURE(fv, 9, "SSSE3: Supplemental SSE3 Instructions")
+	TEST_FEATURE(fv, 10, "L1 Context ID")
+	TEST_FEATURE(fv, 11, "SDBG: Silicon Debug Interface")
+	TEST_FEATURE(fv, 12, "FMA: Fused Multiply-add (FMA3)")
+	TEST_FEATURE(fv, 13, "CX16: CMPXCHG16B Instructions")
+	TEST_FEATURE(fv, 14, "XTPR: Can Disable Sending Task Priority Messages")
+	TEST_FEATURE(fv, 15, "PDCM: Perfmon & Debug Capability")
+	//TEST_FEATURE(fv, 16, "Reserved")
+	TEST_FEATURE(fv, 17, "PCID: Process Context Identifiers (CR4 bit 17)")
+	TEST_FEATURE(fv, 18, "DCA: Direct Cache Access for DMA Writes")
+	TEST_FEATURE(fv, 19, "SSE4.1: SSE4.1 Instructions")
+	TEST_FEATURE(fv, 20, "SSE4.2: SSE4.2 Instructions")
+	TEST_FEATURE(fv, 21, "X2APIC: x2APIC Support")
+	TEST_FEATURE(fv, 22, "MOVBE: MOVBE Instruction (big-endian)")
+	TEST_FEATURE(fv, 23, "POPCNT: POPCNT Instruction")
+	TEST_FEATURE(fv, 24, "TSC-DEADLINE: APIC Supports One-Shot Operation Using a TSC Deadline Value")
+	TEST_FEATURE(fv, 25, "AES: AES Instruction Set")
+	TEST_FEATURE(fv, 26, "XSAVE: XSAVE, XRESTOR, XSETBV, XGETBV")
+	TEST_FEATURE(fv, 27, "OSXSAVE: XSAVE Enabled by OS")
+	TEST_FEATURE(fv, 28, "AVX: Advanced Vector Extensions")
+	TEST_FEATURE(fv, 29, "F16C: F16C (Half-Precision) FP Support")
+	TEST_FEATURE(fv, 30, "RDRND: RDRAND (On-Chip Random Number Generator) Support")
+	TEST_FEATURE(fv, 31, "HYPERVISOR: Running on a Hypervisor (Always 0 on a Real CPU, But Also With Some Hypervisors")
 
 
  	/**********************Get CPU's SERIAL Number*********************/

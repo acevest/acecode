@@ -275,6 +275,7 @@ void Scanner::printToken(TokenType t) const
 	case GE:	cout<<"GE"<<endl;break;
 	case LT:	cout<<"LT"<<endl;break;
 	case LE:	cout<<"LE"<<endl;break;
+	case DO:	cout<<"DO"<<endl;break;
 	}
 }
 

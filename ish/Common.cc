@@ -4,7 +4,7 @@
 
 void fatal(const char *err_msg, int n)
 {
-	fprintf(stderr,"Error: %s,%s\n",err_msg);
+	fprintf(stderr,"Error: %s\n",err_msg);
 	exit(n);
 }
 void *my_malloc(size_t size)

@@ -166,6 +166,7 @@ ExitCode cmd::ExecuteCommand(char **argv)
 
 	//}
 
+	return 0;
 }
 
 #ifdef	DEBUG_CMD
