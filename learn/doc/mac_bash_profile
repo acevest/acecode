@@ -14,4 +14,5 @@ export PS1="\W\$ "
 alias ll='ls -lGh'
 alias ls='ls -Gh'
 alias rm='rm -rf'
+alias grep='grep --color'
 alias msf='msfconsole'
