@@ -7,10 +7,10 @@
  * ------------------------------------------------------------------------
  */
 
- .text
- .global _start
- .type _start, @function
- _start:
+.text
+.code32
+.global _start
+_start:
 
 
     nop

@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -c -I../include -fno-builtin 
+CFLAGS = -m32 -c -I../include -fno-builtin 
 
 CSOUCE_FILES = $(wildcard *.c)
 SSOUCE_FILES = $(wildcard *.S)

@@ -14,8 +14,6 @@
 #define	ASM
 #include<multiboot.h>
 
-.section .init
-
 .global BETA_ENTRY
 
 .extern	kernel_end
@@ -24,7 +22,7 @@
 
 .text
 .code32
-.align 32
+.align 8
 BETA_ENTRY:
 	/* Reset eflags */
 	pushl $0
@@ -62,7 +60,7 @@ _loop:
 	hlt
 	jmp	_loop
 
-.align 32
+.align 8
 /* Multiboot header. */
 multiboot_header:
 magic:	.long	MULTIBOOT_HEADER_MAGIC

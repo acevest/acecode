@@ -1,4 +1,4 @@
-#MYSQL注入笔记
+# MYSQL注入总结
 ##数据库信息
 设数据库```security```里有如下```users```表。
 
@@ -110,7 +110,7 @@ if($row) {
 其它与IntegerBased相似。如获取当前数据库的名字为```-1' UNION ALL SELECT NULL, DATABASE(), NULL AND '1'='```
 
 
-##构造SQL注入之三
+##构造SQL注入之三【GET - Blind - BoolianBased】
 ###1.漏洞代码
 ```
 $id=$_GET['id'];
