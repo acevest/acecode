@@ -27,7 +27,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		50A4F2751AF2154100DB7E36 /* AceBox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AceBox.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		50A4F2751AF2154100DB7E36 /* Ace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ace.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50A4F2791AF2154100DB7E36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		50A4F27A1AF2154100DB7E36 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		50A4F27C1AF2154100DB7E36 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
@@ -70,7 +70,7 @@
 		50A4F2761AF2154100DB7E36 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				50A4F2751AF2154100DB7E36 /* AceBox.app */,
+				50A4F2751AF2154100DB7E36 /* Ace.app */,
 				50A4F28C1AF2154100DB7E36 /* AceBoxTests.xctest */,
 			);
 			name = Products;
@@ -132,7 +132,7 @@
 			);
 			name = AceBox;
 			productName = AceBox;
-			productReference = 50A4F2751AF2154100DB7E36 /* AceBox.app */;
+			productReference = 50A4F2751AF2154100DB7E36 /* Ace.app */;
 			productType = "com.apple.product-type.application";
 		};
 		50A4F28B1AF2154100DB7E36 /* AceBoxTests */ = {
@@ -352,7 +352,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tencent.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Ace;
 			};
 			name = Debug;
 		};
@@ -364,7 +364,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tencent.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Ace;
 			};
 			name = Release;
 		};

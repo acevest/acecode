@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:AceBox.xcodeproj">
+      location = "self:/Users/Ace/workspace/acecode/tools/AceBox/AceBox.xcodeproj">
    </FileRef>
 </Workspace>
