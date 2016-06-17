@@ -15,6 +15,7 @@ class FirstViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         //view.backgroundColor = UIColor.blueColor()
         view.backgroundColor = UIColor(red: 0, green: 0.47843137250000001, blue: 1, alpha: 1)
+
     }
 
     override func didReceiveMemoryWarning() {

@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "50A4F2741AF2154100DB7E36"
-               BuildableName = "AceBox.app"
+               BuildableName = "Ace.app"
                BlueprintName = "AceBox"
                ReferencedContainer = "container:AceBox.xcodeproj">
             </BuildableReference>
@@ -57,7 +57,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "50A4F2741AF2154100DB7E36"
-            BuildableName = "AceBox.app"
+            BuildableName = "Ace.app"
             BlueprintName = "AceBox"
             ReferencedContainer = "container:AceBox.xcodeproj">
          </BuildableReference>
@@ -80,7 +80,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "50A4F2741AF2154100DB7E36"
-            BuildableName = "AceBox.app"
+            BuildableName = "Ace.app"
             BlueprintName = "AceBox"
             ReferencedContainer = "container:AceBox.xcodeproj">
          </BuildableReference>
@@ -99,7 +99,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "50A4F2741AF2154100DB7E36"
-            BuildableName = "AceBox.app"
+            BuildableName = "Ace.app"
             BlueprintName = "AceBox"
             ReferencedContainer = "container:AceBox.xcodeproj">
          </BuildableReference>
