@@ -22,7 +22,7 @@ print()
 
 // Print separator & terminator
 var company:Array<String> = [ "Apple", "Google", "Facebook", "Tencent" ]
-print(company, separator: "#", terminator: " $$$$$\n")
+print(company[0], company[1], company[2], company[3], separator: "#", terminator: " $$$$$\n")
 
 printLine("Count company Array 1")
 for (i,v) in company.enumerate() {
