@@ -24,7 +24,7 @@ import UIKit
 
  */
 
-let company = ["Tencent", "Apple", "Facebook", "Google", "Twitter", "Amazon"]
+var company = ["Tencent", "Apple", "Facebook", "Google", "Twitter", "Amazon"]
 var sortedCompany: [String] = []
 
 printLine("Sort")
@@ -120,11 +120,80 @@ func makeIncrementer(step:Int) -> () -> Int {
     return inc
 }
 
-var closureFuncA = makeIncrementer(1)
+// 闭包是引用类型
+let closureFuncA = makeIncrementer(1)
 print("ClosureFuncA:", closureFuncA())
 print("ClosureFuncA:", closureFuncA())
-var closureFuncB = closureFuncA
+let closureFuncB = closureFuncA
 print("ClosureFunnB:", closureFuncB())
-var closureFuncC = makeIncrementer(1)
+let closureFuncC = makeIncrementer(1)
 print("ClosureFuncC:", closureFuncC())
 
+
+// 逃逸&非逃逸闭包
+printLine("Noescaping & Escaping Closesure")
+func noescapingClosure(@noescape closure: () -> Void) {
+    closure()
+}
+
+var closureHandler: Array<() -> Void> = []
+func escapingClosure(closure: () -> Void) {  // 此时参数前加@noescape会报错
+    closureHandler.append(closure)
+}
+
+
+class ClosureClass {
+    var x = 10
+    func doSomethingAboutEscape() {
+        noescapingClosure() { x = 200 }     // 将参数标记为@noescape能在闭包中隐式地引用self
+        escapingClosure() { self.x = 100 }
+    }
+}
+
+var closureInstance = ClosureClass()
+closureInstance.doSomethingAboutEscape()
+print(closureInstance.x)
+closureHandler[0]()
+print(closureInstance.x)
+
+
+printLine("AutoClosure")
+print("Now Company Items:", company)
+print("Company Item Count:", company.count)
+// autoClosureHanlerA的type是 () -> String 不是 String
+let autoClosureHandlerA = { company.removeAtIndex(0) }  // an autoclosure lets you delay evaluation
+print("Company Item Count:", company.count)
+print("No Remove \(autoClosureHandlerA())")
+print("Company Item Count:", company.count)
+
+
+// autoclosure parameter
+printLine("AutoClosure Parameter")
+func autoClosureFuncParameterA(closure: () -> String) {
+    print("AutoClosureFuncParameterA \(closure())!")
+}
+autoClosureFuncParameterA({ company.removeAtIndex(0) })
+
+func autoClosureFuncParameterB(@autoclosure closure: () -> String) {
+    print("AutoClosureFuncParameterB \(closure())!")
+}
+autoClosureFuncParameterB(company.removeAtIndex(0))
+
+// @autoclosure 暗含了 noescape 特性
+var autoClosureHanlder: [() -> String] = []
+func autoClosureFuncParameterC(@autoclosure closure: () -> String) {
+    //因为参数被@autoclosure修饰了，而@autoclosure暗含@noescape特性，因此以下语句会报错
+    //autoClosureHanlder.append(closure)
+}
+
+// 如果用了@autoclosure又要用escape特性，则用@autoclosure(escaping)修饰参数
+func autoClosureFuncParameterD(@autoclosure(escaping) closure: () ->String) {
+    print("Called autoClosureFuncParameterD")
+    autoClosureHanlder.append(closure)
+}
+autoClosureFuncParameterD(company.removeAtIndex(0))
+autoClosureFuncParameterD(company.removeAtIndex(0))
+
+for handler in autoClosureHanlder {
+    print("autoClosure Handling \(handler())!")
+}
