@@ -4,5 +4,6 @@
         <page name='Functions'/>
         <page name='Basics'/>
         <page name='Closure'/>
+        <page name='Enumerations'/>
     </pages>
 </playground>
