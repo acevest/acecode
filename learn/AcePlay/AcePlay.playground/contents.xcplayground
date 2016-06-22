@@ -5,5 +5,7 @@
         <page name='Basics'/>
         <page name='Closure'/>
         <page name='Enumerations'/>
+        <page name='Classes'/>
+        <page name='Properties'/>
     </pages>
 </playground>
