@@ -6,4 +6,5 @@ ish
 *.DS_Store
 *.swp
 *.ef
+*.conf
 dvwa
