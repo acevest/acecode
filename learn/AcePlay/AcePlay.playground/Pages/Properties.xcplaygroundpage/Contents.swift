@@ -76,3 +76,22 @@ print("square center is (\(squareCenter.x), \(squareCenter.y))")
 square.center = Point(x: 15.0, y: 15.0)
 print("square new origin is (\(square.origin.x), \(square.origin.y))")
 
+
+
+class Cuboid {
+    var width = 0.0, height = 0.0, depth = 0.0
+    
+    // 更简单的getter的写法
+    var volume: Double {
+        return width*height*depth
+    }
+    
+    init(width: Double, height: Double, depth: Double) {
+        self.width  = width
+        self.height = height
+        self.depth  = depth
+    }
+}
+
+let fourByFiveByTwo = Cuboid(width:4.0, height:5.0, depth:2.0)
+print(fourByFiveByTwo.volume)
