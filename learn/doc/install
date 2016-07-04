@@ -21,3 +21,9 @@ gnugo
 
 rhythmbox
 ffmpeg
+apt-get install bluez
+apt-get install libboost-python-dev
+apt-get install libbluetooth-dev
+apt-get install libboost-all-dev
+pip install gatterlib
+
