@@ -23,22 +23,22 @@ let ss = str + " " + String(Variable)  // 类型必需显示转换
 
 // 可以通过在客串中加\()的方式把值转换成字符串
 let Int2Str = "translate int in string with \(VarInt) \(ss)"
-println(Int2Str)
+print(Int2Str)
 
 
 // 数组
 var arrayList = ["apple", "microsoft", "xx", "google", "tencent", "twitter"]
 arrayList[2] = "amazon"
-println(arrayList)
+print(arrayList)
 
 // 字典
 var dict = [
     "apple" : "USA",
     "tencnet" : "CN"
 ]
-println(dict)
-println(dict["apple"])
-println(dict["apple"]!)
+print(dict)
+print(dict["apple"])
+print(dict["apple"]!)
 
 // 创建空数组和空字典
 var EmptyArray = [String]()
@@ -48,7 +48,7 @@ var EmptArrayWithNoType = []
 var EmptDictWithNoType = [:]
 
 for cp in arrayList {
-    println(cp)
+    print(cp)
 }
 
 
@@ -56,11 +56,11 @@ for cp in arrayList {
 var OptionalVar:String? = "hehe"
 //OptionalVar = nil
 if let name = OptionalVar {
-    println("Hello \(OptionalVar)")
+    print("Hello \(OptionalVar)")
 }
 else
 {
-    println("sssssss")
+    print("sssssss")
 }
 
 
@@ -68,81 +68,81 @@ let word = "ff"
 
 switch word {
 case "dd" :
-    println("unknown")
+    print("unknown")
 case "ff" :
-    println("fallthrough")
+    print("fallthrough")
     fallthrough // 会走到下一个case
 case "red apple", "blue apple" :
-    println("red")
+    print("red")
 default:            // 必须在最后。。。
-    println("default");
+    print("default");
 }
 
 
 // 闭区间
 for i in 0...3 {
-    print(i)
+    print(i, terminator: "")
 }
-println("")
+print("")
 // 开区间
 for i in 0..<3 {
-    print(i)
+    print(i, terminator: "")
 }
 
 
 for i in 0..<arrayList.count {
-    println("arrayList的第\(i+1)个元素为 \(arrayList[i])")
+    print("arrayList的第\(i+1)个元素为 \(arrayList[i])")
 }
 
 //let optIntStr = "ffffffff"
 let optIntStr = "123"
-let optInt = optIntStr.toInt()
+let optInt = Int(optIntStr)
 if optInt != nil {
-    println("\(optIntStr) has integer value of \(optInt!)")
-    println("\(optIntStr) has integer value of \(optInt)")
+    print("\(optIntStr) has integer value of \(optInt!)")
+    print("\(optIntStr) has integer value of \(optInt)")
 } else {
-    println("\(optIntStr) could not be converted to an integer")
+    print("\(optIntStr) could not be converted to an integer")
 }
 
 
 let possableString:String?="An optional string"
-println(possableString!)
+print(possableString!)
 let assumedString:String!="An implicitly unwrapped optional string"
-println(assumedString)
+print(assumedString)
 
 
 var opt:String="aaa"
 // opt=nil // 如果声明没有? 或 ! 来表明这是一个可选类型，那么 nil的赋值不合法
-print(opt)
+print(opt, terminator: "")
 //assert(opt != "aaa", "assert failed")
 
 
 // String
 var s = "aaaaaa\0bbbbb\tccccc\\\n\"\'"
-println(s)
+print(s)
 
 var emptySa = ""
 var emptySb = String()
 
 if emptySa.isEmpty && emptySb.isEmpty {
-    println("emptySa and emptySb is empty")
+    print("emptySa and emptySb is empty")
 }
 
 var emojiStr = "😘😡👿😜"
-for c in  emojiStr {
-    print(c)
+for c in  emojiStr.characters {
+    print(c, terminator: "")
 }
 
 
 var smileChar:Character = "😀"
 emojiStr.append(smileChar)
-println("  emojistr \(emojiStr) charactor count is \(count(emojiStr))")
+print("  emojistr \(emojiStr) charactor count is \(emojiStr.characters.count)")
 
 
 s = "Prefix----Suffix"
 if s.hasPrefix("Prefix") && s.hasSuffix("Suffix") {
-    println(s.lowercaseString)
-    println(s.uppercaseString)
+    print(s.lowercaseString)
+    print(s.uppercaseString)
 }
 
 
@@ -157,9 +157,9 @@ IntArray[1..<4]=[999, 888, 777]
 IntArray.insert(1, atIndex: 0)
 IntArray.removeAtIndex(5)
 IntArray.removeLast()
-println(IntArray)
-for (index, value) in enumerate(IntArray) {
-    println("Item \(index+1): \(value)")
+print(IntArray)
+for (index, value) in IntArray.enumerate() {
+    print("Item \(index+1): \(value)")
 }
 
 
@@ -171,7 +171,7 @@ var DoubleArray = [Double](count:3, repeatedValue:9.9)
 for i in 1...5 {
     DoubleArray.append(Double(i)*1.1)
 }
-println(DoubleArray)
+print(DoubleArray)
 
 
 // Set
@@ -183,18 +183,18 @@ SetA.insert(1)
 SetA.insert(2)
 SetA.insert(1)
 if SetA.contains(1) {
-    println(SetA)
+    print(SetA)
 }
 
-for genre in sorted(SetA) {
-    println("\(genre)")
+for genre in SetA.sort() {
+    print("\(genre)")
 }
 
 let oddSet:Set = [1, 3, 5, 7, 9]
 let evenSet:Set = [0, 2, 4, 6, 8]
-println(sorted(oddSet.intersect(evenSet)))  // 交
-println(sorted(oddSet.union(evenSet)))      // 并
-println(oddSet.hashValue)
+print(oddSet.intersect(evenSet).sort())  // 交
+print(oddSet.union(evenSet).sort())      // 并
+print(oddSet.hashValue)
 
 
 // Dict
@@ -202,29 +202,29 @@ var airports: [String:String] = ["TYO" : "Tokyo", "DUB":"Dublin"]
 airports["LHR"] = "London"
 airports["APL"] = "Apple Internation"
 if let oldValue = airports.updateValue("Dublin Internation", forKey: "DUB") {
-    println("The old value for DIB was \(oldValue)")
+    print("The old value for DIB was \(oldValue)")
 }
 
 for (k, v) in airports {
-    println("\(k): \(v)")
+    print("\(k): \(v)")
 }
 
 for k in airports.keys {
-    println("Airport Code: \(k)")
+    print("Airport Code: \(k)")
 }
 
 for v in airports.values {
-    println("Airport Name: \(v)")
+    print("Airport Name: \(v)")
 }
 
-println(airports)
+print(airports)
 airports["APL"] = nil   // Delete
-println(airports)
+print(airports)
 
 if let removedValue = airports.removeValueForKey("DUB") {
-    println("The removed airport's name is \(removedValue)")
+    print("The removed airport's name is \(removedValue)")
 } else {
-    println("The airports dictionary does not contain a value for DUB")
+    print("The airports dictionary does not contain a value for DUB")
 }
 
 // create an empty dict

@@ -88,6 +88,8 @@
 		5063B29A1B390AAF009C5821 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0730;
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = Ace;
 				TargetAttributes = {
@@ -236,6 +238,7 @@
 				5063B2AB1B390AAF009C5821 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
