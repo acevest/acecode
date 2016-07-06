@@ -1,6 +1,6 @@
 CC	= gcc
 CPP	= g++
-BINS	= countc htc cpuid
+BINS	= countc htc
 SCRIPTS = cls cs
 DST	= $(HOME)/.local/bin/ 
 
