@@ -18,6 +18,8 @@ gArgs = None
 
 
 def IsErrPage(html) :
+    print("Need to Rewrite The IsErrPage Function")
+    sys.exit()
     lines = html.splitlines()
     if len(lines) > 0 :
         #print lines[1]
