@@ -12,6 +12,7 @@ import random
 import urllib
 import urllib2
 import argparse
+import string
 
 gArgs = None
 
@@ -35,7 +36,7 @@ def IsErrPage(html) :
 
 def getRandStr(length) :
     rs = ''
-    cs = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    cs = string.ascii_letters
     for i in range(0, length) :
         inx = random.randint(0, len(cs)-1)
         rs += cs[inx]
