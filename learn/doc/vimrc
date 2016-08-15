@@ -101,9 +101,14 @@ set nobomb          "
 "autocmd FileType php,python,c,java,perl,shell,bash,vim,ruby,cpp set sts=4
 
 "golang默认使用TAB
-autocmd FileType go set ai
-autocmd FileType go set tabstop=4
-autocmd FileType go set shiftwidth=4
-autocmd FileType go set noexpandtab
+"autocmd FileType go set ai
+"autocmd FileType go set tabstop=4
+"autocmd FileType go set shiftwidth=4
+"autocmd FileType go set noexpandtab
+
+autocmd FileType asm set ai
+autocmd FileType asm set tabstop=4
+autocmd FileType asm set shiftwidth=4
+autocmd FileType asm set expandtab
 
 imap jj <esc> " 连续按两次jj表示按ESC，进入命令模式
