@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF8">
+<style>
+#Word {
+    border: 1px solid black;
+    padding: 4px;
+    margin: 4px;
+    font-size: 360px;
+    width: 640px;
+    text-align: center;
+}
+
+#Hint {
+    font-size: 48px;
+}
+
+</style>
+<script type="text/javascript" src="./jquery-3.1.1.min.js"></script>
+<script>
+$(function(){
+    var Word = $("#Word");
+    var Hint = $("#Hint");
+    var Mode = 0;
+    
+    var ps = [  'a',    'i',    'u',    'e',    'o',
+                'ka',   'ki',   'ku',   'ke',   'ko',
+                'sa',   'shi',  'su',   'se',   'so',
+                'ta',   'ti',   'tsu',  'te',   'to',
+                'na',   'ni',   'nu',   'ne',   'no',
+                'ha',   'hi',   'hu',   'he',   'ho',
+                'ma',   'mi',   'mu',   'me',   'mo',
+                'ya',           'yu',           'yo',
+                'ra',   'ri',   'ru',   're',   'ro',
+                'wa',                           'wo',
+                'n'];
+    
+    var hs = ['あ',  'い',  'う',  'え',  'お',  'か',  'き',  'く',  'け',  'こ',  'さ',  'し',  'す',  'せ',  'そ',  'た',  'ち',  'つ',  'て',  'と',  'な',  'に',  'ぬ',  'ね',  'の',  'は',  'ひ',  'ふ',  'へ',  'ほ',  'ま',  'み',  'む',  'め',  'も',  'や',  'ゆ',  'よ',  'ら',  'り',  'る',  'れ',  'ろ',  'わ',  'を',  'ん'];
+    
+    var ks = ['ア',  'イ',  'ウ',  'エ',  'オ',  'カ',  'キ',  'ク',  'ケ',  'コ',  'サ',  'シ',  'ス',  'セ',  'ソ',  'タ',  'チ',  'ツ',  'テ',  'ト',  'ナ',  'ニ',  'ヌ',  'ネ',  'ノ',  'ハ',  'ヒ',  'フ',  'ヘ',  'ホ',  'マ',  'ミ',  'ム',  'メ',  'モ',  'ヤ',  'ユ',  'ヨ',  'ラ',  'リ',  'ル',  'レ',  'ロ',  'ワ',  'ヲ',  'ン'];
+
+    
+    var shs = new Array();
+    var sks = new Array();
+    for(i=0; i<ps.length; i++) {
+        shs[hs[i]] = 0;
+        sks[ks[i]] = 0;
+    }
+    
+    function changeWord() {
+        inx = Math.floor(Math.random()*(ps.length));
+        
+        if(Mode == 0) {
+            w = hs[inx];
+            Word.html(w);
+            shs[w]++;
+        } else if (Mode == 1) {
+            w = ks[inx];
+            Word.html(w);
+            sks[w]++;
+        } else {
+            w = ps[inx];
+            Word.html(w);
+        }
+        
+
+        
+        Hint.html(ps[inx] + ' ' + hs[inx] + ' ' + ks[inx]);
+        Hint.hide();
+        
+        for(k in shs) {
+            console.log(k + ': ' + shs[k])
+        }
+    }
+
+    changeWord();
+    
+    Word.click(function(){changeWord();})
+    
+    $(document).keydown(function(event){
+        console.log(event.keyCode);
+        if(event.keyCode == 83) { // 'S' Switch Mode
+            Mode = (Mode + 1) % 3;
+            changeWord();
+        } else if(event.keyCode == 70 || event.keyCode == 74) {     // 'F' or 'J' Hint
+            Hint.show();
+        } else {
+            changeWord();
+        }
+    });
+});
+</script>
+</head>
+<body>
+<div id="Word"></div>
+<div id="Hint"></div>
+</body>
+</html>
