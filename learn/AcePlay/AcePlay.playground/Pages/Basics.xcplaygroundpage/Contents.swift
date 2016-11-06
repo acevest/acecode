@@ -6,7 +6,7 @@ let str = "Hello, playground.小狗:🐶 锤子:🔨"
 
 // Index
 let strInx:String.Index = str.startIndex
-strInx.successor()
+str.index(after: strInx)
 print(strInx)
 
 for c in str.characters {
@@ -19,12 +19,12 @@ var company:Array<String> = [ "Apple", "Google", "Facebook", "Tencent" ]
 print(company[0], company[1], company[2], company[3], separator: "#", terminator: " $$$$$\n")
 
 printLine("Count company Array 1")
-for (i,v) in company.enumerate() {  // enumerate 返回的是 index value 组成的元组
+for (i,v) in company.enumerated() {  // enumerate 返回的是 index value 组成的元组
     print(i, v, separator: " - ", terminator: "\n")
 }
 
 printLine("Count company Array 2")
-company.insert("Alibaba", atIndex: company.count)
+company.insert("Alibaba", at: company.count)
 for i in 0..<company.count {
     print(i, company[i], separator: " - ")
 }
@@ -32,10 +32,10 @@ company.removeLast()
 
 var someIntsA: [Int] = []
 var someIntsB = [Int]()
-var someIntsC = [Int](count: 10, repeatedValue: 1)
+var someIntsC = [Int](repeating: 1, count: 10)
 someIntsA.append(1)
-someIntsB.replaceRange(Range<Int>(0..<someIntsB.count), with: [1,3,4])
-someIntsC.removeAtIndex(4)
+someIntsB.replaceSubrange(CountableRange<Int>(0..<someIntsB.count), with: [1,3,4])
+someIntsC.remove(at: 4)
 someIntsC[1...4] = [1, 2, 3, 4, 5, 6]  //实际赋值量可以与下标Range量不等
 
 printLine("Set")
@@ -68,7 +68,7 @@ if SetC.contains("Swift") {
     print("SetC Contains Swift")
 }
 
-for v in SetC.sort() {
+for v in SetC.sorted() {
     print(v)
 }
 
@@ -92,11 +92,11 @@ for (k, v) in DictD {
     print("Key:", k, " Value: ", v)
 }
 
-for key in DictD.keys.sort() {
+for key in DictD.keys.sorted() {
     print(key)
 }
 
-for value in DictD.values.sort() {
+for value in DictD.values.sorted() {
     print(value)
 }
 

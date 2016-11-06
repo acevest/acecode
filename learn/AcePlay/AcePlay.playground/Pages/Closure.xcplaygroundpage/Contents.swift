@@ -28,38 +28,38 @@ var company = ["Tencent", "Apple", "Facebook", "Google", "Twitter", "Amazon"]
 var sortedCompany: [String] = []
 
 printLine("Sort")
-sortedCompany = company.sort()
+sortedCompany = company.sorted()
 print(sortedCompany)
 sortedCompany = []
 
 printLine("Sort With Function A")
-func backwardsA(a: String, b: String) -> Bool {
+func backwardsA(_ a: String, b: String) -> Bool {
     return a > b
 }
-sortedCompany = company.sort(backwardsA)
+sortedCompany = company.sorted(by: backwardsA)
 print(sortedCompany)
 sortedCompany = []
 
 printLine("Sort With Backwards Closure A [Closure Expression Syntax]")
-sortedCompany = company.sort({ (a: String, b: String) -> Bool in return a>b })
+sortedCompany = company.sorted(by: { (a: String, b: String) -> Bool in return a>b })
 print(sortedCompany)
 sortedCompany = []
 
 // 参数及返回类型自动推断
 printLine("Sort With Backwards Closure B [Inferring Type From Context]")
-sortedCompany = company.sort({ a, b in return a > b })
+sortedCompany = company.sorted(by: { a, b in return a > b })
 print(sortedCompany)
 sortedCompany = []
 
 // 隐式返回表达式闭包，省略return
 printLine("Sort With Backwards Closure C [Implicit Returns from Single-Expression Closures]")
-sortedCompany = company.sort({ a, b in a > b })
+sortedCompany = company.sorted(by: { a, b in a > b })
 print(sortedCompany)
 sortedCompany = []
 
 // 简写参数名
 printLine("Sort With Backwards Closure D [Shorthand Argument Names]")
-sortedCompany = company.sort({ $0 > $1 })
+sortedCompany = company.sorted(by: { $0 > $1 })
 print(sortedCompany)
 sortedCompany = []
 
@@ -67,13 +67,13 @@ sortedCompany = []
  There’s actually an even shorter way to write the closure expression above. Swift’s String type defines its string-specific implementation of the greater-than operator (>) as a function that has two parameters of type String, and returns a value of type Bool. This exactly matches the function type needed by the sort(_:) method. Therefore, you can simply pass in the greater-than operator, and Swift will infer that you want to use its string-specific implementation:
  */
 printLine("Sort With Backwards Closure E [Operator Functions]")
-sortedCompany = company.sort(>)
+sortedCompany = company.sorted(by: >)
 print(sortedCompany)
 sortedCompany = []
 
 // Trailing Closure
 printLine("Sort With Backwards Closure F [Trailing Closure]")
-sortedCompany = company.sort() { a, b in a > b} // 如果闭包参数是这个函数的最后一个参数，是可以采用尾随闭包写法
+sortedCompany = company.sorted() { a, b in a > b} // 如果闭包参数是这个函数的最后一个参数，是可以采用尾随闭包写法
 //sortedCompany = company.sort { a, b in a > b} // 如果闭包参数是这个函数的唯一一个参数，是可以不用写括号的
 print(sortedCompany)
 sortedCompany = []
@@ -110,7 +110,7 @@ print(digitString)
 printLine("Captuare Value")
 
 // 捕获值
-func makeIncrementer(step:Int) -> () -> Int {
+func makeIncrementer(_ step:Int) -> () -> Int {
     var total = 0
     func inc() -> Int {
         total += step
@@ -132,12 +132,12 @@ print("ClosureFuncC:", closureFuncC())
 
 // 逃逸&非逃逸闭包
 printLine("Noescaping & Escaping Closesure")
-func noescapingClosure(@noescape closure: () -> Void) {
+func noescapingClosure(_ closure: () -> Void) {
     closure()
 }
 
 var closureHandler: Array<() -> Void> = []
-func escapingClosure(closure: () -> Void) {  // 此时参数前加@noescape会报错
+func escapingClosure(_ closure: @escaping () -> Void) {  // 此时参数前加@noescape会报错
     closureHandler.append(closure)
 }
 
@@ -161,7 +161,7 @@ printLine("AutoClosure")
 print("Now Company Items:", company)
 print("Company Item Count:", company.count)
 // autoClosureHanlerA的type是 () -> String 不是 String
-let autoClosureHandlerA = { company.removeAtIndex(0) }  // an autoclosure lets you delay evaluation
+let autoClosureHandlerA = { company.remove(at: 0) }  // an autoclosure lets you delay evaluation
 print("Company Item Count:", company.count)
 print("No Remove \(autoClosureHandlerA())")
 print("Company Item Count:", company.count)
@@ -169,30 +169,30 @@ print("Company Item Count:", company.count)
 
 // autoclosure parameter
 printLine("AutoClosure Parameter")
-func autoClosureFuncParameterA(closure: () -> String) {
+func autoClosureFuncParameterA(_ closure: () -> String) {
     print("AutoClosureFuncParameterA \(closure())!")
 }
-autoClosureFuncParameterA({ company.removeAtIndex(0) })
+autoClosureFuncParameterA({ company.remove(at: 0) })
 
-func autoClosureFuncParameterB(@autoclosure closure: () -> String) {
+func autoClosureFuncParameterB(_ closure: @autoclosure () -> String) {
     print("AutoClosureFuncParameterB \(closure())!")
 }
-autoClosureFuncParameterB(company.removeAtIndex(0))
+autoClosureFuncParameterB(company.remove(at: 0))
 
 // @autoclosure 暗含了 noescape 特性
 var autoClosureHanlder: [() -> String] = []
-func autoClosureFuncParameterC(@autoclosure closure: () -> String) {
+func autoClosureFuncParameterC(_ closure: @autoclosure () -> String) {
     //因为参数被@autoclosure修饰了，而@autoclosure暗含@noescape特性，因此以下语句会报错
     //autoClosureHanlder.append(closure)
 }
 
 // 如果用了@autoclosure又要用escape特性，则用@autoclosure(escaping)修饰参数
-func autoClosureFuncParameterD(@autoclosure(escaping) closure: () ->String) {
+func autoClosureFuncParameterD( _ closure: @autoclosure @escaping () ->String) {
     print("Called autoClosureFuncParameterD")
     autoClosureHanlder.append(closure)
 }
-autoClosureFuncParameterD(company.removeAtIndex(0))
-autoClosureFuncParameterD(company.removeAtIndex(0))
+autoClosureFuncParameterD(company.remove(at: 0))
+autoClosureFuncParameterD(company.remove(at: 0))
 
 for handler in autoClosureHanlder {
     print("autoClosure Handling \(handler())!")

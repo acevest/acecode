@@ -37,15 +37,15 @@ var dict = [
     "tencnet" : "CN"
 ]
 print(dict)
-print(dict["apple"])
+print(dict["google"] ?? "default value")
 print(dict["apple"]!)
 
 // 创建空数组和空字典
 var EmptyArray = [String]()
 var EmptyDict  = [String:String]()
 // or
-var EmptArrayWithNoType = []
-var EmptDictWithNoType = [:]
+//var EmptArrayWithNoType = []
+//var EmptDictWithNoType = [:]
 
 for cp in arrayList {
     print(cp)
@@ -141,8 +141,8 @@ print("  emojistr \(emojiStr) charactor count is \(emojiStr.characters.count)")
 
 s = "Prefix----Suffix"
 if s.hasPrefix("Prefix") && s.hasSuffix("Suffix") {
-    print(s.lowercaseString)
-    print(s.uppercaseString)
+    print(s.lowercased())
+    print(s.uppercased())
 }
 
 
@@ -154,11 +154,11 @@ for i in 1...5 {
 IntArray += [0, -1, -2, -3, -4]
 IntArray[0] = 1024
 IntArray[1..<4]=[999, 888, 777]
-IntArray.insert(1, atIndex: 0)
-IntArray.removeAtIndex(5)
+IntArray.insert(1, at: 0)
+IntArray.remove(at: 5)
 IntArray.removeLast()
 print(IntArray)
-for (index, value) in IntArray.enumerate() {
+for (index, value) in IntArray.enumerated() {
     print("Item \(index+1): \(value)")
 }
 
@@ -167,7 +167,7 @@ var StringArray = [String]()
 StringArray.append("dd")
 StringArray = []
 
-var DoubleArray = [Double](count:3, repeatedValue:9.9)
+var DoubleArray = [Double](repeating: 9.9, count: 3)
 for i in 1...5 {
     DoubleArray.append(Double(i)*1.1)
 }
@@ -186,14 +186,14 @@ if SetA.contains(1) {
     print(SetA)
 }
 
-for genre in SetA.sort() {
+for genre in SetA.sorted() {
     print("\(genre)")
 }
 
 let oddSet:Set = [1, 3, 5, 7, 9]
 let evenSet:Set = [0, 2, 4, 6, 8]
-print(oddSet.intersect(evenSet).sort())  // 交
-print(oddSet.union(evenSet).sort())      // 并
+print(oddSet.intersection(evenSet).sorted())  // 交
+print(oddSet.union(evenSet).sorted())      // 并
 print(oddSet.hashValue)
 
 
@@ -221,7 +221,7 @@ print(airports)
 airports["APL"] = nil   // Delete
 print(airports)
 
-if let removedValue = airports.removeValueForKey("DUB") {
+if let removedValue = airports.removeValue(forKey: "DUB") {
     print("The removed airport's name is \(removedValue)")
 } else {
     print("The airports dictionary does not contain a value for DUB")

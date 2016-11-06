@@ -14,7 +14,7 @@ Hello()
 
 printLine("Multiple Return Types")
 
-func minMax(data:Array<Int>) -> (min:Int, max:Int)? {
+func minMax(_ data:Array<Int>) -> (min:Int, max:Int)? {
     guard data.count > 0 else {
         return nil
     }
@@ -43,7 +43,7 @@ func sameExternalParameterNames( ExName a: Int, ExName b: Int) -> Int {
 print(sameExternalParameterNames(ExName: 10, ExName: 20))
 
 // 引用传参
-func swapTwoInts(inout a: Int, inout _ b: Int) -> Void {
+func swapTwoInts(_ a: inout Int, _ b: inout Int) -> Void {
     let t: Int = a
     a = b
     b = t

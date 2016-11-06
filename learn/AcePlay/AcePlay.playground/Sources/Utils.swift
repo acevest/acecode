@@ -1,7 +1,7 @@
 import UIKit
 
 public
-func printLine(title: String) -> Void {
+func printLine(_ title: String) -> Void {
     let line = String(format:"[%@]-----------------------------------", title)
     print(line)
 }
