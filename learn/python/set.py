@@ -24,3 +24,9 @@ print "a&b: ", a&b
 print "a^b: ", a^b
 
 
+Set = {'apple', 'orange', 'apple', 'pear', 'orange', 'banana'}
+print(Set)
+
+
+#Empty Set
+EmptySet = set() # not { }

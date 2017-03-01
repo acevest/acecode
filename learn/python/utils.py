@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------
 #   File Name: utils.py
@@ -16,6 +16,13 @@ print('OLDPWD:\t'	+ os.getenv('OLDPWD'))
 
 
 #判断一个对象是否可以迭代
-print isinstance('0xACE', collections.Iterable)
-print isinstance([1, 2, 3, 4], collections.Iterable)
-print isinstance(0xACE, collections.Iterable)
+print(isinstance('0xACE', collections.Iterable))
+print(isinstance([1, 2, 3, 4], collections.Iterable))
+print(isinstance(0xACE, collections.Iterable))
+
+
+s = u'这是一个中文字符串'
+
+print('{!a}'.format(s)) # !a apply ascii()
+print('{!s}'.format(s)) # !s apply str()
+print('{!s}'.format(s)) # !r apply repr()

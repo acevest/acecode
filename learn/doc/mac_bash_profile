@@ -2,8 +2,8 @@
 #HISTCONTROL=ignorespace # 命令前加空格避免记入历史
 HISTCONTROL=ignoreboth
 
-export PATH=/usr/local/sbin:$PATH
 #export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
+export PATH=/usr/local/sbin:$PATH
 export PATH=/Users/Ace/.local/bin:$PATH
 export GOBIN=/Users/Ace/.local/bin
 export PATH=/Users/Ace/workspace/github/metasploit-framework:$PATH
@@ -18,3 +18,4 @@ alias cls='clear'
 alias grep='grep --color'
 alias egrep='egrep --color'
 alias msf='msfconsole'
+alias cdw='cd ~/workspace/'

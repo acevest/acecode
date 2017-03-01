@@ -7,4 +7,5 @@ ish
 *.swp
 *.ef
 *.conf
+*.diff
 dvwa

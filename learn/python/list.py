@@ -111,12 +111,34 @@ for k, v in reversed(zip(a, b)):
 
 for x in range(len(a)) :
     print x,
+else :
+    print("")
 
 a += b
 print a
+
+questions = ['name', 'quest', 'favorite color']
+answers = ['lancelot', 'the holy grail', 'blue']
+for q, a in zip(questions, answers):
+    print('What is your {0}?  It is {1}.'.format(q, a))
 
 
 # 按下标循环
 print L
 for i, v in enumerate(L) :
-    print i, v
+    print("[{0},{1}]".format(i, v)),
+else :
+    print("")
+
+
+# list 只适合快速后入后出，可以很方便地利用append 和 pop实现栈的功能
+# 要实现前出后入的队列功能就很慢，此时比较适合deque，用append 和 popleft实现
+from collections import deque
+
+queue = deque(['Apple', 'Microsoft', 'Google'])
+queue.append('Tencent')
+queue.append('Baidu')
+queue.append('Alibaba')
+queue.popleft()
+print queue
+

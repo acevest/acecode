@@ -20,9 +20,9 @@
 #include<stdio.h>
 int main()
 {
-	char ch;
+	unsigned int ch;
 	while(scanf("%x",&ch) != EOF)
-		printf("%c",ch);
+		printf("%c",(unsigned char)ch);
 
 	return 0;
 }

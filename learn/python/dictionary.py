@@ -29,6 +29,9 @@ print D
 for name, value in D.items() :
     print "{0:10} : {1:10d}".format(name, value)
 
+D = {x:x**2 for x in range(10)}
+print(D)
+
 D = dict(a=1, b=2, c=3)
 print D
 
@@ -38,17 +41,21 @@ file_sz = {name : os.path.getsize(name) for name in os.listdir(".")}
 for item in file_sz.items() :
     print "{1}:\t{0}".format(item[0], item[1])
 
-
-
-
 x = dict()
 
 for i in range(0, 10) :
     x[i] = x.get(i, i)
 
 for i in sorted(x.keys()) :
-    print x[i]
+    print x[i],
 
+print("")
 
+# Another Make Empty Dictionary Method
+x = { }
 
+for i in range(0, 10) :
+    x[i] = x.get(i, i)
 
+for i in sorted(x.keys()) :
+    print x[i],
