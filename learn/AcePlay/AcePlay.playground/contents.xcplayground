@@ -7,5 +7,6 @@
         <page name='Enumerations'/>
         <page name='Classes'/>
         <page name='Properties'/>
+        <page name='CollectionTypes'/>
     </pages>
 </playground>
