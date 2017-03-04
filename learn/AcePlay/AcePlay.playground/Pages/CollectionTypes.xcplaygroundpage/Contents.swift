@@ -116,9 +116,9 @@ print(farmAnimals.isSuperset(of: houseAnimals))
 print(farmAnimals.isDisjoint(with: cityAnimals))    // 是否无交集
 
 printLine("Dictionary")
-//var DictA = Dictionary<Int, String>()
-//var DictB = ["KA":"VA", "KB":"VB", "KC":"VC"]
-//var DictC: [String:String] = [:]
+var DictA = Dictionary<Int, String>()
+var DictB = ["KA":"VA", "KB":"VB", "KC":"VC"]
+var DictC: [String:String] = [:]
 var DictD = [Int:String]()
 
 DictD[1]  = "V1"
@@ -135,6 +135,8 @@ for (k, v) in DictD {
     print("Key:", k, " Value: ", v)
 }
 
+DictD[4] = nil  // 4 has been removed from the Dictionary
+
 for key in DictD.keys.sorted() {
     print(key)
 }
@@ -143,5 +145,10 @@ for value in DictD.values.sorted() {
     print(value)
 }
 
+
+// 把keys 或 values 放到数组中
 let keys = [Int](DictD.keys)
+let values = Array<String>(DictD.values)
 print(keys)
+print(values)
+

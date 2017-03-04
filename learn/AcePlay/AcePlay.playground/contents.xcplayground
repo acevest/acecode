@@ -8,5 +8,6 @@
         <page name='Classes'/>
         <page name='Properties'/>
         <page name='CollectionTypes'/>
+        <page name='ControlFlow'/>
     </pages>
 </playground>
