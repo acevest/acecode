@@ -85,7 +85,7 @@ func Sum(_ numbers: Int...) -> Int {
 
 print(Sum(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
 
-// 外部参数包能相同, 但内部参数名不能相同
+// 外部参数标签能相同, 但内部参数名不能相同
 func sameExternalParameterNames( ExName a: Int, ExName b: Int) -> Int {
     return max(a, b)
 }
@@ -102,5 +102,101 @@ var IntA = 10
 var IntB = 20
 swapTwoInts(&IntA, &IntB)
 print("IntA: \(IntA) IntB: \(IntB)")
+
+
+// 函数类型
+func addFunc(_ a: Int, _ b: Int) -> Int {
+    print(#function)
+    return a+b
+}
+
+func mulFunc(_ a: Int, _ b: Int) -> Int {
+    print(#file, #function, #line)
+    return a*b
+}
+
+
+var someMathFunc: (Int, Int) -> Int
+someMathFunc = addFunc
+someMathFunc(1, 2)
+
+someMathFunc = mulFunc
+someMathFunc(1, 2)
+
+
+typealias MathFuncType = (Int, Int) -> Int
+func printMathFuncResult(_ mathFunc: MathFuncType, _ a: Int, _ b: Int) -> Void {
+    print("Result: \(mathFunc(a, b))")
+}
+
+printMathFuncResult(addFunc, 3, 4)
+printMathFuncResult(mulFunc, 3, 4)
+
+
+
+// 函数类型作为返回值
+typealias StepFuncType = (inout Int) -> Int
+
+func stepForward(_ input: inout Int) -> Int {
+    input += 1
+    print("step forward to \(input)")
+    return input
+}
+
+func stepBackward(_ input: inout Int) -> Int {
+    input -= 1
+    print("step backward to \(input)")
+    return input
+}
+
+func chooseStepFunc(forward: Bool) -> StepFuncType {
+    if(forward) {
+        return stepForward
+    }
+    
+    return stepBackward
+}
+
+var currentValue = Int(arc4random_uniform(20))
+print("current value: \(currentValue)")
+while currentValue != 10 {
+    let moveTo: StepFuncType = chooseStepFunc(forward: currentValue < 10)
+    _ = moveTo(&currentValue)
+}
+
+
+func getRandomInt(_ n: UInt32) -> Int {
+    var r: Int = Int(arc4random_uniform(n))
+    r *= arc4random_uniform(2) == 0 ? -1 : 1
+    return r;
+}
+
+// 嵌套函数
+func chooseStepFuncV2(forward: Bool) -> (inout Int) -> Void {
+    func stepForwardV2(_ input: inout Int) -> Void {
+        input += 1
+        print("step forward to \(input)")
+    }
+    
+    func stepBackwardV2(_ input: inout Int) -> Void {
+        input -= 1
+        print("step backward to \(input)")
+    }
+
+    if forward {
+        return stepForwardV2
+    }
+    
+    return stepBackwardV2
+}
+
+currentValue = getRandomInt(10)
+print("current value: \(currentValue)")
+while currentValue != 0 {
+    let moveTo = chooseStepFuncV2(forward: currentValue < 0)
+    moveTo(&currentValue)
+}
+
+
 
 
