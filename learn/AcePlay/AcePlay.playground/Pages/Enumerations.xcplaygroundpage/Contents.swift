@@ -3,14 +3,14 @@
 import UIKit
 
 enum CompassPoint {
-    case north
+    case north      // 也可以写在一行上用逗号隔开 north, east, south, west
     case east
     case south
     case west
 }
 
-var directionToHead = CompassPoint.north
-directionToHead = .east
+var directionToHead = CompassPoint.north    // 自动推断类型
+directionToHead = .east                     // 一旦类型确定，再次赋值时可以省略枚举类型名
 
 switch directionToHead {
     case .north: print("Losts of Plantes Have a North")
@@ -49,7 +49,7 @@ enum ASCIIControlCharacter: Character {
 // Implicitly Assigned Raw Values
 // 整型从0开始自增1，每个项的rawValue不能相同
 enum Planet: Int {
-    case mercury
+    case mercury    // 从0开始，后续自增1，也可以指定值 如 mercury=1
     case venus
     case earth
     case mars
@@ -59,17 +59,22 @@ enum Planet: Int {
     case netpune
 }
 
+
 print(Planet.mercury, Planet.mercury.rawValue)
 print(Planet.mars, Planet.mars.rawValue)
+
+// 使用原始值初始化枚举实例
+let possiblePlanet: Planet? = Planet(rawValue: 7)   // 注意是可选类型 Planet?
+print(possiblePlanet!, possiblePlanet!.rawValue)
 print(Planet(rawValue: 5)!, Planet(rawValue: 5)!.rawValue)
 
 
 // String型，每项默认为枚举项的字符串值
 enum CompassPointString: String {
-    case North
+    case North              // String原始值默认与枚举成员名相同
     case East
     case Sourth
-    case West
+    case West = "WEAST"
 }
 
 
@@ -79,6 +84,8 @@ print(CompassPointString.Sourth,CompassPointString.Sourth.rawValue)
 print(CompassPointString.West,  CompassPointString.West.rawValue)
 
 
+
+// 递归枚举
 printLine("Resursive Enumerations")
 // 不能忘记 indirect
 indirect enum Exp {
