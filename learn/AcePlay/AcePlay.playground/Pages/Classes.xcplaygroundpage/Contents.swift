@@ -28,6 +28,19 @@ cinema.width  = 2048
 print("HD: \(hd.width)x\(hd.height)")
 print("Cinema: \(cinema.width)x\(cinema.height)")
 
+// Enumeration 也是值类型
+enum CompassPoint: String {
+    case North
+    case South
+    case East
+    case West
+}
+
+var originDirection = CompassPoint.East
+var currentDirection = originDirection
+currentDirection = .West
+print("originDirection: \(originDirection) currentDirection: \(currentDirection)")
+
 
 class VideoMode {
     var resolution = Resolution()

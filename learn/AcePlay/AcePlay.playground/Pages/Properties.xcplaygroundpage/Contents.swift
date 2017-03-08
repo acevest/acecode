@@ -27,6 +27,30 @@ printLine("Lazy Stored Properties")
 // lazy 属性在声明前加上 lazy 关键字
 // 如果一个被标记为 lazy 的属性在没有初始化时就同时被多个线程访问，则无法保证该属性只会被初始化一次
 
+class DataImporter {
+    var name: String = ""
+    init() {
+        self.name = "DataImporter"
+        print("...\(self.name)...")
+    }
+}
+
+class DataManager {
+    lazy var importer = DataImporter()
+    var data: Array<String> = []
+}
+
+let dataManager = DataManager()
+dataManager.data.append("Data_0")
+dataManager.data.append("Data_1")
+dataManager.data.append("Data_2")
+// lazy 变量还未初始化
+print("the DataImporter instance for the importer property has not yet been created")
+
+// 主动调用才初始化
+dataManager.importer
+
+
 
 printLine("Computed Properties")
 
