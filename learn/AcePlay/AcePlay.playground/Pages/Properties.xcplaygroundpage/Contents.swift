@@ -51,7 +51,6 @@ print("the DataImporter instance for the importer property has not yet been crea
 dataManager.importer
 
 
-
 printLine("Computed Properties")
 
 struct Point {
@@ -67,6 +66,7 @@ struct Rect {
     var origin = Point()
     var size   = Size()
     
+    // 必须使用 var 关键字定义计算属性，包括只读计算属性，因为它们的值不是固定的
     var center: Point {
         get {
             var p = Point()
@@ -81,7 +81,7 @@ struct Rect {
         }
         
         /*
-         //set 有更简洁的写法，set重命名参数的话默认参数名为newValue
+        //set 有更简洁的写法，set重命名参数的话默认参数名为newValue
          
         set {
             origin.x = newValue.x - size.width/2
@@ -119,3 +119,83 @@ class Cuboid {
 
 let fourByFiveByTwo = Cuboid(width:4.0, height:5.0, depth:2.0)
 print(fourByFiveByTwo.volume)
+
+
+// 属性观察器
+class StepCounter
+{
+    var totalSteps: Int = 0 {
+        // 默认的分别是newValue & oldValue
+        willSet(newValue) {
+            print("About to set totalSteps to \(newValue)")
+        }
+        
+        didSet {
+            if totalSteps > oldValue {
+                print("Added \(totalSteps-oldValue) steps")
+            }
+        }
+    }
+    
+    var serialNumber: String = "0000-00000-0000000-000" {
+        // 不想用newValue & oldValue 可以命名为别的方法
+        willSet(newSerialNumber) {
+            print("New serial number \(newSerialNumber)")
+        }
+        
+        didSet(oldSerialNumber) {
+            print("Old serial number \(oldSerialNumber)")
+        }
+    }
+}
+
+
+let stepCounter = StepCounter()
+
+stepCounter.totalSteps = 100
+stepCounter.totalSteps = 300
+stepCounter.totalSteps = 657
+stepCounter.totalSteps = 257
+stepCounter.serialNumber = "0010-23873-83F123A-ECA"
+stepCounter.serialNumber = "10A0-8376C-247232E-EST"
+
+
+// 类型属性
+struct SomeStructure {
+    static var storedType = "Structure"
+    static var computedType: Int {
+        return 1;
+    }
+}
+
+enum SomeEnumeration {
+    static var v: String = "ComputedEnumeration"
+    static var storedType = "Enumeration"
+    static var computedType: String {
+        get {
+            return "get" + v
+        }
+        
+        set(v) {
+            self.v = v
+        }
+    }
+}
+
+class SomeClass {
+    static var storedType = "Class"
+    static var computedType: String {
+        return "ComputedClass"
+    }
+}
+
+print(SomeStructure.storedType)
+print(SomeEnumeration.storedType)
+print(SomeClass.storedType)
+
+print(SomeStructure.computedType)
+print(SomeEnumeration.computedType)
+SomeEnumeration.computedType = "ComputedEnumerationV2"
+print(SomeEnumeration.computedType)
+print(SomeClass.computedType)
+

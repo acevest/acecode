@@ -9,5 +9,6 @@
         <page name='Properties'/>
         <page name='CollectionTypes'/>
         <page name='ControlFlow'/>
+        <page name='Methods'/>
     </pages>
 </playground>
