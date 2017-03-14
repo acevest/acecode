@@ -10,5 +10,6 @@
         <page name='CollectionTypes'/>
         <page name='ControlFlow'/>
         <page name='Methods'/>
+        <page name='Subscripts'/>
     </pages>
 </playground>

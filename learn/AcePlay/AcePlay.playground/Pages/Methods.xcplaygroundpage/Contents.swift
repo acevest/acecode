@@ -2,7 +2,7 @@
 
 import Foundation
 
-var str = "Hello, playground"
+var str = "Hello, Methods"
 
 //: [Next](@next)
 
