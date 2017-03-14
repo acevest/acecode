@@ -11,5 +11,7 @@
         <page name='ControlFlow'/>
         <page name='Methods'/>
         <page name='Subscripts'/>
+        <page name='Inheritance'/>
+        <page name='Initialization'/>
     </pages>
 </playground>
