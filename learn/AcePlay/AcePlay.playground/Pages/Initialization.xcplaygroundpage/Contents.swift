@@ -173,4 +173,164 @@ print("CenterRect: \(centerRect.description)")
 
 // 类的继承和构造过程
 
+// 每一个类都必须拥有至少一个指定构造器
+// 应当只在必要的时候为类提供便利构造器
 
+// 指定构造器语法
+// init(parameters) {
+//      statements
+// }
+
+// 便利构造器语法
+// convenience init(parameters) {
+//      statements
+// }
+
+
+// 构造器之间的代理规则
+// 1. 指定构造器必须调用其直接父类的的指定构造器
+// 2. 便利构造器必须调用同类中定义的其它构造器
+// 3. 便利构造器必须最终导致一个指定构造器被调用
+
+
+// 换种说法
+// 1. 指定构造器必须总是向上代理
+// 2. 便利构造器必须总是横向代理
+
+
+
+//
+// 两段式构造安全检查
+//
+// 需要注意`初始化` 和 `赋新值`之间的细微差别
+// 1. 指定构造器必须保证它所在类引入的所有属性都必须先`初始化`完成
+// 2. 指定构造器必须先向上代理调用父类构造器，然后再为继承的属性`赋新值`
+// 3. 便利构造器必须先代理调用同一类中的其它构造器，然后再为任意属性赋新值
+// 4. 构造器在第一阶段构造完成之前，不能调用任何实例方法，不能读取任何实例属性的值，不能引用self作为一个值
+
+
+//
+// 阶段 1
+//
+// 某个指定构造器或便利构造器被调用。
+// 完成新实例内存的分配，但此时内存还没有被初始化。
+// 指定构造器确保其所在类引入的所有存储型属性都已赋初值。存储型属性所属的内存完成初始化。
+// 指定构造器将调用父类的构造器，完成父类属性的初始化。
+// 这个调用父类构造器的过程沿着构造器链一直往上执行，直到到达构造器链的最顶部。
+// 当到达了构造器链最顶部，且已确保所有实例包含的存储型属性都已经赋值，这个实例的内存被认为已经完全初始化。此时阶段 1 完成。
+
+//
+// 阶段 2
+//
+// 从顶部构造器链一直往下，每个构造器链中类的指定构造器都有机会进一步定制实例。构造器此时可以访问self、修改它的属性并调用实例方法等等。
+// 最终，任意构造器链中的便利构造器可以有机会定制实例和使用self
+
+
+
+// Swift 中的子类默认情况下不会继承父类的构造器
+// 父类的构造器仅会在安全和适当的情况下被继承
+// 在编写一个和父类中指定构造器相匹配的子类构造器时，实际上是在重写父类的这个指定构造器。因此必须在定义子类构造器时带上override修饰符
+// 如果编写了一个和父类便利构造器相匹配的子类构造器，由于子类不能直接调用父类的便利构造器，因此并不算子类重写父类构造器。所以不需要加override前缀
+
+
+
+// Vehicle 只为存储属性提供默认值，而不自定义构造器
+// 因此它会自动获得一个默认构造器
+class Vehicle {
+    var numberOfWheels = 0
+    var description: String {
+        return "\(numberOfWheels) wheel(s)"
+    }
+}
+
+let someVehicle = Vehicle()
+print("SomeVehicle: \(someVehicle.description)")
+
+class Bicycle: Vehicle {
+    override init() {   // 重写默认构造器
+        
+        super.init()    // 调用父类默认构造器
+        
+        numberOfWheels = 2  // 赋新值
+    }
+}
+
+let someBicycle = Bicycle()
+print("SomeBicycel: \(someBicycle.description)")
+
+
+
+
+
+// 构造器的自动继承
+// 规则1: 如果子类没有定义任何`指定构造器`，它将自动继承所有父类的指定构造器。
+// 规则2: 如果子类提供了所有父类指定构造器的实现——无论是通过规则1继承过来的，还是提供了自定义实现——它将自动继承所有父类的`便利构造器`
+// 注意: 
+// 1. 即使你在子类中添加了更多的便利构造器，这两条规则仍然适用。
+// 2. 对于规则2，子类可以将父类的指定构造器实现为便利构造器。
+
+
+
+class Food {
+    var name: String
+
+    // 指定构造器
+    init(name: String) {
+        self.name = name
+    }
+    
+    // 便利构造器
+    convenience init() {
+        self.init(name: "[Unnamed]")
+    }
+}
+
+
+let namedMeat = Food(name: "Bacon")
+
+
+class RecipeIngredient: Food {    // 食谱 材料 <==> 食材
+    var quantity: Int
+    
+    init(name: String, quantity: Int) {
+        self.quantity = quantity
+        
+        super.init(name: name)
+    }
+    
+    // 重写父类的指定构造器，可以改写成便利构造器
+    override convenience init(name: String) {
+        
+        // 便利构造器只允许调用本类的构造器
+        self.init(name: name, quantity: 1)
+    }
+    
+    
+    // 由于RecipeIngredient类实现了父类Food的所有指定构造器
+    // 因此它自动继承了父类Food的所有便利构造器
+    // 在这个例子中是继承了
+    //    convenience init() {
+    //        self.init(name: "[Unnamed]")
+    //    }
+    // 只不过继承的这个便利构造器代理的不是Food，而是RecipeIngredient这个类
+    // 因此self指的不是Food而是RecipeIngredient
+    
+    var description: String {
+        return "RecipeIngredient: \(self.name) x \(self.quantity)"
+    }
+}
+
+// 因此有三种方式创建RecipeIngredient的实例
+
+// 1. 调用将父类指定构造器重写为便利构造器的构造器
+let oneBacon = RecipeIngredient(name: "Bacon")
+print("OneBacon: \(oneBacon.description)")
+
+// 2. 调用新写的指定构造器
+let sixEggs = RecipeIngredient(name: "Egg", quantity: 6)
+print("SixEggs: \(sixEggs.description)")
+
+// 3. 调用继承自父类的便利构造器
+//    需要注意的是此时的构造器代理的不是父类而是当前类
+let oneMysterItem = RecipeIngredient()
+print("OneMysterItem: \(oneMysterItem.description)")
