@@ -334,3 +334,257 @@ print("SixEggs: \(sixEggs.description)")
 //    需要注意的是此时的构造器代理的不是父类而是当前类
 let oneMysterItem = RecipeIngredient()
 print("OneMysterItem: \(oneMysterItem.description)")
+
+
+
+class ShoppingListElement: RecipeIngredient {
+    var purchased = false
+    
+    override var description: String {
+        return "\(self.name) x \(self.quantity)" + (purchased ? " ✔" : " ✘")
+    }
+    
+    // 此时继承了三个构造器
+    // init(name: String, quantity: Int)
+    // convenience init(name: String)
+    // init()
+}
+
+
+var breakfastList = [
+    ShoppingListElement(),  // 继承而来的默认构造器
+    ShoppingListElement(),
+    ShoppingListElement(name: "Bacon"), // 继承的便利构造器
+    ShoppingListElement(name: "Eggs", quantity: 6) // 继承的指定构造器
+]
+
+
+breakfastList[1].purchased = true
+breakfastList[1].name = "Orange Juice"
+
+
+for v in breakfastList {
+    print(v.description)
+}
+
+// 可失败的构造器 init?
+// 语法为在init后添加一个`?`号，如init? 用return nil来表明失败
+// 可失败构造器的参数名和参数类型，不能与其它非可失败构造器的参数名，及其参数类型相同。
+//
+
+struct Animal {
+    let species: String
+    
+    init?(species: String) {
+        if species.isEmpty {
+            return nil
+        }
+        
+        self.species = species
+    }
+}
+
+if let someCreature = Animal(species: "") {
+    print("An animal wat initialized with a species of \(someCreature.species)")
+} else {
+    print("The anonymous creature could not be initialized")
+}
+
+
+// 枚举类型的可失败构造器
+enum TemperatureUnit {
+    case Kelvin
+    case Celius
+    case Fahrenheit
+    
+    init?(symbol: Character) {
+        switch symbol {
+        case "K":
+            self = .Kelvin
+        case "C":
+            self = .Celius
+        case "F":
+            self = .Fahrenheit
+        default:
+            return nil
+        }
+    }
+}
+
+
+let unknownUnit = TemperatureUnit(symbol: "A")
+if unknownUnit == nil {
+    print("This is not a defined temperature unit")
+}
+
+
+// 带原始值的枚举类型的可失败构造器
+// 带原始值的枚举类型会自带一个可失败构造器init?(rawValue:)
+enum TemperatureUnitWithRawValue: Character {
+    case Kelvin = "K"
+    case Celius = "C"
+    case Fahrenheit = "F"
+}
+
+let unknownUnit2 = TemperatureUnitWithRawValue(rawValue: "X")
+if unknownUnit2 == nil {
+    print("This is not a defined temperature unit")
+}
+
+
+
+// 构造的失败传递
+// 类，结构体，枚举的可失败构造器可以横向代理到类型中的其他可失败构造器。类似的，子类的可失败构造器也能向上代理到父类的可失败构造器。
+// 如果代理到的其他可失败构造器触发构造失败，整个构造过程将立即终止，接下来的任何构造代码不会再被执行。
+// 可失败构造器也可以代理到其它的非可失败构造器
+
+class Product {
+    var name: String
+    init?(name: String) {
+        if name.isEmpty {
+            return nil
+        }
+        self.name = name
+    }
+}
+
+class CartItem: Product {
+    var quantity: Int
+    
+    init?(name: String, quantity: Int) {
+        if quantity < 1 {
+            return nil
+        }
+        
+        self.quantity = quantity
+        
+        super.init(name: name)
+    }
+}
+
+
+if let twoSocks = CartItem(name: "Sock", quantity: 2) {
+    print("Item: \(twoSocks.name), quantity: \(twoSocks.quantity)")
+}
+
+let zeroShirts = CartItem(name: "Shirt", quantity: 0)
+if zeroShirts == nil {
+    print("Unable to initialize zero shirts")
+}
+
+
+// 重写一个败构造器
+// 可以在子类中重写父类的可失败构造器
+// 也可以用子类的非可失败构造器重写一个父类的可失败构造器
+// 注意1:当用子类的非可失败构造器重写父类的可失败构造器时，向上代理到父类的可失败构造器的唯一方式是对父类的可失败构造器的返回值进行强制解包
+// 注意2:可以用非可失败构造器重写可失败构造器，但反过来却不行
+
+
+
+class Document {    // 定义一个类，其name成员必需为nil或非空字符串
+    var name: String?
+    init() {        // 该构造器创建一个name为nil的实例
+    }
+    
+    init?(name: String) {   // 该构造器创建一个name为非空字符串的实例
+        if name.isEmpty {
+            return nil
+        }
+        
+        self.name = name
+    }
+}
+
+
+class AutomaticallyDocument: Document {
+    override init() {
+        super.init()
+        self.name = "[Unnamed]"
+    }
+    
+    
+    // 用非可失败的构造器重写父类的可失败构造器
+    override init(name: String) {
+        super.init()
+        
+        if name.isEmpty {
+            self.name = "[Unnamed]"
+        } else {
+            self.name = name
+        }
+    }
+}
+
+
+// 可以在子类的非可失败构造器中使用强制解包来调用父类的可失败构造器
+class UntitledDocument: Document {
+    override init() {
+        super.init(name: "[Unnammed]")!
+    }
+}
+
+
+
+// 可失败构造器 init!
+// 一旦init!构造失败，则会触发一个断言
+
+
+
+
+// 必要构造器
+// 在类的构造器前添加required修饰符表明所有该类的子类都必须实现该构造器
+// 子类实现构造器前也得加required，不用加override
+// 注意:如果子类继承的构造器能满足必要构造器的要求，则无须在子类中显式提供必要构造器的实现
+class SomeClass {
+    required init() {
+        
+    }
+}
+
+class SomeSubClass: SomeClass {
+    required init() { // 不用再写override
+        
+    }
+}
+
+
+
+// 通过闭包或函数设置属性的默认值
+// 注意: 如果使用闭包来初始化属性，在闭包执行时，实例的其它部分都还没有初始化。这意味着不能在闭包里访问其它属性，即使这些属性有默认值。同样，也不能使用隐式的self属性，或者调用任何实例方法。
+class SomeClosureClass {
+    var someProperty: String = {
+        return "a"+"b" // 返回类型必须与属性类型相同
+    }() // 末尾的`()`很重要，这告诉Swift立即执行此闭包，如果不加这个就表示把闭包赋给属性
+}
+
+
+struct CheckerBoard {
+    let boardColors: [Bool] = {
+        var tmpBoard = [Bool]()
+        var isBlack = false
+        for i in 1...8 {
+            for j in 1...8 {
+                tmpBoard.append(isBlack)
+                isBlack = !isBlack
+            }
+            isBlack = !isBlack
+        }
+        
+        return tmpBoard
+    }()
+    
+    func squareIsBlack(row: Int, col: Int) -> Bool? {
+        guard row >= 1 && row <= 8 && col >= 1 && row <= 8 else {
+            return nil
+        }
+        
+        return self.boardColors[(row-1)*8+col-1]
+    }
+}
+
+let board = CheckerBoard()
+
+if let isBlack = board.squareIsBlack(row: 7, col: 7) {
+    print((isBlack ? "Black" : "White"))
+}
+
