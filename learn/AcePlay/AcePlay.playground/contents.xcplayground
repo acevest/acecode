@@ -16,5 +16,10 @@
         <page name='Deinitialization'/>
         <page name='ARC'/>
         <page name='OptionalChaining'/>
+        <page name='ErrorHandling'/>
+        <page name='TypeCasting'/>
+        <page name='NestedTypes'/>
+        <page name='Extensions'/>
+        <page name='Protocols'/>
     </pages>
 </playground>
