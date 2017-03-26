@@ -41,7 +41,7 @@ print("Tandem: \(someTandem.description)")
 
 // 重写
 // 子类可以为继承来的实例方法，类方法，实例属性，或下标提供自己定制的实现。我们把这种行为叫重写
-// 如果要重写某个特性，你需要在重写定义的前面加上override关键字
+// 如果要重写某个特性，需要在重写定义的前面加上override关键字
 class Train: Vehicle {
     override func makeNoise() {
         print("Choo Choo")
@@ -57,7 +57,7 @@ someTrain.makeNoise()
 // 可以将一个继承来的只读属性重写为一个读写属性
 // 不可以将一个继承来的读写属性重写为一个只读属性
 
-// 如果在重写属性中提供了setter，那么你也一定要提供getter
+// 如果在重写属性中提供了setter，那么也一定要提供getter
 // 如果不想在重写版本中的getter 里修改继承来的属性值
 // 可以直接通过super.someProperty来返回继承来的值，其中someProperty是要重写的属性的名字
 
