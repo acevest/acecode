@@ -131,12 +131,12 @@ unit7C!.tenant = bill
 print("----------destroy bill------------")
 // PersonWeak实例依然保持对ApartmentWeak实例的强引用
 // 但是ApartmentWeak实例现在对PersonWeak实例是弱引用
-// 这意味着当你断开bill变量所保持的强引用时，再也没有指向PersonWeak实例的强引用了，由于再也没有指向PersonWeak实例的强引用，该实例会被释放
+// 这意味着当断开bill变量所保持的强引用时，再也没有指向PersonWeak实例的强引用了，由于再也没有指向PersonWeak实例的强引用，该实例会被释放
 bill = nil
 
 
 print("----------destroy unit7C------------")
-// 现在只剩下来自unit7C变量对ApartmentWeak实例的强引用。如果你打断这个强引用，那么ApartmentWeak实例就再也没有强引用了
+// 现在只剩下来自unit7C变量对ApartmentWeak实例的强引用。如果打断这个强引用，那么ApartmentWeak实例就再也没有强引用了
 unit7C = nil
 
 
@@ -178,7 +178,7 @@ carl = Customer(name: "Carl")
 carl!.card = CreditCard(number: 314_1414_1732, customer: carl!)
 
 // 现在Customer实例对CreditCard实例有一个强引用，并且CreditCard实例对Customer实例有一个无主引用
-// 由于 Customer 的无主引用，当你断开 john 变量持有的强引用时，那么就再也没有指向 Customer 实例的强引用了
+// 由于 Customer 的无主引用，当断开 john 变量持有的强引用时，那么就再也没有指向 Customer 实例的强引用了
 // 因为不再有 Customer 的强引用，该实例被释放了。其后，再也没有指向 CreditCard 实例的强引用，该实例也随之被释放了
 print("----------destroy carl------------")
 carl = nil
@@ -267,7 +267,7 @@ paragraph = nil
 
 
 // Swift通过闭包捕获列表来解决这个问题
-// Swift要求你在闭包中引用self成员时使用self.someProperty或者self.someMethod 而不只是 someProperty或someMethod）。这有助于提醒你可能会一不小心就捕获了self
+// Swift要求在闭包中引用self成员时使用self.someProperty或者self.someMethod 而不只是 someProperty或someMethod）。这有助于提醒可能会一不小心就捕获了self
 
 // 捕获列表中的每一项都由 weak 或 unowned 关键字与类实例的引用（如 self ）或初始化过的变量（如 delegate = self.delegate! ）成对组成。这些项写在方括号中用逗号分开。
 // 把捕获列表放在形式参数和返回类型前边，如果它们存在的话

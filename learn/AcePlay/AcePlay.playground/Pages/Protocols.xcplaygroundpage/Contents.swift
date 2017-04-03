@@ -106,3 +106,111 @@ let generator = LinearCongruentialGenerator()
 print("Here is a random number: \(generator.random())")
 print("Here is another random number: \(generator.random())")
 
+
+
+
+
+
+
+
+// 类类型专属协议
+protocol SomeClassOnlyProtocol: class {
+    func haha() -> String
+}
+
+class HahaClass: SomeClassOnlyProtocol {
+    func haha() -> String {
+        return "Haha Class"
+    }
+}
+// 只能Class继承
+//struct HahaStruct : SomeClassOnlyProtocol {
+//    func haha() -> String {
+//        return "Haha Struct"
+//    }
+//}
+
+let h = HahaClass()
+print(h.haha())
+
+
+
+// 协议合成
+// 有时候需要同时遵循多个协议，以将多个协议采用 SomeProtocol & AnotherProtocol 这样的格式进行组合
+protocol Named {
+    var name: String { get }
+}
+
+protocol Aged {
+    var age: Int { get }
+}
+
+struct SomeOne: Named, Aged {
+    var name: String
+    var age: Int
+}
+
+
+func wishHappyBirthday(to celebrator: Named & Aged) {
+    print("Happy Birthday, \(celebrator.name), you're \(celebrator.age)")
+}
+wishHappyBirthday(to: SomeOne(name: "Ace", age: 18))
+
+
+// 检查协议一致性
+protocol Area {
+    var area: Double { get }
+}
+
+class Circle: Area {
+    var radius: Double
+    let pi = 3.1415927
+    var area: Double {
+        get {
+            return pi*radius*radius
+        }
+    }
+    
+    init(radius: Double) {self.radius = radius }
+}
+
+
+class Country: Area {
+    var area: Double
+    init(area: Double) { self.area = area }
+}
+
+class Animal {
+    var legs: Int
+    init(legs: Int) { self.legs = legs }
+}
+
+let objects: [AnyObject] = [
+    Circle(radius: 45),
+    Country(area: 960),
+    Animal(legs: 4)
+]
+
+for o in objects {
+    if let oa = o as? Area {
+        print("Area is \(oa.area)")
+    } else {
+        print("Something that does not have area")
+    }
+}
+
+
+
+// 协议扩展
+// 协议可以通过扩展来为遵循协议的类型提供属性、方法以及下标的实现。通过这种方式，可以基于协议本身来实现这些功能，而无需在每个遵循协议的类型中都重复同样的实现，也无需使用全局函数。
+extension RandomNumberGenerator {
+    func randomBool() -> Bool {
+        return random() > 0.5
+    }
+}
+
+let generator1 = LinearCongruentialGenerator()
+print(generator1.randomBool())
+
+
+
