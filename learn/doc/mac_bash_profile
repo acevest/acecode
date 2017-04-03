@@ -9,7 +9,7 @@ export GOBIN=/Users/Ace/.local/bin
 export PATH=/Users/Ace/workspace/github/metasploit-framework:$PATH
 export MSF_DATABASE_CONFIG=/Users/Ace/workspace/github/metasploit-framework/config/database.yml
 #多个GOPATH用';'分隔 go get会存到第一个目录
-export GOPATH=/Users/Ace/workspace/go
+export GOPATH=/Users/Ace/go
 export PS1="\W\$ "
 alias ll='ls -lGh'
 alias ls='ls -Gh'
