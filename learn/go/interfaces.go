@@ -35,7 +35,7 @@ func (r *Round) Area() float64 {
 
 
 type Rectangular struct {
-	width 	float64
+	width	float64
 	height	float64
 }
 

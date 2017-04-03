@@ -109,10 +109,6 @@ print("Here is another random number: \(generator.random())")
 
 
 
-
-
-
-
 // 类类型专属协议
 protocol SomeClassOnlyProtocol: class {
     func haha() -> String
@@ -212,5 +208,182 @@ extension RandomNumberGenerator {
 let generator1 = LinearCongruentialGenerator()
 print(generator1.randomBool())
 
+// Mutating 方法要求
+// 实现协议中的 mutating 方法时，若是类类型，则不用写 mutating 关键字。而对于结构体和枚举，则必须写 mutating 关键字。
+
+protocol Togglable {
+    mutating func toggle()
+}
 
 
+enum OnOffSwitch: String, Togglable {
+    case On
+    case Off
+    
+    mutating func toggle() {
+        switch self {
+        case .Off:
+            self = .On
+        case .On:
+            self = .Off
+        }
+    }
+}
+
+
+var lightSwith = OnOffSwitch.Off
+lightSwith.toggle()
+print(lightSwith)
+
+
+// 构造器要求
+// 协议可以要求遵循协议的类型实现指定的构造器
+// 在协议的定义里写构造器的声明不需要写花括号和构造器的实体
+
+protocol SomeProtocol {
+    init(someParameter: Int)
+}
+
+// 在遵循协议的类中实现构造器，无论是作为指定构造器，还是作为便利构造器。无论哪种情况，都必须为构造器实现标上 required 修饰符
+// 因为使用 required 修饰符可以确保所有子类也必须提供此构造器实现，从而也能符合协议。
+// 注意如果`类`已经被标记为final，那么不需要在协议构造器的实现中使用required修饰符，因为final类不能有子类
+class SomeClass: SomeProtocol {
+    required init(someParameter: Int) {
+        
+    }
+}
+
+
+
+// 如果一个子类重写了父类的指定构造器，并且该构造器满足了某个协议的要求，那么该构造器的实现需要同时标注required和override修饰符
+protocol InitProtocol {
+    init()
+}
+
+class InitBaseClass {
+    init() { }
+}
+
+
+// 写继承列表应该先写类，再写协议
+class InitClass: InitBaseClass, InitProtocol {
+    override required init() { }
+}
+
+
+// 可失败构造器要求
+// 遵循协议的类型可以通过可失败构造器（init?）或非可失败构造器（init）来满足协议中定义的可失败构造器要求
+// 协议中定义的非可失败构造器要求可以通过非可失败构造器（init）或隐式解包可失败构造器（init!）来满足。
+
+
+
+
+// 协议作为类型
+// 作为函数、方法或构造器中的参数类型或返回值类型
+// 作为常量、变量或属性的类型
+// 作为数组、字典或其他容器中的元素类型
+class Dice {
+    let sides: Int
+    let generator: RandomNumberGenerator
+    
+    init(sides: Int, generator: RandomNumberGenerator) {
+        self.sides = sides
+        self.generator = generator
+    }
+    
+    func roll() -> Int {
+        return Int(generator.random()*Double(self.sides)) + 1
+    }
+}
+
+let dice = Dice(sides: 6, generator: LinearCongruentialGenerator())
+print("Roll: \(dice.roll())")
+print("Roll: \(dice.roll())")
+print("Roll: \(dice.roll())")
+print("Roll: \(dice.roll())")
+
+
+// 委托(代理)模式
+// 委托模式允许类或结构体将一些需要它们负责的功能委托给其他类型的实例
+// 委托模式定义协议来封装那些需要被委托的功能，这样就能确保遵循协议的类型能提供这些功能
+// 委托模式可以用来响应特定的动作，或者接收外部数据源提供的数据，而无需关心外部数据源的类型
+
+
+// DiceGame 协议可以被任意涉及骰子的游戏遵循。
+protocol DiceGame {
+    var dice: Dice { get }
+    func Play()
+}
+
+// DiceGameDelegate 协议可以被任意类型遵循，用来追踪 DiceGame 的游戏过程
+protocol DiceGameDelegate {
+    func GameDidStart(_ game: DiceGame)
+    func game(_ game: DiceGame, didStartNewTurnWithDiceRoll diceRoll: Int)
+    func GameDidEnd(_ game: DiceGame)
+}
+
+
+class SnakesAndLadders: DiceGame {
+    let dice = Dice(sides: 6, generator: LinearCongruentialGenerator())
+    let finalSquare = 25
+    
+    var board: [Int]
+    var delegate: DiceGameDelegate?
+    
+    init() {
+        board = [Int](repeating:0, count: finalSquare + 1)
+        board[03] = +08; board[06] = +11; board[09] = +09; board[10] = +02
+        board[04] = -10; board[19] = -11; board[22] = -02; board[24] = -08
+    }
+    
+    func Play() {
+        var square = 0
+        
+        // 因为 delegate 是一个 DiceGameDelegate 类型的可选属性，
+        // 因此在 play() 方法中通过可选链式调用来调用它的方法
+        // 若 delegate 属性为 nil，则调用方法会优雅地失败，并不会产生错误
+        delegate?.GameDidStart(self)
+        gameLoop: while square != finalSquare {
+            let diceRoll = dice.roll()
+            delegate?.game(self, didStartNewTurnWithDiceRoll: diceRoll)
+            switch square + diceRoll {
+            case finalSquare:
+                break gameLoop
+            case let newSquare where newSquare > finalSquare:
+                continue gameLoop
+            default:
+                square += diceRoll
+                square += board[square]
+            }
+        }
+        delegate?.GameDidEnd(self)
+    }
+}
+
+class DiceTracker: DiceGameDelegate {
+    var numberOfTurns = 0
+    func GameDidStart(_ game: DiceGame) {
+        if game is SnakesAndLadders {
+            print("Start a new game of Snakes and Ladders")
+        }
+        print("The game is using a \(game.dice.sides)-sided game")
+    }
+    func game(_ game: DiceGame, didStartNewTurnWithDiceRoll diceRoll: Int) {
+        numberOfTurns += 1
+        print("Rolled a \(diceRoll)")
+    }
+    func GameDidEnd(_ game: DiceGame) {
+        print("Game lasts for \(numberOfTurns) turns")
+    }
+}
+
+let tracker = DiceTracker()
+let game = SnakesAndLadders()
+
+game.delegate = tracker
+game.Play()
+
+// 通过扩展添加协议一致性
+protocol TextRepesentable {
+    var textualDescription: String { get }
+}
