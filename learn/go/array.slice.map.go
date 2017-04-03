@@ -27,6 +27,15 @@ func main() {
 	fmt.Println(b)
 	fmt.Println(c)
 
+	array_x := [...]string{"a", "b", "c"}
+	var array_y = [5]int{3: 99, 1: 88}	// 只指定初始化某些元素，其它用0初始化
+	fmt.Println(array_x[0])
+	fmt.Println(array_y[0])
+
+	for i, v := range(array_y) {
+		fmt.Printf("array_y[%02d] = %d\n", i, v)
+	}
+
 	// SLICE
 	// []T 表示slice
 	var slice []string
