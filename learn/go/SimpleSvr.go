@@ -10,22 +10,23 @@
 package main
 
 import (
-	// "bufio"
-	// "fmt"
+	"bufio"
+	"fmt"
 	"log"
 	"net"
 )
 
 func handleConn(conn net.Conn) {
 	who := conn.RemoteAddr().String()
-	/*
-		input := bufio.NewScanner(conn)
-		for input.Scan() {
 
-		}
-	*/
-	//fmt.Println(who)
 	log.Print(who + " connected to the server")
+
+	input := bufio.NewScanner(conn)
+	for input.Scan() {
+		fmt.Println(input.Text())
+	}
+
+	fmt.Println(who)
 
 	conn.Close()
 }
@@ -33,9 +34,10 @@ func handleConn(conn net.Conn) {
 func main() {
 	defer log.Print("Program Exited...")
 	log.Print("Program Started...")
-
-	//listener, err := net.Listen("tcp", "localhost:6666")
-	listener, err := net.Listen("tcp", "10.135.190.233:6666")
+	log.Print(net.LookupHost("www.qq.com"))
+	return
+	listener, err := net.Listen("tcp", "localhost:6666")
+	//listener, err := net.Listen("tcp", "10.135.190.233:6666")
 	if err != nil {
 		log.Fatal(err)
 	}

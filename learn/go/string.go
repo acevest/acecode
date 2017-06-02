@@ -77,4 +77,7 @@ func main() {
 	if err == nil {
 		fmt.Println("strconv Atoi: ", val)
 	}
+
+
+	fmt.Printf("%q\n", "hello world")	# 输出字符串前后会带双引号
 }

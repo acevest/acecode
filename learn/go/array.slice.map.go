@@ -193,4 +193,14 @@ func AboutMap() {
 
 		fmt.Printf("Version B: Value of items: %v (Invalid Method) \n", items)
 	}
+
+	var m1 map[string]int		// 此时m1==nil
+	m1 = make(map[string]int)	// 如果不为m1分配空间
+	m1["test"] = 1				// 那么这一句会panic
+
+	var m2 = make(map[string]int)
+	m2["test"] = 2
+
+	m3 := make(map[string]int)
+	m3["test"] = 3
 }
