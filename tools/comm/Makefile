@@ -11,6 +11,7 @@ DST	= $(HOME)/.local/bin/
 
 .PHONY:every
 every: $(BINS)
+	mkdir -p $(DST)
 	cp $(BINS) $(DST)
 	cp $(SCRIPTS) $(DST)
 	rm -f $(BINS)
