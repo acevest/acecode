@@ -1,0 +1,17 @@
+package sample;
+
+enum SampleType {
+	SAMPLE_TYPE_RAW			= 1;
+	SAMPLE_TYPE_LIGHT		= 2;
+	SAMPLE_TYPE_TEMPERATURE	= 3;
+	SAMPLE_TYPE_HUMIDITY	= 4;
+	SAMPLE_TYPE_TEST		= 5;
+}
+
+message SampleData {
+	optional string title = 1;
+	required SampleType type = 2;
+	repeated string data = 3;
+};
+
+
