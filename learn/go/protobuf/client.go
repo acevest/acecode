@@ -11,18 +11,24 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"io"
-
+	//"github.com/acecode/learn/go/protobuf/sample"
+	"./sample"
 	"github.com/golang/protobuf/proto"
 )
 
 func main() {
 	defer fmt.Println("Program Exited...")
 
-	sampleData := sample.SampleData {
-		Title : "test golang protobuf",
-		Type : SAMPLE_TYPE_TEST,
-		Data : [1.414, 2.732, 3.14, 6.18],
+	dataType := sample.SampleType_SAMPLE_TYPE_TEST
+	title := "test golang protobuf"
+	sampleData := &sample.SampleData {
+		Title : &title,
+		Type : &dataType,
+		Data : []float64{1.414, 2.732, 3.14, 6.18},
+		Source: &sample.SampleData_Source {
+			Band: proto.String("Ace"),
+			Version: proto.String("1.2"),
+		},
 	}
 
 	data, err := proto.Marshal(sampleData)
@@ -37,7 +43,8 @@ func main() {
 
 	defer conn.Close()
 
-	if _, err := io.Copy(conn, data) {
+	fmt.Println("Data Len: ", len(data))
+	if _, err := conn.Write(data); err != nil {
 		log.Fatal(err)
 	}
 }

@@ -10,8 +10,12 @@ enum SampleType {
 
 message SampleData {
 	optional string title = 1;
-	required SampleType type = 2;
-	repeated string data = 3;
+	optional SampleType type = 2;	// SampleType 必需是optional
+	repeated double data = 3;
+	optional group Source = 4 {
+		required string band = 5;
+		required string version = 6;
+	}
 };
 
 
