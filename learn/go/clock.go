@@ -15,6 +15,8 @@ import (
     "net"
     "log"
     "time"
+    "math/rand"
+    "strconv"
 )
 
 func main() {
@@ -46,7 +48,12 @@ func handleConn(c net.Conn) {
             return
         }
 
-        //time.Sleep(1 * time.Second)
+        _, err = io.WriteString(c, strconv.Itoa(rand.Int())+"\n")
+        if err != nil {
+            return
+        }
+
+        time.Sleep(1 * time.Second)
         time.Sleep(100 * time.Millisecond);
     }
 }

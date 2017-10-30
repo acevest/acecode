@@ -19,7 +19,7 @@ type AstronomicalObject struct {
 	sma				float64	// Semi-major axis 轨道半长轴
 	inclination		float64 // 轨道倾角
 	eccentricity	float64 // 轨道偏心率,没有使用
-	u				float64 // 标准重力参数
+	u				float64 // 标准重力参数 u = GM, F=(G*M*m)/(r^2)
 	soi				float64	// Sphere of influence 势国作用范围
 }
 
@@ -34,6 +34,17 @@ var objects = map[string]AstronomicalObject {
 		1.1723328e18,
 		math.MaxFloat64,	// 应该是infinity
 	},
+    "Eve" :
+    {
+        "Eve",
+        "Kerbol",
+        700000,
+        9832684544,
+        2.1,
+        0.01,
+        8.1717302E12,
+        85109365,
+    },
 	"Duna" :
 	{
 		"Duna",
@@ -68,7 +79,7 @@ func main() {
 
 	// 轨道周期的计算公式为 T=2*Pi*sqrt(sma^3/u)
 	// 设源和目标轨道半轴长分别为Rs, Rd
-	// 则转移轨道周期为 Tt = 2*Pi*sqlrt(((Rs+Rd)/2)^3/u)
+	// 则转移轨道周期为 Tt = 2*Pi*sqrt(((Rs+Rd)/2)^3/u)
 	// 则源，目标和平均转移角速度分别为 Ws = 1/Ts, Wd = 1/Td, Wt = 1/Tt
 	// 设转移时间为t
 	// 则有 t*Wt = Pi   ===> t = Tt*Pi
@@ -77,7 +88,7 @@ func main() {
 	// ===> PhaseAngle = Pi - Tt*Pi/Td 
 
 	aos := objects["Kerbin"]
-	aod := objects["Duna"]
+	aod := objects["Eve"]
 	if aos.parent != aod.parent || aos.parent == "" || aod.parent == "" {
 		fmt.Println("invalid astronomical object");
 		return
