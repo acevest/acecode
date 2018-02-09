@@ -1,0 +1,24 @@
+
+##############################################################
+
+arduino_interal_8MHz.name=Arduino 8MHz Internal Clock
+
+arduino_interal_8MHz.upload.protocol=arduino
+arduino_interal_8MHz.upload.maximum_size=30720
+arduino_interal_8MHz.upload.speed=57600
+
+arduino_interal_8MHz.bootloader.low_fuses=0xE2
+arduino_interal_8MHz.bootloader.high_fuses=0xD2
+arduino_interal_8MHz.bootloader.extended_fuses=0x05
+
+arduino_interal_8MHz.bootloader.file=atmega/ATmegaBOOT_168_atmega328_pro_8MHz.hex
+arduino_interal_8MHz.bootloader.unlock_bits=0x3F
+arduino_interal_8MHz.bootloader.lock_bits=0x0F
+
+arduino_interal_8MHz.build.mcu=atmega328p
+arduino_interal_8MHz.build.f_cpu=8000000L
+arduino_interal_8MHz.build.core=arduino
+arduino_interal_8MHz.build.board=AVR_UNO
+arduino_interal_8MHz.build.variant=standard
+arduino_interal_8MHz.bootloader.tool=avrdude
+arduino_interal_8MHz.upload.tool=avrdude
