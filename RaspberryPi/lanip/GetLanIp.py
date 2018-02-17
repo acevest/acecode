@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------
-#   File Name: get_lan_ip.py
+#   File Name: GetLanIp.py
 #      Author: Zhao Yanbai
 #              2016-07-04 23:14:50 Monday CST
 # Description: none
@@ -11,6 +11,7 @@ import fcntl
 import struct
 import os
 import sys
+import time
 import re,urllib2
 import smtplib
 import ConfigParser
@@ -27,7 +28,8 @@ def get_ip_address(ifname):
 
 def SendMail(title, content) :
     cnfp = ConfigParser.ConfigParser()
-    cnfp.read('./mail.conf')
+
+    cnfp.read(os.path.split(os.path.realpath(__file__))[0]+'/mail.conf')
 
     mail_host = cnfp.get('EMAIL', 'MAILHOST')  # 服务器
     mail_user = cnfp.get('EMAIL', 'MAILUSER')  # 用户名
@@ -59,5 +61,11 @@ if __name__ == "__main__" :
             lanip[k] = get_ip_address(k)
         except :
             continue
+    while True :
+        try :
+            SendMail("LanIp", str(lanip))
+            break
+        except:
+            time.sleep(1);
+            continue
 
-    SendMail("LanIp", str(lanip))

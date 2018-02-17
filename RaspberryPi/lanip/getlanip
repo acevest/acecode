@@ -1,0 +1,31 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides: acevest
+# Required-Start: $remote_fs $syslog
+# Required-Stop: $remote_fs $syslog
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: get lan ip and send email
+# Description: This service is used to get lan ip
+### END INIT INFO
+
+# cp getlanip /etc/init.d/getlanip
+# sudo update-rc.d getlanip defaults
+
+
+case "$1" in
+start)
+    echo "Starting Get RaspberryPi's LanIp"
+    /root/workspace/acecode/RaspberryPi/lanip/GetLanIp.py 2> /tmp/getlanip.log &
+    ;;
+
+stop)
+    echo "Stopping Get RaspberryPi's LanIp"
+    ;;
+
+*)
+    echo "Usage: service getlanip start|stop $1"
+    exit 0
+    ;;
+esac
+exit 0
