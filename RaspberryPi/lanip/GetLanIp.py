@@ -55,13 +55,18 @@ def SendMail(title, content) :
 
 
 if __name__ == "__main__" :
-    lanip = { 'wlan0':'NULL', 'eth0':'NULL', 'lo':'NULL' }
-    for k, v in lanip.items() :
-        try :
-            lanip[k] = get_ip_address(k)
-        except :
-            continue
     while True :
+        lanip = { 'wlan0':'NULL', 'eth0':'NULL', 'lo':'NULL' }
+        for k, v in lanip.items() :
+            try :
+                lanip[k] = get_ip_address(k)
+            except :
+                continue
+
+        if lanip['wlan0'] == 'NULL' :
+            time.sleep(1)
+            continue
+
         try :
             SendMail("LanIp", str(lanip))
             break
