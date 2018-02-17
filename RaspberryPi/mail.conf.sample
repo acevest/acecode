@@ -1,0 +1,7 @@
+[EMAIL]
+MAILHOST= smtp.qq.com
+MAILUSER= username
+MAILPASS= password
+SENDER= username@qq.com
+MAILTO= username@qq.com
+DEVICE= RaspberryPi
