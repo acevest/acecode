@@ -11,20 +11,21 @@ package main
 
 import (
 	"fmt"
+	"sort"
 )
 
 var words = []string{
-	//"℃、·、♡、♥、‰、‱、•、←、↑、→、↓、↖、↗、↘、↙、☂、",
-	//"▲、△、▶、▷、▼、▽、◀、◁",
-	//"：，。；“”？！",
-	"°",
+	"℃、·、♡、♥、‰、‱、•、←、↑、→、↓、↖、↗、↘、↙、☂、",
+	"▲、△、▶、▷、▼、▽、◀、◁",
+	"：，。；“”？！",
+	"°、请",
 	"温度、湿度、压力、强度、浓度、高度、深度、长度、厚度、弧度、速度、角速度、仰角、倾角",
 	"土壤、水分、空气、毒气、天然气、液体",
 	"次数、计数器、循环",
 	"强中弱",
 	"车、船",
 	"太阳、月亮",
-	"接收、发送、处理、等待、心跳、探测、启动、退出、运行、重启、进出、收发包、编解码",
+	"接收、发送、处理、等待、心跳、探测、启动、退出、运行、重启、进出、收发包、编解码、开关机、稍候",
 	"占比、比率、比例、百分比",
 	"每个十百千万亿兆厘毫微纳皮",
 	"安培、伏特、欧姆、法拉、焦耳、赫兹、牛顿、瓦特、亨利、库伦、字节、米、秒、帕斯卡、特斯拉、开尔文、克、分钟、时、日、月、年、世纪、星期",
@@ -56,18 +57,26 @@ func getSingleCharacterFromWords(words []string) string {
 }
 
 // cd u8g2/tools/font/bdfconv
-// ./bdfconv -v ../bdf/unifont.bdf -b 0 -f 1 -M self.map -d ../bdf/7x13.bdf -n u8g2_font_unifont_t_acevest -o u8g2_font_unifont_t_acevest.c
+// ./bdfconv -v ../bdf/unifont.bdf -b 0 -f 1 -M ~/unicode.map -n u8g2_font_unifont_t_acevest -o ~/u8g2_font_unifont_t_acevest.c
 
 func main() {
 
 	chars := getSingleCharacterFromWords(words)
-	//fmt.Println(chars)
 
-	fmt.Printf("0-128,\n");
-
+	var unicodes = make([]string, 0)
+	var unicode_map = make(map[string]string)
 	for _, char := range chars {
-		//fmt.Printf("\\u%04X %q\n", char, char)
-		fmt.Printf("$%04X,\n", char)
+		info := fmt.Sprintf("\\u%04X %q", char, char)
+		s := fmt.Sprintf("$%04X", char)
+		unicodes = append(unicodes, s)
+		unicode_map[s] = info
 	}
 
+	sort.Strings(unicodes)
+
+	fmt.Printf("32-128,\n");
+	for _, uc := range unicodes {
+		//fmt.Printf("%s,\n", uc)
+		fmt.Printf("%s %s\n", uc, unicode_map[uc])
+	}
 }
