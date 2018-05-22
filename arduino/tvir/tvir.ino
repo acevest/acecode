@@ -4,11 +4,11 @@
 #include <IRremote.h>
 #include <SoftwareSerial.h>
 
-SoftwareSerial btSerial(10, 11); // RX, TX
+SoftwareSerial btSerial(2, 4); // RX, TX
 
 
 IRsend irsend;
-const int ledPin = 13;
+const int ledPin = 5;
 
 
 const int xiaomiRawCodeLen = 23;
