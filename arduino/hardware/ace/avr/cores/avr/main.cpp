@@ -20,7 +20,7 @@ int main()
 {
     init();
 
-    uint8_t pin = 13;
+    //uint8_t pin = 13;
     uint8_t bit = 1<<5; // pin 13是 B组的第5个
     volatile uint8_t *reg = ((volatile uint8_t *)((uint16_t)(&DDRB)));
     volatile uint8_t *out = ((volatile uint8_t *)((uint16_t)(&PORTB)));
