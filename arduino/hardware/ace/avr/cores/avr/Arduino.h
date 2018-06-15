@@ -9,8 +9,9 @@
 
 #pragma once
 
-void setup(void);
-void loop(void);
-
-
+#include <stdint.h>
+#include <avr/pgmspace.h>
 #include <AceAvr.h>
+
+void delay(unsigned long ms);
+void acevest();
