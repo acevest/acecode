@@ -9,13 +9,8 @@
 
 #include<Arduino.h>
 
-extern "C" void TIMER0_OVF_vect() __attribute__ ((signal,used, externally_visible));
-volatile unsigned long timer0_overflow_count = 0;
-void TIMER0_OVF_vect()
-{
-    timer0_overflow_count++;
-}
 
+volatile unsigned long timer0_overflow_count = 0;
 #if 0
 static void __empty() {
     // Empty
@@ -68,4 +63,36 @@ void init_timer0() {
 
     // enable timer 0 overflow interrupt
     sbi(TIMSK0, TOIE0);
+}
+
+
+
+
+void init_timer1() {
+  //set timer1 interrupt at 100Hz
+  TCCR1A = 0;// set entire TCCR1A register to 0
+  TCCR1B = 0;// same for TCCR1B
+  TCNT1  = 0;//initialize counter value to 0
+  // set compare match register for 100Hz increments
+  OCR1A = 155; // = (16*10^6) / (1024*100Hz) - 1 (must be <65536)
+  // turn on CTC mode
+  TCCR1B |= (1 << WGM12);
+  // Set CS10 and CS12 bits for 1024 prescaler
+  TCCR1B |= (1 << CS12) | (1 << CS10);  
+  // enable timer compare interrupt
+  TIMSK1 |= (1 << OCIE1A);
+}
+
+extern "C" void TIMER0_OVF_vect() __attribute__ ((signal,used, externally_visible));
+void TIMER0_OVF_vect()
+{
+    timer0_overflow_count++;
+}
+
+
+extern "C" void TIMER1_COMPA_vect() __attribute__ ((signal,used, externally_visible));
+uint8_t tick = 0;
+void TIMER1_COMPA_vect()
+{
+    tick++;
 }

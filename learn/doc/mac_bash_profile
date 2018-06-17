@@ -5,9 +5,11 @@ HISTCONTROL=ignoreboth
 #export PATH="$(brew --prefix homebrew/php/php56)/bin:$PATH"
 export PATH=/usr/local/sbin:$PATH
 export PATH=/Users/Ace/.local/bin:$PATH
+export PATH=$PATH:$HOME/esp/xtensa-esp32-elf/bin
 export GOBIN=/Users/Ace/.local/bin
-export PATH=/Users/Ace/workspace/github/metasploit-framework:$PATH
-export MSF_DATABASE_CONFIG=/Users/Ace/workspace/github/metasploit-framework/config/database.yml
+export IDF_PATH=$HOME/esp/esp-idf
+export PATH=$PATH:/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin/
+export PATH=$PATH:$HOME/Library/Arduino15/packages/arduino/tools/avrdude/6.0.1-arduino5/bin
 #多个GOPATH用';'分隔 go get会存到第一个目录
 export GOPATH=/Users/Ace/go
 export PS1="\W\$ "

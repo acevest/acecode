@@ -99,6 +99,8 @@ autocmd FileType php,python,h,c,java,perl,shell,bash,vim,ruby,cc,cpp set ai
 autocmd FileType php,python,h,c,java,perl,shell,bash,vim,ruby,cc,cpp set sw=4
 autocmd FileType php,python,h,c,java,perl,shell,bash,vim,ruby,cc,cpp set ts=4
 autocmd FileType php,python,h,c,java,perl,shell,bash,vim,ruby,cc,cpp set sts=4
+autocmd FileType php,python,h,c,java,perl,shell,bash,vim,ruby,cc,cpp set expandtab
+
 
 "golang默认使用TAB
 "autocmd FileType go set ai
