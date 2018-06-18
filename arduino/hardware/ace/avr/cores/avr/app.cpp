@@ -42,10 +42,16 @@ void user_task1() {
 uint8_t user_task2_stack[TASK_STACK_SIZE];
 void user_task2() {
     int cnt = 0;
+    uint8_t pin = 14;
+    set_digital_pin_mode(pin, OUTPUT);
+    uint8_t state = LOW;
+
     while(1) {
+        state = state == LOW ? HIGH : LOW;
+        digital_write(pin, state);
         Serial.print("user task 2, cnt: ");
         Serial.println(cnt++);
-        task_delay(90);
+        task_delay(random() % 50);
     }
 }
 #endif
