@@ -6,7 +6,7 @@
  * Description: none
  * ------------------------------------------------------------------------
  */
-#include <Arduino.h>
+#include <AceAvr.h>
 
 void init_timer0();
 void init_timer1();

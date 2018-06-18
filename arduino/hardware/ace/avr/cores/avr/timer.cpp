@@ -7,19 +7,10 @@
  * ------------------------------------------------------------------------
  */
 
-#include<Arduino.h>
+#include<AceAvr.h>
 
 
 volatile unsigned long timer0_overflow_count = 0;
-#if 0
-static void __empty() {
-    // Empty
-}
-
-void yield(void) __attribute__ ((weak, alias("__empty")));
-#else
-void yield(void) { }
-#endif
 
 unsigned long micros() {
     unsigned long m;

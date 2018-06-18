@@ -8,6 +8,4 @@
  */
 
 #pragma once
-
 #include <AceAvr.h>
-

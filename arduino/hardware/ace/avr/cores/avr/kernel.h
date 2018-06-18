@@ -10,7 +10,12 @@
 #pragma once
 #include <stdint.h>
 
+#define MAX_TASK_CNT    8
 #define TASK_STACK_SIZE 64
+
+#if MAX_TASK_CNT > 32
+#error "too much tasks"
+#endif
 
 enum task_state {
     TASK_STATE_EMPTY  = 0,
@@ -30,3 +35,4 @@ void init_tasks();
 void create_task(void (*handler)(), char *stack, uint8_t priority);
 void task_switch(struct task *prev, struct task *next);
 void task_delay(uint16_t ticks);
+//void yield(void);

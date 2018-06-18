@@ -11,23 +11,24 @@
 
 void delay(unsigned long ms);
 
+const uint8_t task_cnt = MAX_TASK_CNT + 1;
+const uint8_t idle_task_priority = task_cnt - 1;
 struct task *current_task = 0;
-const uint8_t max_task_cnt = 8;
-struct task tasks[max_task_cnt];
-uint8_t idle_task_stack[TASK_STACK_SIZE];
+struct task tasks[task_cnt];
 uint32_t ticks = 0;
-void task_scheduler();
+int8_t kernel_initialized = 0;
 
-#define IDLE_TASK (tasks+max_task_cnt-1)
+#define IDLE_TASK (tasks+task_cnt-1)
 #define LED_TASK (tasks+0);
 #define DEBUG_TASK (tasks+1);
+
+void task_scheduler();
 
 uint8_t debug_task_stack[TASK_STACK_SIZE];
 void debug_task() {
     while(1) task_delay(1000);
     uint8_t pin = 12;
     set_digital_pin_mode(pin, OUTPUT);
-
     while(1) {
         digital_write(pin, HIGH);
         task_delay(20);
@@ -40,7 +41,6 @@ uint8_t led_task_stack[TASK_STACK_SIZE];
 void led_task() {
     uint8_t pin = 13;
     set_digital_pin_mode(pin, OUTPUT);
-
     while(1) {
         digital_write(pin, HIGH);
         task_delay(10);
@@ -52,9 +52,11 @@ void led_task() {
 
 // idle_task 在没有进程READY的情况下都会调度运行
 // 所以task_delay不能在此进程生效
+uint8_t idle_task_stack[TASK_STACK_SIZE];
+uint32_t idle_cnt = 0;
 void idle_task() {
     sei();
-    static uint32_t idle_cnt = 0;
+    kernel_initialized = 1;
     uint8_t pin = 12;
     set_digital_pin_mode(pin, OUTPUT);
     uint8_t state = LOW;
@@ -65,6 +67,7 @@ void idle_task() {
         delay(1000);
     }
 }
+
 
 void task_delay(uint16_t ticks)
 {
@@ -77,7 +80,11 @@ void task_delay(uint16_t ticks)
 
 void create_task(void (*handler)(), uint8_t *stack, uint8_t priority)
 {
-    if(priority >= max_task_cnt) {
+    if(priority == idle_task_priority && handler != idle_task) {
+        return;
+    }
+
+    if(priority > task_cnt) {
         return;
     }
 
@@ -210,30 +217,9 @@ void task_switch(struct task *prev, struct task *next) {
     );
 }
 
-void init_tasks() {
-    cli();
-    for(uint8_t i=0; i<max_task_cnt; i++) {
-        struct task *t = tasks+i;
-        t->pid          = i;
-        t->handler      = 0;
-        t->stack        = 0;
-        t->state        = TASK_STATE_EMPTY;
-        t->delay_ticks  = 0;
-    }
-
-    create_task(led_task, led_task_stack, 0);
-    create_task(debug_task, debug_task_stack, 1);
-    create_task(idle_task, idle_task_stack, max_task_cnt-1);
-    current_task = IDLE_TASK;
-    IDLE_TASK->stack = idle_task_stack+TASK_STACK_SIZE - 3;
-
-    SP = (uint16_t)(IDLE_TASK->stack);
-    asm("ret;");
-}
-
 void task_scheduler() {
     struct task *next = IDLE_TASK;
-    for(uint8_t i=0; i<max_task_cnt; i++) {
+    for(uint8_t i=0; i<task_cnt; i++) {
         struct task *t = tasks+i;
         if(TASK_STATE_READY == t->state) {
             next = t;
@@ -244,13 +230,21 @@ void task_scheduler() {
     task_switch(current_task, next);
 }
 
+void yield(void)
+{
+    if(kernel_initialized == 0) {
+        return ;
+    }
+
+    task_scheduler();
+}
 
 extern "C" void TIMER1_COMPA_vect() __attribute__ ((signal,used, externally_visible));
 void TIMER1_COMPA_vect()
 {
     ticks++;
 
-    for(uint8_t i=0; i<max_task_cnt; i++) {
+    for(uint8_t i=0; i<task_cnt; i++) {
         struct task *t = tasks+i;
         if(TASK_STATE_SLEEP != t->state) {
             continue;
@@ -282,3 +276,26 @@ void init_timer1() {
     // enable timer compare interrupt
     TIMSK1 |= (1 << OCIE1A);
 }
+
+void init_tasks() {
+    cli();
+    for(uint8_t i=0; i<task_cnt; i++) {
+        struct task *t = tasks+i;
+        t->pid          = i;
+        t->handler      = 0;
+        t->stack        = 0;
+        t->state        = TASK_STATE_EMPTY;
+        t->delay_ticks  = 0;
+    }
+
+    create_task(led_task, led_task_stack, 0);
+    create_task(debug_task, debug_task_stack, 1);
+    create_task(idle_task, idle_task_stack, idle_task_priority);
+    current_task = IDLE_TASK;
+    IDLE_TASK->stack = idle_task_stack+TASK_STACK_SIZE - 3;
+
+    SP = (uint16_t)(IDLE_TASK->stack);
+    asm("ret;");
+}
+
+

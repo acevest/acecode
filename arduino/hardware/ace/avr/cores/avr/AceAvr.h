@@ -59,3 +59,5 @@ volatile uint8_t* get_digital_pin_port_output_register(uint8_t pin);
 
 void set_digital_pin_mode(uint8_t pin, uint8_t mode);
 void digital_write(uint8_t pin, uint8_t val);
+void yield(void);
+
