@@ -30,12 +30,25 @@ void led_task() {
 
 uint8_t user_task1_stack[TASK_STACK_SIZE];
 void user_task1() {
+    int cnt = 0;
     while(1) {
-        Serial.println("user task 1");
+        Serial.print("user task 1, cnt: ");
+        Serial.println(cnt++);
         task_delay(100);
     }
 }
 
+#if 1
+uint8_t user_task2_stack[TASK_STACK_SIZE];
+void user_task2() {
+    int cnt = 0;
+    while(1) {
+        Serial.print("user task 2, cnt: ");
+        Serial.println(cnt++);
+        task_delay(100);
+    }
+}
+#endif
 
 
 
@@ -43,6 +56,7 @@ void app_main() {
     Serial.begin(9600);
     create_task(led_task, led_task_stack, 0);
     create_task(user_task1, user_task1_stack, 1);
+    create_task(user_task2, user_task2_stack, 2);
     create_task(debug_task, debug_task_stack, 3);
 }
 

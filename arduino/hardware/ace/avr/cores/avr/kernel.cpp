@@ -113,84 +113,15 @@ void task_switch(struct task *prev, struct task *next) {
         return;
     }
 
-    __asm__ __volatile__(
-    "PUSH R31\n"
-    "PUSH R30\n"
-    "PUSH R29\n"
-    "PUSH R28\n"
-    "PUSH R27\n"
-    "PUSH R26\n"
-    "PUSH R25\n"
-    "PUSH R24\n"
-    "PUSH R23\n"
-    "PUSH R22\n"
-    "PUSH R21\n"
-    "PUSH R20\n"
-    "PUSH R19\n"
-    "PUSH R18\n"
-    "PUSH R17\n"
-    "PUSH R16\n"
-    "PUSH R15\n"
-    "PUSH R14\n"
-    "PUSH R13\n"
-    "PUSH R12\n"
-    "PUSH R11\n"
-    "PUSH R10\n"
-    "PUSH R09\n"
-    "PUSH R08\n"
-    "PUSH R07\n"
-    "PUSH R06\n"
-    "PUSH R05\n"
-    "PUSH R04\n"
-    "PUSH R03\n"
-    "PUSH R02\n"
-    "PUSH R01\n"
-    "PUSH R00\n"
-    "IN R00, __SREG__\n"
-    "PUSH R00\n"
-    );
+    SAVE_CONTEXT;
 
     prev->stack = (uint8_t *) SP;
     SP = ((uint16_t)next->stack);
     current_task = next;
 
-    __asm__ __volatile__(
-    "POP R00\n"
-    "OUT __SREG__, R00\n"
-    "POP R00\n"
-    "POP R01\n"
-    "POP R02\n"
-    "POP R03\n"
-    "POP R04\n"
-    "POP R05\n"
-    "POP R06\n"
-    "POP R07\n"
-    "POP R08\n"
-    "POP R09\n"
-    "POP R10\n"
-    "POP R11\n"
-    "POP R12\n"
-    "POP R13\n"
-    "POP R14\n"
-    "POP R15\n"
-    "POP R16\n"
-    "POP R17\n"
-    "POP R18\n"
-    "POP R19\n"
-    "POP R20\n"
-    "POP R21\n"
-    "POP R22\n"
-    "POP R23\n"
-    "POP R24\n"
-    "POP R25\n"
-    "POP R26\n"
-    "POP R27\n"
-    "POP R28\n"
-    "POP R29\n"
-    "POP R30\n"
-    "POP R31\n"
-    "ret\n"
-    );
+    RESTORE_CONTEXT;
+    __asm__ __volatile__("ret");
+
 }
 
 void task_scheduler() {
@@ -218,6 +149,7 @@ void yield(void)
 extern "C" void TIMER1_COMPA_vect() __attribute__ ((signal,used, externally_visible));
 void TIMER1_COMPA_vect()
 {
+    SAVE_CONTEXT;
     ticks++;
 
     for(uint8_t i=0; i<task_cnt; i++) {
@@ -236,6 +168,7 @@ void TIMER1_COMPA_vect()
     }
 
     task_scheduler();
+    RESTORE_CONTEXT;
 }
 
 void init_timer1() {
