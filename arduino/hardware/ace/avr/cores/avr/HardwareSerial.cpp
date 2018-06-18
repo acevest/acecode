@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <inttypes.h>
-#include "Arduino.h"
+#include "AceAvr.h"
 
 #include "HardwareSerial.h"
 #include "HardwareSerial_private.h"

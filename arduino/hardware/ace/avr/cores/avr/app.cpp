@@ -45,7 +45,7 @@ void user_task2() {
     while(1) {
         Serial.print("user task 2, cnt: ");
         Serial.println(cnt++);
-        task_delay(100);
+        task_delay(90);
     }
 }
 #endif
