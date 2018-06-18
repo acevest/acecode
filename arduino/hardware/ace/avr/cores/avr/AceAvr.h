@@ -11,6 +11,7 @@
 
 #include <stdint.h>
 #include <avr/pgmspace.h>
+#include <avr/interrupt.h>
 
 #define LOW  0
 #define HIGH 1
@@ -39,11 +40,24 @@ void acevest();
 #error "did not define F_CPU"
 #endif
 #define clockCyclesPerMicrosecond() ( F_CPU / 1000000L )
+#define clockCyclesToMicroseconds(a) ( (a) / clockCyclesPerMicrosecond() )
+#define MICROSECONDS_PER_TIMER0_OVERFLOW (clockCyclesToMicroseconds(64 * 256))
+#define MILLIS_INC (MICROSECONDS_PER_TIMER0_OVERFLOW / 1000)
+#define FRACT_INC ((MICROSECONDS_PER_TIMER0_OVERFLOW % 1000) >> 3)
+#define FRACT_MAX (1000 >> 3)
+
 
 #define cli()  __asm__ __volatile__ ("cli" ::: "memory")
 #define sei()  __asm__ __volatile__ ("sei" ::: "memory")
 #define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
 
+
+#ifndef cbi
+#define cbi(sfr, bit) (_SFR_BYTE(sfr) &= ~_BV(bit))
+#endif
+#ifndef sbi
+#define sbi(sfr, bit) (_SFR_BYTE(sfr) |= _BV(bit))
+#endif
 
 const uint8_t PA = 1;
 const uint8_t PB = 2;
@@ -61,3 +75,8 @@ void set_digital_pin_mode(uint8_t pin, uint8_t mode);
 void digital_write(uint8_t pin, uint8_t val);
 void yield(void);
 
+unsigned long millis();
+
+
+typedef bool boolean;
+typedef uint8_t byte;

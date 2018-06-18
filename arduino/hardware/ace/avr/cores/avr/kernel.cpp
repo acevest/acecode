@@ -8,6 +8,7 @@
  */
 #include <AceAvr.h>
 #include <kernel.h>
+#include <HardwareSerial.h>
 
 void delay(unsigned long ms);
 
@@ -26,6 +27,13 @@ void task_scheduler();
 
 uint8_t debug_task_stack[TASK_STACK_SIZE];
 void debug_task() {
+    Serial.begin(9600);
+
+    while(1) {
+        Serial.println("fuck");
+        task_delay(100);
+    }
+
     while(1) task_delay(1000);
     uint8_t pin = 12;
     set_digital_pin_mode(pin, OUTPUT);
