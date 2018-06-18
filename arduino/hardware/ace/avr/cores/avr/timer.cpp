@@ -65,24 +65,14 @@ void init_timer0() {
     sbi(TIMSK0, TOIE0);
 }
 
-void init_timer1() {
-    //set timer1 interrupt at 100Hz
-    TCCR1A = 0;// set entire TCCR1A register to 0
-    TCCR1B = 0;// same for TCCR1B
-    TCNT1  = 0;//initialize counter value to 0
-    // set compare match register for 100Hz increments
-    //OCR1A = 155; // = (16*10^6) / (1024*100Hz) - 1 (must be <65536)
-    OCR1A = 15500; // = (16*10^6) / (1024*100Hz) - 1 (must be <65536)
-    // turn on CTC mode
-    TCCR1B |= (1 << WGM12);
-    // Set CS10 and CS12 bits for 1024 prescaler
-    TCCR1B |= (1 << CS12) | (1 << CS10);
-    // enable timer compare interrupt
-    TIMSK1 |= (1 << OCIE1A);
-}
-
 extern "C" void TIMER0_OVF_vect() __attribute__ ((signal,used, externally_visible));
 void TIMER0_OVF_vect()
 {
     timer0_overflow_count++;
 }
+
+
+#if 0
+extern "C" void TIMER1_COMPA_vect() __attribute__ ((signal,used, externally_visible));
+void TIMER1_COMPA_vect() { }
+#endif

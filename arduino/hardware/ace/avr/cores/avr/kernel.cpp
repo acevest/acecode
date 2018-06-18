@@ -19,11 +19,12 @@ uint32_t ticks = 0;
 void task_scheduler();
 
 #define IDLE_TASK (tasks+max_task_cnt-1)
-#define LED_TASK (task+0);
-#define DEBUG_TASK (task+1);
+#define LED_TASK (tasks+0);
+#define DEBUG_TASK (tasks+1);
 
 uint8_t debug_task_stack[TASK_STACK_SIZE];
 void debug_task() {
+    while(1) task_delay(1000);
     uint8_t pin = 12;
     set_digital_pin_mode(pin, OUTPUT);
 
@@ -37,15 +38,14 @@ void debug_task() {
 
 uint8_t led_task_stack[TASK_STACK_SIZE];
 void led_task() {
-    while(1) task_delay(1000);
     uint8_t pin = 13;
     set_digital_pin_mode(pin, OUTPUT);
 
     while(1) {
         digital_write(pin, HIGH);
-        task_delay(30);
+        task_delay(10);
         digital_write(pin, LOW);
-        task_delay(30);
+        task_delay(10);
     }
 }
 
@@ -55,7 +55,7 @@ void led_task() {
 void idle_task() {
     sei();
     static uint32_t idle_cnt = 0;
-    uint8_t pin = 13;
+    uint8_t pin = 12;
     set_digital_pin_mode(pin, OUTPUT);
     uint8_t state = LOW;
     while(1) {
@@ -75,7 +75,6 @@ void task_delay(uint16_t ticks)
     task_scheduler();
 }
 
-
 void create_task(void (*handler)(), uint8_t *stack, uint8_t priority)
 {
     if(priority >= max_task_cnt) {
@@ -85,19 +84,12 @@ void create_task(void (*handler)(), uint8_t *stack, uint8_t priority)
     struct task *t = tasks + priority;
     t->handler = handler;
     t->state = TASK_STATE_READY;
-#if 0
+
     t->stack = stack + TASK_STACK_SIZE - 3;
     uint8_t *p = t->stack;
-    *(p+0) = 0x00;
-    *(p+1) = (((uint16_t)handler) >> 8);
-    *(p+2) = (((uint16_t)handler) >> 0);
-#else
-    t->stack = stack + TASK_STACK_SIZE - 2;
-    uint8_t *p = t->stack;
-    *(p+0) = (((uint16_t)handler) >> 0);
-    *(p+1) = (((uint16_t)handler) >> 8);
-#endif
-
+    *(p+0) = (((uint32_t)handler) >> 16);
+    *(p+1) = (((uint32_t)handler) >> 8);
+    *(p+2) = (((uint32_t)handler) >> 0);
     *(--(t->stack)) = 0x00;   // SREG
     *(--(t->stack)) = 0x00;   // R0
     *(--(t->stack)) = 0x00;
@@ -131,10 +123,6 @@ void create_task(void (*handler)(), uint8_t *stack, uint8_t priority)
     *(--(t->stack)) = 0x00;
     *(--(t->stack)) = 0x00;   // 30
     *(--(t->stack)) = 0x00;
-
-    --(t->stack);
-    // AVR 的PUSH是先存值再SP-1
-    // AVR 的POP 是先SP+1再取值
 }
 
 void task_switch(struct task *prev, struct task *next) {
@@ -218,7 +206,7 @@ void task_switch(struct task *prev, struct task *next) {
     "POP R29\n"
     "POP R30\n"
     "POP R31\n"
-    "reti\n"
+    "ret\n"
     );
 }
 
@@ -233,19 +221,17 @@ void init_tasks() {
         t->delay_ticks  = 0;
     }
 
-
-    current_task = IDLE_TASK;
-
+    create_task(led_task, led_task_stack, 0);
+    create_task(debug_task, debug_task_stack, 1);
     create_task(idle_task, idle_task_stack, max_task_cnt-1);
-//    create_task(led_task, led_task_stack, 0);
-//    create_task(debug_task, debug_task_stack, 1);
-    IDLE_TASK->stack = idle_task_stack+TASK_STACK_SIZE-2-2;
+    current_task = IDLE_TASK;
+    IDLE_TASK->stack = idle_task_stack+TASK_STACK_SIZE - 3;
+
     SP = (uint16_t)(IDLE_TASK->stack);
     asm("ret;");
 }
 
 void task_scheduler() {
-    return;
     struct task *next = IDLE_TASK;
     for(uint8_t i=0; i<max_task_cnt; i++) {
         struct task *t = tasks+i;
@@ -258,12 +244,11 @@ void task_scheduler() {
     task_switch(current_task, next);
 }
 
+
 extern "C" void TIMER1_COMPA_vect() __attribute__ ((signal,used, externally_visible));
 void TIMER1_COMPA_vect()
 {
     ticks++;
-
-    return;
 
     for(uint8_t i=0; i<max_task_cnt; i++) {
         struct task *t = tasks+i;
@@ -281,4 +266,19 @@ void TIMER1_COMPA_vect()
     }
 
     task_scheduler();
+}
+
+void init_timer1() {
+    //set timer1 interrupt at 100Hz
+    TCCR1A = 0;// set entire TCCR1A register to 0
+    TCCR1B = 0;// same for TCCR1B
+    TCNT1  = 0;//initialize counter value to 0
+    // set compare match register for 100Hz increments
+    OCR1A = 155; // = (16*10^6) / (1024*100Hz) - 1 (must be <65536)
+    // turn on CTC mode
+    TCCR1B |= (1 << WGM12);
+    // Set CS10 and CS12 bits for 1024 prescaler
+    TCCR1B |= (1 << CS12) | (1 << CS10);
+    // enable timer compare interrupt
+    TIMSK1 |= (1 << OCIE1A);
 }
