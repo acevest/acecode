@@ -47,10 +47,8 @@ void idle_task() {
 
 void task_delay(uint16_t ticks)
 {
-    cli();
     current_task->state = TASK_STATE_SLEEP;
     current_task->delay_ticks = ticks;
-    sei();
     task_scheduler();
 }
 
