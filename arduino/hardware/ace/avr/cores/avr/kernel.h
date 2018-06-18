@@ -32,7 +32,7 @@ struct task {
 };
 
 void init_tasks();
-void create_task(void (*handler)(), char *stack, uint8_t priority);
+void create_task(void (*handler)(), uint8_t *stack, uint8_t priority);
 void task_switch(struct task *prev, struct task *next);
 void task_delay(uint16_t ticks);
 //void yield(void);

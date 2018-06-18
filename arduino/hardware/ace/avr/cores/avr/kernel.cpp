@@ -8,7 +8,6 @@
  */
 #include <AceAvr.h>
 #include <kernel.h>
-#include <HardwareSerial.h>
 
 void delay(unsigned long ms);
 
@@ -25,46 +24,15 @@ int8_t kernel_initialized = 0;
 
 void task_scheduler();
 
-uint8_t debug_task_stack[TASK_STACK_SIZE];
-void debug_task() {
-    Serial.begin(9600);
-
-    while(1) {
-        Serial.println("fuck");
-        task_delay(100);
-    }
-
-    while(1) task_delay(1000);
-    uint8_t pin = 12;
-    set_digital_pin_mode(pin, OUTPUT);
-    while(1) {
-        digital_write(pin, HIGH);
-        task_delay(20);
-        digital_write(pin, LOW);
-        task_delay(20);
-    }
-}
-
-uint8_t led_task_stack[TASK_STACK_SIZE];
-void led_task() {
-    uint8_t pin = 13;
-    set_digital_pin_mode(pin, OUTPUT);
-    while(1) {
-        digital_write(pin, HIGH);
-        task_delay(10);
-        digital_write(pin, LOW);
-        task_delay(10);
-    }
-}
-
-
 // idle_task 在没有进程READY的情况下都会调度运行
 // 所以task_delay不能在此进程生效
 uint8_t idle_task_stack[TASK_STACK_SIZE];
 uint32_t idle_cnt = 0;
+void app_main();
 void idle_task() {
     sei();
     kernel_initialized = 1;
+    app_main();
     uint8_t pin = 12;
     set_digital_pin_mode(pin, OUTPUT);
     uint8_t state = LOW;
@@ -296,8 +264,6 @@ void init_tasks() {
         t->delay_ticks  = 0;
     }
 
-    create_task(led_task, led_task_stack, 0);
-    create_task(debug_task, debug_task_stack, 1);
     create_task(idle_task, idle_task_stack, idle_task_priority);
     current_task = IDLE_TASK;
     IDLE_TASK->stack = idle_task_stack+TASK_STACK_SIZE - 3;

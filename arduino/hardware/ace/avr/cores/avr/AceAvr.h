@@ -13,6 +13,9 @@
 #include <avr/pgmspace.h>
 #include <avr/interrupt.h>
 
+#include <HardwareSerial.h>
+#include <kernel.h>
+
 #define LOW  0
 #define HIGH 1
 
