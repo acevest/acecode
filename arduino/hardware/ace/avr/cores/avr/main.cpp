@@ -6,38 +6,90 @@
  * Description: none
  * ------------------------------------------------------------------------
  */
-
 #include <Arduino.h>
+
 void init_timer0();
 void init_timer1();
+void init_tasks();
 
+#if 1
 void init() {
-    sei();
+    cli();
     init_timer0();
-    init_timer1();
+    //init_timer1();
+    //init_tasks();
+    sei();
 }
 
-extern uint8_t tick;
 int main()
 {
     init();
 
-    uint8_t pin = 12;
+    uint8_t pin = 13;
     set_digital_pin_mode(pin, OUTPUT);
+    digital_write(pin, LOW);
 
-    int n = 0;
     uint8_t state = LOW;
     while(1) {
-        n++;
-
-        if(tick > 100) {
-            state = state == LOW ? HIGH : LOW;
-            tick = 0;
-        }
-
+        state = state == LOW ? HIGH : LOW;
         digital_write(pin, state);
-        delay(10);
+        delay(1000);
     }
+
 
     return 0;
 }
+#else
+
+uint8_t stack[128];
+
+void handler() {
+    uint8_t pin = 12;
+    set_digital_pin_mode(pin, OUTPUT);
+    digital_write(pin, LOW);
+
+
+    uint8_t state = LOW;
+    while(1) {
+        state = state == LOW ? HIGH : LOW;
+        digital_write(pin, state);
+        delay(1000);
+    }
+}
+
+
+uint8_t * volatile p = 0;
+int main()
+{
+    sei();
+    init_timer0();
+
+    p = stack+64;
+
+    *(p+0) = 0;
+    *(p+1) = 0; //(((uint16_t)handler) >> 8);
+    *(p+2) = (((uint16_t)handler) >> 0);
+    *(p+3) = (((uint16_t)handler) >> 8);
+
+
+    asm("nop");
+    asm("nop");
+    #if 1
+    SP = (uint16_t) p;
+    #else
+    asm volatile (
+        "lds r26, p\n"
+        "lds r27, p+1\n"
+        "out __SP_L__, r26\n"
+        "out __SP_H__, r27\n"
+        );
+    #endif
+    asm("nop");
+    asm("nop");
+
+    asm("ret");
+
+    return 0;
+}
+
+#endif
