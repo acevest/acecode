@@ -70,6 +70,7 @@ void create_task(void (*handler)(), uint8_t *stack, uint8_t priority)
 
     t->stack = stack + TASK_STACK_SIZE - 3;
     uint8_t *p = t->stack;
+    // 貌似atmega328p执行RET会弹出3个字节给到PC寄存器
     *(p+0) = (((uint32_t)handler) >> 16);
     *(p+1) = (((uint32_t)handler) >> 8);
     *(p+2) = (((uint32_t)handler) >> 0);
