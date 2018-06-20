@@ -41,3 +41,11 @@ COMPONENTS := $(dir $(foreach cd,$(COMPONENT_DIRS),	\
 
 export COMPONENTS
 #endif
+
+COMPONENT_PATHS := $(foreach comp,$(COMPONENTS),$(firstword $(foreach cd,$(COMPONENT_DIRS),$(wildcard $(dir $(cd))$(comp) $(cd)/$(comp)))))
+COMPONENT_KCONFIGS := $(foreach component,$(COMPONENT_PATHS),$(wildcard $(component)/Kconfig))
+COMPONENT_KCONFIGS_PROJBUILD := $(foreach component,$(COMPONENT_PATHS),$(wildcard $(component)/Kconfig.projbuild))
+
+SDKCONFIG ?= $(PROJECT_PATH)/sdkconfig
+
+KCONFIG_TOOL_DIR=$(RTOS_PATH)/tools/kconfig
