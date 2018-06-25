@@ -1,3 +1,21 @@
+CC ?= gcc
+LD ?= ld
+AR ?= ar
+OBJCOPY ?= objcopy
+SIZE ?= size
+HOSTCC := $(CC)
+HOSTLD := $(LD)
+HOSTAR := $(AR)
+HOSTOBJCOPY := $(OBJCOPY)
+HOSTSIZE := $(SIZE)
+CC := $(call dequote,$(CONFIG_TOOLPREFIX))gcc
+CXX := $(call dequote,$(CONFIG_TOOLPREFIX))c++
+LD := $(call dequote,$(CONFIG_TOOLPREFIX))ld
+AR := $(call dequote,$(CONFIG_TOOLPREFIX))ar
+OBJCOPY := $(call dequote,$(CONFIG_TOOLPREFIX))objcopy
+SIZE := $(call dequote,$(CONFIG_TOOLPREFIX))size
+export CC CXX LD AR OBJCOPY SIZE
+
 
     # ?= 的意思是如果没有赋值过则赋值?=后面的值
 OS ?=
@@ -39,13 +57,24 @@ endif
 COMPONENTS := $(dir $(foreach cd,$(COMPONENT_DIRS),	\
 					$(wildcard $(cd)/*/component.mk) $(wildcard $(cd)/component.mk)))
 
+COMPONENTS := $(sort $(foreach comp,$(COMPONENTS),$(lastword $(subst /, ,$(comp)))))
 export COMPONENTS
 #endif
 
 COMPONENT_PATHS := $(foreach comp,$(COMPONENTS),$(firstword $(foreach cd,$(COMPONENT_DIRS),$(wildcard $(dir $(cd))$(comp) $(cd)/$(comp)))))
 COMPONENT_KCONFIGS := $(foreach component,$(COMPONENT_PATHS),$(wildcard $(component)/Kconfig))
+    # COMPONENT_KCONFIGS_PROJBUILD 会在$(RTOS_PATH)/Kconfig里用到
 COMPONENT_KCONFIGS_PROJBUILD := $(foreach component,$(COMPONENT_PATHS),$(wildcard $(component)/Kconfig.projbuild))
 
 SDKCONFIG ?= $(PROJECT_PATH)/sdkconfig
 
 KCONFIG_TOOL_DIR=$(RTOS_PATH)/tools/kconfig
+
+
+# Workaround to run make parallel (-j). mconf and conf cannot be made simultaneously
+$(KCONFIG_TOOL_DIR)/mconf: $(KCONFIG_TOOL_DIR)/conf
+
+# reset MAKEFLAGS as the menuconfig makefile uses implicit compile rules
+$(KCONFIG_TOOL_DIR)/mconf $(KCONFIG_TOOL_DIR)/conf: $(wildcard $(KCONFIG_TOOL_DIR)/*.c)
+	MAKEFLAGS="" CC=$(HOSTCC) LD=$(HOSTLD) \
+	$(MAKE) -C $(KCONFIG_TOOL_DIR)

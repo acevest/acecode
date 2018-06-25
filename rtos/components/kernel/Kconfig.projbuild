@@ -1,0 +1,7 @@
+menu "Kernel config"
+config KERNEL_NAME
+	string "Kernel name"
+	default "rtos"
+	help
+		what's the kenel name
+endmenu

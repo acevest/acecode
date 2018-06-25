@@ -1,0 +1,8 @@
+deps_config := \
+	/Users/ace/workspace/acecode/rtos/Kconfig
+
+include/config/auto.conf: \
+	$(deps_config)
+
+
+$(deps_config): ;

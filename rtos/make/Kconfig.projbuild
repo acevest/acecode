@@ -1,0 +1,10 @@
+menu "Example Configuration"
+
+config EXAMPLE_CONF_VAL
+	int "example configuration value"
+	range 0 34
+	default 3
+	help
+		example configuration value
+
+endmenu
