@@ -1,5 +1,3 @@
-details := @echo
-summary := @true
 HOSTCC := gcc
 HOSTCXX := g++
 HOSTLD	:= ld
@@ -7,16 +5,16 @@ HOSTAR	:= ar
 HOSTOBJCOPY := objcopy
 HOSTSIZE := size
 
-CONFIG_TOOLPREFIX := xtensa-esp32-elf-
-CC := $(CONFIG_TOOLPREFIX)gcc
-CXX := $(CONFIG_TOOLPREFIX)c++
-LD := $(CONFIG_TOOLPREFIX)ld
-AR := $(CONFIG_TOOLPREFIX)ar
-OBJCOPY := $(CONFIG_TOOLPREFIX)objcopy
-SIZE := $(CONFIG_TOOLPREFIX)size
+CONFIG_TOOLPREFIX := "xtensa-esp32-elf-"
+CC := $(call dequote,$(CONFIG_TOOLPREFIX))gcc
+CXX := $(call dequote,$(CONFIG_TOOLPREFIX))c++
+LD := $(call dequote,$(CONFIG_TOOLPREFIX))ld
+AR := $(call dequote,$(CONFIG_TOOLPREFIX))ar
+OBJCOPY := $(call dequote,$(CONFIG_TOOLPREFIX))objcopy
+SIZE := $(call dequote,$(CONFIG_TOOLPREFIX))size
 export CC CXX LD AR OBJCOPY SIZE
 
-.PHONY: all_binaries clean
+.PHONY: all_binaries
 all: all_binaries
 
     # ?= 的意思是如果没有赋值过则赋值?=后面的值
@@ -97,26 +95,15 @@ APP_ELF:=$(BUILD_DIR_BASE)/$(PROJECT_NAME).elf
 APP_MAP:=$(APP_ELF:.elf=.map)
 APP_BIN:=$(APP_ELF:.elf=.bin)
 
-all_binaries: $(APP_ELF) 
-	@echo "end"
+all_binaries: $(APP_BIN) $(COMPONENT_PROJECT_VARS)
 
-fff := $(foreach libcomp,$(COMPONENT_LIBRARIES),$(BUILD_DIR_BASE)/$(libcomp)/lib$(libcomp).a)
 
-LDFLAGS ?= -nostdlib \
-    -u call_user_start_cpu0 \
-    $(EXTRA_LDFLAGS) \
-    -Wl,--gc-sections   \
-    -Wl,-static \
-    -Wl,--start-group   \
-    $(COMPONENT_LDFLAGS) \
-    -lgcc \
-    -lstdc++ \
-    -lgcov \
-    -Wl,--end-group \
-    -Wl,-EL
-$(APP_ELF): $(foreach libcomp,$(COMPONENT_LIBRARIES),$(BUILD_DIR_BASE)/$(libcomp)/lib$(libcomp).a) $(COMPONENT_PROJECT_VARS)
-	$(summary) LD $(patsubst $(PWD)/%,%,$@)
-	$(CC) $(LDFLAGS) -o $@ -Wl,-Map=$(APP_MAP)
+
+$(APP_BIN): $(APP_ELF)
+	cp $(APP_ELF) $(APP_BIN)
+
+
+$(APP_ELF):
 
 
 define RunConf
@@ -131,13 +118,6 @@ endef
 menuconfig: $(KCONFIG_TOOL_DIR)/mconf $(KCONFIG_TOOL_DIR)/conf
 	$(call RunConf,mconf)
 	$(call RunConf,conf --silentoldconfig)
-
-app-clean: $(addprefix component-,$(addsuffix -clean,$(notdir $(COMPONENT_PATHS))))
-	$(summary) RM $(APP_ELF)
-	rm -f $(APP_ELF) $(APP_BIN) $(APP_MAP)
-
-clean: app-clean
-
 
 
 
@@ -157,15 +137,15 @@ endef
 define GenerateComponentTargets
 .PHONY: component-$(2)-build component-$(2)-clean
 
-component-$(2)-build: $(call prereq_if_explicit, component-$(2)-clean) | $(BUILD_DIR_BASE)/$(2)
+component-$(2)-build: check-submodules $(call prereq_if_explicit, component-$(2)-clean) | $(BUILD_DIR_BASE)/$(2)
 	$(call ComponentMake,$(1),$(2)) build
 
 component-$(2)-clean: | $(BUILD_DIR_BASE)/$(2) $(BUILD_DIR_BASE)/$(2)/component_project_vars.mk
 	$(call ComponentMake,$(1),$(2)) clean
 
+
 $(BUILD_DIR_BASE)/$(2):
 	@mkdir -p $(BUILD_DIR_BASE)/$(2)
-
 
 $(BUILD_DIR_BASE)/$(2)/lib$(2).a: component-$(2)-build
 	$(details) "Target '$$^' responsible for '$$@'" # echo which build target built this file

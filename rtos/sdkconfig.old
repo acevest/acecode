@@ -7,3 +7,8 @@
 # RTOS Configuration
 #
 CONFIG_BLINK_GPIO=2
+
+#
+# Kernel config
+#
+CONFIG_KERNEL_NAME="rtos"
