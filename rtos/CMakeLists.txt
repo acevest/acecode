@@ -1,21 +1,27 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.12)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
-SET(RTOS_VERSION_MAJOR	0)
+SET(CMAKE_VERBOSE_MAKEFILE on)
+SET(RTOS_VERSION_MAJOR 0)
 SET(RTOS_VERSION_MINOR 1)
 
-
 PROJECT(rtos)
+ENABLE_LANGUAGE(ASM)
+
 
 CONFIGURE_FILE(
 	"${PROJECT_SOURCE_DIR}/rtos_config.h.in"
 	"${PROJECT_BINARY_DIR}/rtos_config.h"
 )
 
-add_subdirectory(components)
+ADD_SUBDIRECTORY(components)
 
-include_directories("${PROJECT_BINARY_DIR}"
-					"components/debug")
+INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}"
+	"components/utils")
 
-add_executable(rtos rtos.c)
+LINK_DIRECTORIES(${LIBRARY_OUTPUT_PATH})
 
-target_link_libraries(rtos components)
+ADD_EXECUTABLE(rtos rtos.c)
+
+
+# TARGET_LINK_LIBRARIES 参数里 debug optimized general 是关键词，不能用
+TARGET_LINK_LIBRARIES(rtos utils)

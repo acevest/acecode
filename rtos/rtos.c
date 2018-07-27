@@ -8,11 +8,11 @@
  */
 #include<stdio.h>
 #include "rtos_config.h"
-#include "debug.h"
+#include "utils.h"
 
 int main(int argc, char *argv[]){
     printf("rtos: version %u.%u\n", RTOS_VERSION_MAJOR, RTOS_VERSION_MINOR);
     debug();
     asm_debug();
-	return 0;
+    return 0;
 }
