@@ -111,5 +111,6 @@ void task_delay(uint16_t ticks);
     "POP R29\n"    \
     "POP R30\n"    \
     "POP R31\n"    \
+    "reti\n"\
     );
 

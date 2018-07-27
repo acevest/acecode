@@ -21,3 +21,4 @@ alias grep='grep --color'
 alias egrep='egrep --color'
 alias msf='msfconsole'
 alias cdw='cd ~/workspace/'
+export PATH="/usr/local/opt/ncurses/bin:$PATH"

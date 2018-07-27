@@ -1,13 +1,14 @@
 /*
  * ------------------------------------------------------------------------
- *   File Name: debug.c
+ *   File Name: debug.h
  *      Author: Zhao Yanbai
- *              2018-07-07 14:02:11 Saturday CST
+ *              2018-07-26 15:47:46 Thursday CST
  * Description: none
  * ------------------------------------------------------------------------
  */
 
-int debug() {
+#pragma once
 
-    return 0;
-}
+void debug();
+
+void asm_debug();

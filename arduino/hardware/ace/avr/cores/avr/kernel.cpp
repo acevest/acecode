@@ -148,7 +148,6 @@ void yield(void)
 extern "C" void TIMER1_COMPA_vect() __attribute__ ((signal,used, externally_visible));
 void TIMER1_COMPA_vect()
 {
-    SAVE_CONTEXT;
     ticks++;
 
     for(uint8_t i=0; i<task_cnt; i++) {
@@ -167,7 +166,6 @@ void TIMER1_COMPA_vect()
     }
 
     task_scheduler();
-    RESTORE_CONTEXT;
 }
 
 void init_timer1() {

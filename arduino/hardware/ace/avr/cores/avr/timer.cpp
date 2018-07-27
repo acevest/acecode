@@ -75,7 +75,6 @@ void init_timer0() {
 extern "C" void TIMER0_OVF_vect() __attribute__ ((signal,used, externally_visible));
 void TIMER0_OVF_vect()
 {
-    SAVE_CONTEXT;
     unsigned long m = timer0_millis;
     unsigned char f = timer0_fract;
 
@@ -90,7 +89,6 @@ void TIMER0_OVF_vect()
     timer0_millis = m;
 
     timer0_overflow_count++;
-    RESTORE_CONTEXT;
 }
 
 

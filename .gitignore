@@ -10,3 +10,4 @@ ish
 *.diff
 *.d
 dvwa
+build
