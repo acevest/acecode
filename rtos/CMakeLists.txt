@@ -7,7 +7,6 @@ SET(RTOS_VERSION_MINOR 1)
 PROJECT(rtos)
 ENABLE_LANGUAGE(ASM)
 
-
 CONFIGURE_FILE(
 	"${PROJECT_SOURCE_DIR}/rtos_config.h.in"
 	"${PROJECT_BINARY_DIR}/rtos_config.h"
@@ -24,4 +23,4 @@ ADD_EXECUTABLE(rtos rtos.c)
 
 
 # TARGET_LINK_LIBRARIES 参数里 debug optimized general 是关键词，不能用
-TARGET_LINK_LIBRARIES(rtos utils)
+TARGET_LINK_LIBRARIES(rtos components)
