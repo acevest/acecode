@@ -11,8 +11,8 @@
 #include "utils.h"
 
 int main(int argc, char *argv[]){
-    printf("rtos: version %u.%u\n", RTOS_VERSION_MAJOR, RTOS_VERSION_MINOR);
+//    printf("rtos: version %u.%u\n", RTOS_VERSION_MAJOR, RTOS_VERSION_MINOR);
     debug();
-    asm_debug();
+//    asm_debug();
     return 0;
 }
