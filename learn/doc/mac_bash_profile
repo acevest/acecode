@@ -5,6 +5,7 @@ HISTCONTROL=ignoreboth
 export PATH=/usr/local/sbin:$PATH
 export PATH=$HOME/.local/bin:$PATH
 export PATH=$PATH:$HOME/workspace/esp/xtensa-esp32-elf/bin
+export PATH=$PATH:$HOME/workspace/esp/xtensa-lx106-elf/bin
 export GOBIN=$HOME/.local/bin
 export IDF_PATH=$HOME/workspace/esp/esp-idf
 export PATH=$PATH:/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin/
