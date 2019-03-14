@@ -52,7 +52,7 @@ var objects = map[string]AstronomicalObject {
 		320000,
 		20726155264,
 		0.06,
-		0.05,
+		0.051,
 		3.0136321e11,
 		47921949,
 	},
@@ -67,6 +67,17 @@ var objects = map[string]AstronomicalObject {
 		3.5315984e12,
 		84159271,
 	},
+    "Dress" :
+    {
+        "Dress",
+        "Kerbol",
+        138000,
+        40839348203,
+        5,
+        0.145,
+        2.1484489e10,
+        32832840,
+    },
 }
 
 func getAstronomicalObjectOrbitalPeriod(sma float64, u float64) float64 {
@@ -87,8 +98,8 @@ func main() {
 	// ===> (1/Td)*Tt*Pi + PhaseAngle = Pi
 	// ===> PhaseAngle = Pi - Tt*Pi/Td 
 
-	aod := objects["Eve"]
-	aos := objects["Duna"]
+	aos := objects["Kerbin"]
+	aod := objects["Duna"]
 	if aos.parent != aod.parent || aos.parent == "" || aod.parent == "" {
 		fmt.Println("invalid astronomical object");
 		return
