@@ -9,6 +9,7 @@
 
 #pragma once
 #include <stdint.h>
+#include <Arduino.h>
 
 #if defined(__GNUC__) && defined(__AVR__)
 #  define ACEVEST_FONT_SECTION(name) ACEVEST_SECTION(".progmem." name)
@@ -28,6 +29,6 @@
 extern const uint8_t font_acevest[] ACEVEST_FONT_SECTION("font_acevest");
 
 typedef struct {
-  const char *name;
-  const char *pwd;
+  String ssid;
+  String pwd;
 } WiFiItem_t;

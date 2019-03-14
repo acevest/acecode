@@ -87,8 +87,8 @@ func main() {
 	// ===> (1/Td)*Tt*Pi + PhaseAngle = Pi
 	// ===> PhaseAngle = Pi - Tt*Pi/Td 
 
-	aos := objects["Kerbin"]
 	aod := objects["Eve"]
+	aos := objects["Duna"]
 	if aos.parent != aod.parent || aos.parent == "" || aod.parent == "" {
 		fmt.Println("invalid astronomical object");
 		return
