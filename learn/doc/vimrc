@@ -68,6 +68,7 @@ let &guicursor = &guicursor . ",a:blinkon0"
 set number        " 显示行号
 " set autoindent    " 自动对齐
 set smartindent
+
 set tabstop=4     " TAB的宽度
 set shiftwidth=4
 set expandtab     " TAB用空格代替，否则可用 set noexpandtab
@@ -77,14 +78,6 @@ set cursorline
 "set cursorcolumn
 "hi CursorColumn ctermbg=lightgreen cterm=BOLD
 set viminfo='1000,<500
-
-" 需要安装bundle/vundle vim-go 到~/.vim/
-"filetype off
-"set rtp+=~/.vim/bundle/vundle/
-"call vundle#rc()
-"Bundle 'gmarik/vundle'
-"Plugin 'fatih/vim-go'
-"filetype plugin indent on
 
 " 以下是让mac vim支持中文输入
 set encoding=utf-8  " 默认UTF-8
@@ -115,5 +108,52 @@ autocmd FileType asm set expandtab
 " 连续按两次jj表示按ESC，进入命令模式
 imap jj <Esc>
 
+
 " set paste 会使 imap jj <Esc>失效
 "set paste
+
+
+filetype off
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'fatih/vim-go'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'Lokaltog/vim-powerline'
+Plugin 'scrooloose/nerdtree'
+call vundle#end()
+filetype plugin indent on
+
+" youcompleteme插件相关配置
+let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/third_party/ycmd/.ycm_extra_conf.py"
+" 设置回车为补全确认键
+let g:ycm_key_list_stop_completion = ['<CR>']
+
+" vim-powerline插件相关配置
+set laststatus=2   " Always show the statusline
+set encoding=utf-8 " Necessary to show Unicode glyphs
+set t_Co=256
+let g:Powerline_symbols= 'unicode'
+
+" NERDTree 插件的相关配置
+"F2开启和关闭树"
+map <F2> :NERDTreeToggle<CR>
+let NERDTreeChDirMode=1
+"显示书签"
+let NERDTreeShowBookmarks=1
+"设置忽略文件类型"
+let NERDTreeIgnore=['\~$', '\.pyc$', '\.swp$']
+"窗口大小"
+let NERDTreeWinSize=25
+
+"let g:indentLine_setColors = 0
+"let g:indentLine_color_term = 239
+"let g:indentLine_bgcolor_term = 202
+"let g:indentLine_bgcolor_gui = '#FF5F00'
+"let g:indentLine_char = '|'
+let g:indentLine_color_term = 239
+"let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+"let g:indentLine_enabled=1
+let g:indentLine_char='┆'
+let g:indentLine_enabled = 1
+let g:indentLine_showFirstIndentLevel = 1
