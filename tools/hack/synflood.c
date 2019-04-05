@@ -81,7 +81,6 @@ int main(int argc, char *argv[]) {
     signal(SIGINT, sig_int);
 
     while(!terminated) {
-
         l = libnet_init(
                 LIBNET_RAW4,
                 iface,
