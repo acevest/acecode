@@ -9,5 +9,6 @@ ish
 *.conf
 *.diff
 *.d
+*.log
 dvwa
 build
