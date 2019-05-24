@@ -115,13 +115,13 @@ imap jj <Esc>
 
 filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
-"call vundle#begin()
-"Plugin 'VundleVim/Vundle.vim'
-"Plugin 'fatih/vim-go'
+call vundle#begin()
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'fatih/vim-go'
 "Plugin 'Valloric/YouCompleteMe'
 "Plugin 'Lokaltog/vim-powerline'
 "Plugin 'scrooloose/nerdtree'
-"call vundle#end()
+call vundle#end()
 filetype plugin indent on
 
 " youcompleteme插件相关配置
