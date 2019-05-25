@@ -12,12 +12,15 @@
 #include "gpio.h"
 #include "rcc.h"
 
-#define APB2ENR (*(unsigned int*)(RCC_BASE+0x18))
 
-unsigned int pin = 8;
+unsigned int pin = 9;
 
 
 void SystemInit() {
+
+	InitSystemClock();
+
+
 	// 使能时钟
 	RCCEnableGPIOBClock();
 
@@ -25,12 +28,11 @@ void SystemInit() {
 }
 
 void delay() {
-	int i=65536;
+	int i=965536;
 	while(i--);
 }
 
 int main() {
-
 	while(1) {
 		GPIOWrite(GPIOB, pin, HIGH);
 		delay();
