@@ -11,15 +11,13 @@
 
 #include "gpio.h"
 #include "rcc.h"
-
+#include "systick.h"
 
 unsigned int pin = 9;
 
 
 void SystemInit() {
-
 	InitSystemClock();
-
 
 	// 使能时钟
 	RCCEnableGPIOBClock();
@@ -28,6 +26,8 @@ void SystemInit() {
 }
 
 void delay() {
+	Delay();
+	return;
 	int i=965536;
 	while(i--);
 }
