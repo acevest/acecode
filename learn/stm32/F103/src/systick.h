@@ -20,6 +20,7 @@ typedef struct {
 
 #define SysTick ((SysTick_t*) 0xE000E010)
 
-
-void Delay();
+void InitSysTick();
+void Delay(uint32_t ms);
+void NoneIntDelay(uint32_t ms);
 #endif /* SYSTICK_H_ */

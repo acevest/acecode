@@ -24,13 +24,41 @@
 #define SYSTICK_CTRL_ENABLE_MASK	(1 << SYSTICK_CTRL_ENABLE_POS)
 #define SYSTICK_CTRL_ENABLE 		(1 << SYSTICK_CTRL_ENABLE_POS)
 
-void Delay() {
+uint32_t gSysTickCnt = 0;
+void SysTick_Handler() {
+	gSysTickCnt++;
+}
+
+// 每1ms触发一次SysTick中断
+void InitSysTick() {
 	SysTick->CTRL &= ~SYSTICK_CTRL_ENABLE_MASK;
 	SysTick->CTRL &= ~SYSTICK_CTRL_TICKINT_MASK;
 	SysTick->CTRL &= ~SYSTICK_CTRL_CLKSOURCE_MASK;
 
 
-	SysTick->LOAD = 9000*1000; // 1000ms
+	SysTick->LOAD = 9000;
+	SysTick->VAL  = 0;
+
+
+	SysTick->CTRL |= SYSTICK_CTRL_ENABLE | SYSTICK_CTRL_TICKINT_ENABLE;
+}
+
+void Delay(uint32_t ms) {
+	gSysTickCnt = 0;
+	while(gSysTickCnt < ms) {
+
+	}
+}
+
+// 非中断版本的Delay
+// ms 最大值为1864
+void NoneIntDelay(uint32_t ms) {
+	SysTick->CTRL &= ~SYSTICK_CTRL_ENABLE_MASK;
+	SysTick->CTRL &= ~SYSTICK_CTRL_TICKINT_MASK;
+	SysTick->CTRL &= ~SYSTICK_CTRL_CLKSOURCE_MASK;
+
+
+	SysTick->LOAD = 9000*ms;
 	SysTick->VAL  = 0;
 
 

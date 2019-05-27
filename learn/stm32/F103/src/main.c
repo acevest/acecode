@@ -19,6 +19,8 @@ unsigned int pin = 9;
 void SystemInit() {
 	InitSystemClock();
 
+	InitSysTick();
+
 	// 使能时钟
 	RCCEnableGPIOBClock();
 
@@ -26,10 +28,7 @@ void SystemInit() {
 }
 
 void delay() {
-	Delay();
-	return;
-	int i=965536;
-	while(i--);
+	Delay(200);
 }
 
 int main() {
