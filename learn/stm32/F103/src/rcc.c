@@ -94,7 +94,13 @@
 #define RCC_CFGR_MCO_HSE		0x06000000
 #define RCC_CFGR_MCO_PLL_HALF	0x07000000
 
+
+
+#define RCC_CSR_LSION			0x00000001
+#define RCC_CSR_LSIRDY			0x00000002
+
 #define HSE_STARTUP_TIMEOUT	0x500
+#define LSI_STARTUP_TIMEOUT	0x500
 
 void InitFlashAcr();
 
@@ -106,7 +112,6 @@ void InitSystemClock() {
 
 	// 启动HSI
 	RCC->CR |= RCC_CR_HSION;
-
 
 	// SW： System Close Switch 重置为 HSI
 	RCC->CFGR &= ~RCC_CFGR_SW_MASK;
@@ -170,6 +175,20 @@ void InitSystemClock() {
 	SetSystemClock72MHz();
 }
 
+
+void EnableLSI() {
+	RCC->CSR |= RCC_CSR_LSION;
+
+	volatile uint32_t StartupCnt = 0;
+	volatile uint32_t Status = 0;
+
+	do {
+		Status = RCC->CSR & RCC_CSR_LSIRDY;
+		StartupCnt++;
+	} while(Status == 0 && StartupCnt < LSI_STARTUP_TIMEOUT);
+
+
+}
 
 
 void SetSystemClock72MHz() {

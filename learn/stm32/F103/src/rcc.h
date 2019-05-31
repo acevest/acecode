@@ -42,5 +42,6 @@ void __RCCEnableAPB2(uint32_t en);
 #define RCCEnableGPIOEClock() __RCCEnableAPB2(RCC_APB2ENR_IOPEEN)
 
 void InitSystemClock();
+void EnableLSI();
 
 #endif /* RCC_H_ */
