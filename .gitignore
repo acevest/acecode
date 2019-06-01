@@ -12,3 +12,5 @@ ish
 *.log
 dvwa
 build
+Debug
+OneNetMiniBoard
