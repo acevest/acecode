@@ -56,7 +56,9 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void SystemPreInit();
+void SystemSetup();
+void SystemLoop();
 /* USER CODE END 0 */
 
 /**
@@ -83,19 +85,20 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
+  SystemPreInit();
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-
+  SystemSetup();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  SystemLoop();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
