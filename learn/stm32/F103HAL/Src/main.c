@@ -66,8 +66,8 @@ void SystemEntry();
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-	SystemEntry();
-	return 0; // never
+SystemEntry();
+return 0; // never
   /* USER CODE END 1 */
   
 

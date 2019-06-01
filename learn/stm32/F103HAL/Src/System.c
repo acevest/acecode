@@ -8,9 +8,6 @@
 
 #include "stm32f1xx_hal.h"
 
-void SystemPreInit() {
-
-}
 
 
 #define LED_Pin 		GPIO_PIN_6
@@ -42,8 +39,32 @@ void SystemClock_Init() {
 	}
 }
 
+void SysTick_Init() {
+	//HAL_SysTick_Init();
+	//HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
+	//HAL_InitTick(0);
+	//HAL_NVIC_EnableIRQ(SysTick_IRQn);
+	//HAL_NVIC_DisableIRQ(SysTick_IRQn);
+	HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
+	HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+	//HAL_NVIC_ClearPendingIRQ(SysTick_IRQn);
+}
+
+volatile uint32_t SysTicks = 0;
+void SysTick_IRQ_Handler() {
+	SysTicks++;
+	HAL_IncTick();
+}
+
+void Delay(uint32_t n) {
+
+	uint32_t b = SysTicks;
+	while((b+n) > SysTicks);
+}
+
 void GPIO_Init() {
 	__HAL_RCC_GPIOB_CLK_ENABLE();
+
 	// GPIO 初始化，需要启用相应GPIO Port的时钟
 	GPIO_InitTypeDef GPIO_InitStruct;
 	GPIO_InitStruct.Mode	= GPIO_MODE_OUTPUT_OD;
@@ -56,16 +77,25 @@ void GPIO_Init() {
 
 void SystemSetup() {
 
+	//__HAL_FLASH_PREFETCH_BUFFER_ENABLE();
 	HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_2);
 
 	SystemClock_Init();
+
+	SysTick_Init();
+
+#if 1
+	__HAL_RCC_AFIO_CLK_ENABLE();
+	//__HAL_RCC_PWR_CLK_ENABLE();
+	__HAL_AFIO_REMAP_SWJ_NOJTAG();
+#endif
 
 	GPIO_Init();
 }
 
 void SystemLoop() {
 	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
-	HAL_Delay(1000);
+	Delay(1000);
 }
 
 
