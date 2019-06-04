@@ -1,0 +1,109 @@
+EESchema Schematic File Version 4
+EELAYER 29 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Device:R R?
+U 1 1 5CF46E84
+P 2300 2050
+F 0 "R?" V 2093 2050 50  0000 C CNN
+F 1 "4.7K" V 2184 2050 50  0000 C CNN
+F 2 "" V 2230 2050 50  0001 C CNN
+F 3 "~" H 2300 2050 50  0001 C CNN
+	1    2300 2050
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5CF47D6C
+P 2300 2700
+F 0 "R?" V 2093 2700 50  0000 C CNN
+F 1 "1K" V 2184 2700 50  0000 C CNN
+F 2 "" V 2230 2700 50  0001 C CNN
+F 3 "~" H 2300 2700 50  0001 C CNN
+	1    2300 2700
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 5CF4820F
+P 3450 2050
+F 0 "C?" V 3198 2050 50  0000 C CNN
+F 1 "104pF" V 3289 2050 50  0000 C CNN
+F 2 "" H 3488 1900 50  0001 C CNN
+F 3 "~" H 3450 2050 50  0001 C CNN
+	1    3450 2050
+	0    1    1    0   
+$EndComp
+$Comp
+L power:+3V3 #PWR?
+U 1 1 5CF48B55
+P 4400 2700
+F 0 "#PWR?" H 4400 2550 50  0001 C CNN
+F 1 "+3V3" V 4415 2828 50  0000 L CNN
+F 2 "" H 4400 2700 50  0001 C CNN
+F 3 "" H 4400 2700 50  0001 C CNN
+	1    4400 2700
+	0    1    1    0   
+$EndComp
+$Comp
+L power:Earth #PWR?
+U 1 1 5CF49CDA
+P 1100 2050
+F 0 "#PWR?" H 1100 1800 50  0001 C CNN
+F 1 "Earth" H 1100 1900 50  0001 C CNN
+F 2 "" H 1100 2050 50  0001 C CNN
+F 3 "~" H 1100 2050 50  0001 C CNN
+	1    1100 2050
+	0    1    1    0   
+$EndComp
+$Comp
+L Switch:SW_Push SW?
+U 1 1 5CF4C6BB
+P 3450 2700
+F 0 "SW?" H 3450 2985 50  0000 C CNN
+F 1 "SW_Push" H 3450 2894 50  0000 C CNN
+F 2 "" H 3450 2900 50  0001 C CNN
+F 3 "~" H 3450 2900 50  0001 C CNN
+	1    3450 2700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2450 2700 2800 2700
+Wire Wire Line
+	3650 2700 4050 2700
+Wire Wire Line
+	2450 2050 2800 2050
+Wire Wire Line
+	3600 2050 4050 2050
+Wire Wire Line
+	4050 2050 4050 2700
+Connection ~ 4050 2700
+Wire Wire Line
+	4050 2700 4400 2700
+Wire Wire Line
+	2800 2050 2800 2700
+Connection ~ 2800 2050
+Wire Wire Line
+	2800 2050 3300 2050
+Connection ~ 2800 2700
+Wire Wire Line
+	2800 2700 3250 2700
+Wire Wire Line
+	1100 2050 2150 2050
+Text Label 1000 2700 0    50   ~ 0
+INPUT
+Wire Wire Line
+	1000 2700 2150 2700
+$EndSCHEMATC
