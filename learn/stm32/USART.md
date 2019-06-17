@@ -110,3 +110,116 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 	  TransferUsartData();
   }
 ```
+
+
+# USART1、USART2 DMA转发
+```
+#define USART_RX_BUFSZ	64
+typedef struct {
+	uint32_t len : 24;
+	uint32_t end : 8;
+	DMA_HandleTypeDef *dmarx;
+	DMA_HandleTypeDef *dmatx;
+	uint8_t  buf[USART_RX_BUFSZ];
+}UsartDmaData_t;
+
+UsartDmaData_t  usart1_dma_data;
+UsartDmaData_t  usart2_dma_data;
+
+void InitUsartDmaTransfer(){
+	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
+	__HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE);
+
+	memset(&usart1_dma_data, 0, sizeof(usart1_dma_data));
+	memset(&usart2_dma_data, 0, sizeof(usart2_dma_data));
+
+	usart1_dma_data.dmarx = &hdma_usart1_rx;
+	usart2_dma_data.dmarx = &hdma_usart2_rx;
+	usart1_dma_data.dmatx = &hdma_usart1_tx;
+	usart2_dma_data.dmatx = &hdma_usart2_tx;
+
+	HAL_UART_Receive_DMA(&huart1, usart1_dma_data.buf, USART_RX_BUFSZ);
+	HAL_UART_Receive_DMA(&huart2, usart2_dma_data.buf, USART_RX_BUFSZ);
+}
+
+
+void TransferToUsart(UsartDmaData_t *data, UART_HandleTypeDef *from_huart, UART_HandleTypeDef *to_huart){
+	if(data->end != 1) {
+		return;
+	}
+
+	HAL_UART_Transmit_DMA(to_huart, data->buf, data->len);
+	//HAL_UART_Transmit(to_huart, data->buf, data->len, 0xFFFF);
+	data->len = 0;
+	data->end = 0;
+	HAL_UART_Receive_DMA(from_huart, data->buf, USART_RX_BUFSZ);
+}
+
+void TransferUsartData() {
+	TransferToUsart(&usart1_dma_data, &huart1, &huart2);
+	TransferToUsart(&usart2_dma_data, &huart2, &huart1);
+}
+
+void ReceiveUsartDmaData(UsartDmaData_t *data, UART_HandleTypeDef *huart) {
+	uint32_t flag = __HAL_UART_GET_FLAG(huart,UART_FLAG_IDLE);
+	if(flag == RESET) {
+		return;
+	}
+
+	__HAL_UART_CLEAR_IDLEFLAG(huart);
+
+	HAL_UART_DMAStop(huart);
+
+	data->len = USART_RX_BUFSZ - data->dmarx->Instance->CNDTR;
+	data->end = 1;
+}
+
+
+void ReceiveUsartData(UART_HandleTypeDef *huart) {
+	if(huart->Instance == USART1) {
+		return ReceiveUsartDmaData(&usart1_dma_data, huart);
+	}
+
+	if(huart->Instance == USART2) {
+		return ReceiveUsartDmaData(&usart2_dma_data, huart);
+	}
+}
+```
+
+```
+// stm32f1xx_it.c
+
+
+void USART1_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART1_IRQn 0 */
+
+  /* USER CODE END USART1_IRQn 0 */
+  HAL_UART_IRQHandler(&huart1);
+  /* USER CODE BEGIN USART1_IRQn 1 */
+  ReceiveUsartData(&huart1);
+  /* USER CODE END USART1_IRQn 1 */
+}
+
+
+void USART2_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART2_IRQn 0 */
+
+  /* USER CODE END USART2_IRQn 0 */
+  HAL_UART_IRQHandler(&huart2);
+  /* USER CODE BEGIN USART2_IRQn 1 */
+  ReceiveUsartData(&huart2);
+  /* USER CODE END USART2_IRQn 1 */
+}
+
+```
+
+```
+  // main.c
+  InitUsartDmaTransfer();
+  while (1)
+  {
+	TransferUsartData();
+  }
+```
