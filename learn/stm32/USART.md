@@ -100,3 +100,13 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 	}
 }
 ```
+
+```
+  // main.c
+  InitUsartTransfer();
+
+  while (1)
+  {
+	  TransferUsartData();
+  }
+```
