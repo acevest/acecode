@@ -19,26 +19,23 @@ import (
 func main() {
 	var port string
 	var baud int
-	flag.StringVar(&port, "p", "/dev/cu.SLAB_USBtoUART", "serial port")
+	//flag.StringVar(&port, "p", "/dev/cu.SLAB_USBtoUART", "serial port")
+	flag.StringVar(&port, "p", "/dev/cu.wchusbserial1460", "serial port")
 	flag.IntVar(&baud, "b", 115200, "baud rate default 115200")
 	flag.Parse()
 
 	log.Printf("port: %s\n", port)
 
+	//c := &serial.Config{Name: port, Baud: baud}
 	c := &serial.Config{Name: port, Baud: baud}
 	s, err := serial.OpenPort(c)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	n, err := s.Write([]byte("test"))
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	for {
 		buf := make([]byte, 4096)
-		n, err = s.Read(buf)
+		n, err := s.Read(buf)
 		if err != nil {
 			log.Fatal(err)
 		}
