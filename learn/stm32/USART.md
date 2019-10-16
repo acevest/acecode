@@ -413,3 +413,92 @@ void USART2_IRQHandler(void)
 	TransferUsartData();
   }
 ```
+
+## USART DMA 任意字节接收
+需要把DMA接收模式改为`Circular`模式
+
+```
+#define BUFSZ	2
+typedef struct {
+	uint32_t len;
+	DMA_HandleTypeDef *dmarx;
+	uint8_t  buf[BUFSZ];
+}UsartDmaData_t;
+
+#define CBUFSIZE 512
+typedef struct CircleBuffer {
+	uint32_t rp;
+	uint32_t wp;
+	uint8_t  buf[CBUFSIZE]
+} CircleBuffer_t;
+
+UsartDmaData_t  usart1_dma_data;
+CircleBuffer_t circle_buf;
+
+static uint32_t tick = 0;
+void InitUsartDmaTransfer(){
+
+	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
+
+	memset(&usart1_dma_data, 0, sizeof(usart1_dma_data));
+	memset(&circle_buf, 0, sizeof(circle_buf));
+
+	usart1_dma_data.dmarx = &hdma_usart1_rx;
+
+	HAL_UART_Receive_DMA(&huart1, usart1_dma_data.buf, BUFSZ);
+
+	//HAL_Delay(1000);
+	HAL_UART_Transmit(&huart1, "AT+CIFSR\r\n", 10, 0xFFFF);
+}
+
+
+void TransferUsartData() {
+	if(circle_buf.rp == circle_buf.wp) {
+		HAL_Delay(10); // 很重要
+		return;
+	}
+
+	uint8_t t = circle_buf.buf[circle_buf.rp];
+	HAL_UART_Transmit(&huart1, &t, 1, 0xFFFF);
+	circle_buf.rp = (circle_buf.rp + 1) % CBUFSIZE;
+}
+
+void WriteCircleData(uint8_t *data, uint32_t size) {
+	for(uint32_t i=0; i<size; i++) {
+		if((circle_buf.wp + 1) % CBUFSIZE == circle_buf.rp) {
+			continue;
+		}
+
+		circle_buf.buf[circle_buf.wp] = data[i];
+
+		circle_buf.wp = (circle_buf.wp + 1) % CBUFSIZE;
+
+	}
+}
+
+
+static uint32_t cplt_cnt = 0;
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+	cplt_cnt++;
+	//HAL_UART_Transmit(huart, usart1_dma_data.buf, BUFSZ, 0xFFFF);
+	WriteCircleData(usart1_dma_data.buf, BUFSZ);
+}
+
+void ReceiveUsartData(UART_HandleTypeDef *huart) {
+	if(huart->Instance != USART1) {
+		return ;
+	}
+	uint32_t flag = __HAL_UART_GET_FLAG(huart,UART_FLAG_IDLE);
+	if(flag == RESET) {
+		return;
+	}
+
+	__HAL_UART_CLEAR_IDLEFLAG(huart);
+
+	HAL_UART_DMAStop(huart);
+
+	WriteCircleData(usart1_dma_data.buf, BUFSZ - usart1_dma_data.dmarx->Instance->CNDTR);
+
+	HAL_UART_Receive_DMA(&huart1, usart1_dma_data.buf, BUFSZ);
+}
+```

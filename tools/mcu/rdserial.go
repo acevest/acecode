@@ -28,6 +28,7 @@ func main() {
 
 	log.Printf("port: %s\n", port)
 
+	//c := &serial.Config{Name: port, Baud: baud}
 	c := &serial.Config{Name: port, Baud: baud}
 	s, err := serial.OpenPort(c)
 	if err != nil {
