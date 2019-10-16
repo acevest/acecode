@@ -111,6 +111,192 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
   }
 ```
 
+## USART转发优化版本
+
+```
+#include "main.h"
+#include "usart.h"
+#include "gpio.h"
+#include "stm32f1xx_hal.h"
+#include "cmsis_os.h"
+
+#define BOARD_STANDARD
+//#define BOARD_NBIOT
+
+// 如果要测试BOARD_STANDARD上的M6312，则必需：
+// 1. 5V/2A电源要供电
+// 2. PC4_M6312_PWR_KEY 要设置为推挽输入，高电平
+// 3. J10接线端子用跳线帽接到M6312上
+
+#define USART_RX_BUFSZ  32
+#define USART_TX_BUFSZ  32
+typedef struct {
+    uint8_t rxbuf[USART_RX_BUFSZ];
+    uint8_t txbuf[USART_TX_BUFSZ];
+    uint16_t rxwp;
+    uint16_t rxrp;
+    UART_HandleTypeDef *huart;
+    uint8_t rxdata;
+} DebugUsart_t;
+
+#define INIT_DEBUG_USART(_name, _huart)	\
+	static DebugUsart_t _name = {		\
+			.rxwp	= 0,		\
+			.rxrp   = 0,		\
+			.huart  = &_huart,	\
+			.rxdata = 0			\
+	};
+
+
+
+INIT_DEBUG_USART(__usart1, huart1)
+
+#if defined(BOARD_STANDARD)
+	INIT_DEBUG_USART(__usart2, huart2)
+	#define LED_GPIO_Port	STANDARD_LED_GPIO_Port
+	#define LED_Pin		 	STANDARD_LED_Pin
+	#define UsartA __usart1
+	#define UsartB __usart2
+#elif defined(BOARD_NBIOT)
+	INIT_DEBUG_USART(__usart3, huart3)
+	#define LED_GPIO_Port	NB_LED_GPIO_Port
+	#define LED_Pin		 	NB_LED_Pin
+	#define UsartA __usart1
+	#define UsartB __usart3
+#else
+	#error "must define board"
+#endif
+
+
+
+void InitUsartTransfer(){
+    if(HAL_OK != HAL_UART_Receive_IT(UsartA.huart, &UsartA.rxdata, 1)) {
+        Error_Handler();
+    }
+
+    if(HAL_OK != HAL_UART_Receive_IT(UsartB.huart, &UsartB.rxdata, 1)) {
+        Error_Handler();
+    }
+}
+
+
+int ReadUsartData(DebugUsart_t *data, uint8_t *ch) {
+    uint16_t rxwp = data->rxwp;
+    if(data->rxrp == rxwp) {
+        // empty
+        return -1;
+    }
+    *ch = data->rxbuf[data->rxrp];
+    data->rxrp = (data->rxrp + 1) % USART_RX_BUFSZ;
+    return 0;
+}
+
+
+void ReceiveUsartData(DebugUsart_t *data) {
+    if((data->rxwp + 1) % USART_RX_BUFSZ == data->rxrp) {
+        // full
+        goto end;
+    }
+
+    data->rxbuf[data->rxwp] = data->rxdata;
+
+    data->rxwp =(data->rxwp + 1) % USART_RX_BUFSZ;
+
+end:
+    if(HAL_OK != HAL_UART_Receive_IT(data->huart, &data->rxdata, 1)) {
+        //Error_Handler();
+    }
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+	if(huart == UsartA.huart) {
+        return ReceiveUsartData(&UsartA);
+	}
+
+	if(huart == UsartB.huart) {
+        return ReceiveUsartData(&UsartB);
+    }
+}
+
+
+int TransferData(DebugUsart_t *from ,DebugUsart_t *to) {
+	int cnt = 0;
+	while(cnt < USART_TX_BUFSZ) {
+		uint8_t ch;
+		if(0 != ReadUsartData(from, &ch)) {
+			break;
+		}
+		from->txbuf[cnt++] = ch;
+	}
+
+	if(cnt > 0) {
+		HAL_UART_Transmit(to->huart, from->txbuf, cnt, 0xFFFF);
+	}
+
+	return cnt;
+}
+
+void TransferTask(void *arg) {
+	while(1) {
+		// 以下两次调用不得直接放到if表达式中
+		int cnt1 = TransferData(&UsartA, &UsartB);
+		int cnt2 = TransferData(&UsartB, &UsartA);
+
+		if(cnt1 == 0 && cnt2 == 0) {
+			osDelay(1);
+		}
+	}
+}
+
+void LedTask(void *pdata) {
+    while(1) {
+    	HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
+        osDelay(100);
+    }
+}
+
+osThreadDef(transferTask, TransferTask, osPriorityNormal, 0, 128);
+osThreadDef(ledTask, LedTask, osPriorityLow, 0, 64);
+
+void InitDebug() {
+	InitUsartTransfer();
+
+#if defined(BOARD_STANDARD)
+	HAL_GPIO_WritePin(M6312_PWRKEY_GPIO_Port, M6312_PWRKEY_Pin, GPIO_PIN_SET);
+#endif
+
+	osThreadId taskHandle;
+	taskHandle = osThreadCreate(osThread(transferTask), NULL);
+	if(taskHandle == NULL) {
+		Error_Handler();
+	}
+
+	taskHandle = osThreadCreate(osThread(ledTask), NULL);
+	if(taskHandle == NULL) {
+		Error_Handler();
+	}
+}
+
+
+#if 1
+#include <stdio.h>
+#ifdef __GNUC__
+	#define PUTCHAR_PROTOTYPE int __io_putchar(int ch)
+#else
+	#define PUTCHAR_PROTOTYPE int fputc(int ch, FILE *f)
+#endif
+PUTCHAR_PROTOTYPE
+{
+#if defined(BOARD_CHINA_MOBILE_NBIOT)
+	HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 0xFFFF);
+#endif
+	return ch;
+}
+#endif
+
+
+```
+
 
 # USART1、USART2 DMA转发
 ```
@@ -168,6 +354,11 @@ void ReceiveUsartDmaData(UsartDmaData_t *data, UART_HandleTypeDef *huart) {
 
 	__HAL_UART_CLEAR_IDLEFLAG(huart);
 
+	//软件清空空闲中断标志位
+	volatile tmp;
+	tmp =huart->SR;
+	tmp =huart->DR;   
+
 	HAL_UART_DMAStop(huart);
 
 	data->len = USART_RX_BUFSZ - data->dmarx->Instance->CNDTR;
@@ -205,11 +396,10 @@ void USART1_IRQHandler(void)
 void USART2_IRQHandler(void)
 {
   /* USER CODE BEGIN USART2_IRQn 0 */
-
+  ReceiveUsartData(&huart2);
   /* USER CODE END USART2_IRQn 0 */
   HAL_UART_IRQHandler(&huart2);
   /* USER CODE BEGIN USART2_IRQn 1 */
-  ReceiveUsartData(&huart2);
   /* USER CODE END USART2_IRQn 1 */
 }
 
