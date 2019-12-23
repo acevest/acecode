@@ -107,6 +107,10 @@ void create_task(void (*handler)(), uint8_t *stack, uint8_t priority)
     *(--(t->stack)) = 0x00;
 }
 
+void fuck() {
+    SP = 0xAC;
+}
+
 void task_switch(struct task *prev, struct task *next) {
     if(prev == next) {
         return;

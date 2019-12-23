@@ -38,6 +38,7 @@ void acevest();
 #define PORTD   _SFR_IO8(0x0B)
 #define SREG    _SFR_IO8(0x3F)
 
+
 // F_CPU 定义在命令行中
 #ifndef F_CPU
 #error "did not define F_CPU"
