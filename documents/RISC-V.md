@@ -11,7 +11,7 @@ Bumblebe内核遵循的标准 RISC-V 特权架构文档版本为:“特权架构
 
 ### 2. CSR `mtvec`的MODE部分
 
-在riscv-privileged-v1.10.pdf文档中，`mtvect`MODE的合法值为:
+在riscv-privileged-v1.10.pdf文档中，`mtvec`MODE的合法值为:
 
 |Value|Name|Description|
 |:-:|:-:|:--|
@@ -42,6 +42,13 @@ Bumblebe内核遵循的标准 RISC-V 特权架构文档版本为:“特权架构
  1. `mtvt2`的最低位`mtvt2.MTVT2EN == 0`，则所有非向量中断共享的入口地址由CSR寄存器`mtvec`的值(忽略最低2位的值)指定
  2. `mtvt2`的最低位`mtvt2.MTVT2EN == 1`，则所有非向量中断共享的入口地址由CSR寄存器`mtvt2`的值(忽略最低2位的值)指定
 
-ECLIC的每个中断源均可以设置成向量或者非向量处理(通过寄存器`clicintattr[i].shv`)，如果中断被配置为向量处理模式，则该中断被处理器内核响应后，处理器直接跳入该中断的向量入口(Vector Table Entry)存储的目标地址（ECLIC中断向量表的基地址保存在`mtvt`中，通过这个寄存器查得）。
+**注:**
+
+**向量中断模式** *指各个中断直接跳到各个中断的入口地址，由`mtvt`指定*
+
+**非向量中断模式** *指各个中断共享同一个入口地址，由`mtvt2`指定*
+
+每个中断源均可以设置成向量或者非向量处理(通过寄存器`clicintattr[i].shv`)。
+
 
 *疑问：如果`mtvt2.MTVT2EN==0` 且在clicintattr[i]中配置成向量中断，就与riscv-privileged-v1.10.pdf中的"vectored interrupt"基本等价？只是一个是从`mtvt`中取出基址，一个是从`mtvec`中取出基址？*

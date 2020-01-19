@@ -15,6 +15,7 @@ import (
 	"github.com/tarm/serial"
 	"log"
 	"os"
+    "time"
 )
 
 func main() {
@@ -41,6 +42,11 @@ func main() {
 	}
 	defer f.Close()
 
+    time.Sleep(1*time.Second)
+    s.Write([]byte("ATE0\r\n"))
+    time.Sleep(1*time.Second)
+    s.Write([]byte("AT\r\n"))
+    time.Sleep(1*time.Second)
 	for {
 		buf := make([]byte, 4096)
 		n, err := s.Read(buf)
