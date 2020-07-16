@@ -76,7 +76,7 @@ ZSH_THEME="agnoster"
 # 将incr-0.2.zsh保存到~/.oh-my-zsh/custom/plugins/incr/并重命名为incr.plugin.zsh
 plugins=(
  git
- incr
+# incr
 )
 
 source $ZSH/oh-my-zsh.sh
