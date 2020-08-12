@@ -12,8 +12,6 @@ export PATH=$PATH:/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin
 export PATH=$PATH:$HOME/Library/Arduino15/packages/arduino/tools/avrdude/6.0.1-arduino5/bin
 export PATH=$PATH:/usr/local/opt/go/libexec/bin
 export PATH=$PATH:/Users/ace/sys/gnu-mcu-eclipse/riscv-none-gcc/8.2.0-2.2-20190521-0004/bin
-#多个GOPATH用';'分隔 go get会存到第一个目录
-export GOPATH=$HOME/workspace/go:$HOME/workspace/web/qossvr/
 export RTOS_PATH=$HOME/workspace/acecode/rtos/
 
 RED="\[\033[01;31m\]"

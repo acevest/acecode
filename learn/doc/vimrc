@@ -157,3 +157,6 @@ let g:indentLine_color_term = 239
 let g:indentLine_char='┆'
 let g:indentLine_enabled = 1
 let g:indentLine_showFirstIndentLevel = 1
+
+" 禁用vim中鼠标点击时自动进入虚拟选中模式(visual mode)
+set mouse-=a
