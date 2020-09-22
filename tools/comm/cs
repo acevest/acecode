@@ -6,7 +6,9 @@
 # Description:	Create Source Code
 # ------------------------------------------------------------------------
 use strict;
-use POSIX qw(strftime);
+use POSIX qw(strftime setlocale);
+
+setlocale(&POSIX::LC_ALL,'en_US.UTF-8');
 
 my $filename    = "  File Name: ";
 my $author      = "     Author: Zhao Yanbai\n";
@@ -90,13 +92,18 @@ foreach my $file (@ARGV) {
         $f = "H_" . uc($f) . "__";
         $as .= "\n#pragma once\n";
     } elsif($index eq "go") {
+        $as .= "\n";
         $as .= "package main\n";
+        $as .= "\n";
         $as .= "import (\n";
         $as .= "\t\"fmt\"\n";
-        $as .= ")\n\n";
+        $as .= ")\n";
+        $as .= "\n";
         $as .= "func main() {\n";
-        $as .= "\tdefer fmt.Println(\"Program Exited...\")\n\n";
+        $as .= "\tdefer fmt.Println(\"Program Exited...\")\n";
+        $as .= "\n";
         $as .= "}";
+        $as .= "\n";
         $as = "" unless($create_main);
     } elsif($index eq "py") {
     } elsif($index eq "rb") {
