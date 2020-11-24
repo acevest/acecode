@@ -8,7 +8,7 @@
 use strict;
 use POSIX qw(strftime setlocale);
 
-setlocale(&POSIX::LC_ALL,'en_US.UTF-8');
+setlocale(&POSIX::LC_TIME,'en_US.UTF-8');
 
 my $filename    = "  File Name: ";
 my $author      = "     Author: Zhao Yanbai\n";
@@ -34,6 +34,7 @@ my %s = ("c"        => {CSTYLE},
          "go"       => {CSTYLE},
          "cpp"      => {CSTYLE},
          "h"        => {CSTYLE},
+         "rs"       => {CSTYLE},
          "pl"       => {env=>"#!/usr/bin/env perl\n",   SSTYLE},
          "py"       => {env=>"#!/usr/bin/env python\n# -*- coding: utf-8 -*-\n", SSTYLE},
          "rb"       => {env=>"#!/usr/bin/env ruby -w\n", SSTYLE}
