@@ -14,7 +14,6 @@ const char* websockets_server_host = "10.0.0.6";
 const uint16_t websockets_server_port = 80;
 
 WiFiItem_t WiFiTable[] = {
-  { "AceNetGear2G", "acewifipwdis123" },
   { "WiFiName1", "" },
   { "WiFiName2", "12345678" },
   { "WiFiName3", "87654321" }

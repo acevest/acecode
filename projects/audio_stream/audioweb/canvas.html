@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>CANVAS VIDEO</title>
+    <style>
+        #Video {
+            border: 1px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="Video" width="120" height="160"></canvas>
+    <pre id="Stat"></pre>
+    <pre id="Msg"></pre>
+
+    <script>
+        var ws;
+        var wsURL = "ws://127.0.0.1/stream";
+        var canvas = document.getElementById('Video');
+        var ctx = canvas.getContext('2d'); 
+
+        var frameCount = 0;
+        var totalBytes = 0;
+        window.setInterval(function() {
+            fps = frameCount;
+            bytes = totalBytes;
+
+            frameCount = 0;
+            totalBytes = 0;
+            
+            var Stat = document.getElementById('Stat');
+            Stat.innerHTML = "当前帧率: " + fps + " fps, 带宽:" + (bytes*8.0/(1024.0*1024.0)).toFixed(1) + " Mbps";
+        },1000)
+
+        function Msg(...args) {
+            msg = args.join('');
+            console.log(msg);
+
+            var Msg = document.getElementById('Msg');
+            contents = Msg.innerHTML;
+            contents += msg;
+            slice = contents.split('\n').slice(-5);
+            msg = slice.join('\n')+'\n';
+            Msg.innerHTML = msg;
+        }
+    
+        function initWebsocket() {
+            ws = new WebSocket(wsURL);
+            ws.SendCmd = function(req) {
+                req = JSON.stringify(req);
+                ws.send(req);
+            }
+    
+            ws.onopen = function () {
+                Msg("websocket opened");
+            };
+    
+            ws.onerror = function (event) {
+                Msg("websocket error: " + event);
+            };
+    
+            ws.onclose = function (event) {
+                Msg("websocket closed with code: " + event.code + " reason: " + event.reason);
+            };
+    
+            ws.onmessage = function (event) {
+                imageData = event.data;
+                frameCount++;
+                totalBytes += imageData.size;
+                Msg("frame data len: ", imageData.size);
+                var image = new Image();
+                image.src = URL.createObjectURL(imageData);
+                image.onload = () => {
+                    URL.revokeObjectURL(image.src);
+                    ctx.save();
+                    ctx.translate(60, 80);
+                    ctx.rotate(90*(Math.PI/180));
+                    ctx.translate(-80, -60);
+                    ctx.drawImage(image, 0, 0);
+                    ctx.restore();
+                }
+            };
+        }
+
+        initWebsocket();
+    </script>
+</body>
+
+</html>
