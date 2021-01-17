@@ -32,7 +32,7 @@ var upgrader = websocket.Upgrader{
 var frameChan chan []byte
 
 func init() {
-	frameChan = make(chan []byte, 32)
+	frameChan = make(chan []byte, 1024)
 }
 
 const (
@@ -105,6 +105,8 @@ func streamHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
 	var ws *websocket.Conn
 
+	log.Printf("stream\n")
+
 	ws, err = upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Printf("err: %v", err)
@@ -117,7 +119,9 @@ func streamHandler(w http.ResponseWriter, r *http.Request) {
 		var data []byte
 		select {
 		case data = <-frameChan:
-		case <-time.After(1 * time.Millisecond):
+        //case <-time.After(1 * time.Millisecond):
+        default:
+            time.Sleep(10 * time.Millisecond)
 			continue
 		}
 

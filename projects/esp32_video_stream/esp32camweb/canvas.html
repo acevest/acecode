@@ -13,21 +13,26 @@
 
 <body>
     <canvas id="Video" width="240" height="320"></canvas>
-    <pre id="FrameRate"></pre>
+    <pre id="Stat"></pre>
     <pre id="Msg"></pre>
 
     <script>
         var ws;
-        var wsURL = "wss://10.0.0.10/stream";
+        var wsURL = "ws://127.0.0.1/stream";
         var canvas = document.getElementById('Video');
         var ctx = canvas.getContext('2d'); 
 
         var frameCount = 0;
+        var totalBytes = 0;
         window.setInterval(function() {
             fps = frameCount;
+            bytes = totalBytes;
+
             frameCount = 0;
-            var FrameRate = document.getElementById('FrameRate');
-            FrameRate.innerHTML = "当前帧率: " + fps + " fps";
+            totalBytes = 0;
+            
+            var Stat = document.getElementById('Stat');
+            Stat.innerHTML = "当前帧率: " + fps + " fps, 带宽:" + (bytes*8.0/(1024.0*1024.0)).toFixed(1) + " Mbps";
         },1000)
 
         function Msg(...args) {
@@ -64,6 +69,7 @@
             ws.onmessage = function (event) {
                 imageData = event.data;
                 frameCount++;
+                totalBytes += imageData.size;
                 Msg("frame data len: ", imageData.size);
                 var image = new Image();
                 image.src = URL.createObjectURL(imageData);
