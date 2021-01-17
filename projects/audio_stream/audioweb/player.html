@@ -15,125 +15,124 @@
     <pre id="Msg"></pre>
 
     <script>
-        var ws;
-        var wsURL = "ws://10.0.0.6/stream";
+      var ws;
+      var wsURL = "ws://10.0.0.6/stream";
 
-        var frameCount = 0;
-        var totalBytes = 0;
-        window.setInterval(function() {
-            fps = frameCount;
-            bytes = totalBytes;
+      var frameCount = 0;
+      var totalBytes = 0;
+      window.setInterval(function() {
+        fps = frameCount;
+        bytes = totalBytes;
 
-            frameCount = 0;
-            totalBytes = 0;
+        frameCount = 0;
+        totalBytes = 0;
 
-            var Stat = document.getElementById('Stat');
-            Stat.innerHTML = "当前帧率: " + fps + " fps, 带宽:" + (bytes*8.0/(1024.0*1024.0)).toFixed(1) + " Mbps";
-        },1000)
+        var Stat = document.getElementById('Stat');
+        Stat.innerHTML = "当前帧率: " + fps + " fps, 带宽:" + (bytes*8.0/(1024.0*1024.0)).toFixed(1) + " Mbps";
+      },1000)
 
-        function Msg(...args) {
-            msg = args.join('');
-            console.log(msg);
+      function Msg(...args) {
+        msg = args.join('');
+        console.log(msg);
 
-            var Msg = document.getElementById('Msg');
-            contents = Msg.innerHTML;
-            contents += msg;
-            slice = contents.split('\n').slice(-5);
-            msg = slice.join('\n')+'\n';
-            Msg.innerHTML = msg;
+        var Msg = document.getElementById('Msg');
+        contents = Msg.innerHTML;
+        contents += msg;
+        slice = contents.split('\n').slice(-5);
+        msg = slice.join('\n')+'\n';
+        Msg.innerHTML = msg;
+      }
+
+      class PcmDataPlayer {
+        constructor() {
+          this.sampleRate = 8000;
+          this.flushTime = 1000;
+          this.audioSamples = new Float32Array();
+
+          this.audioCtx = new window.AudioContext();
+          this.gainNode = this.audioCtx.createGain();
+          this.gainNode.connect(this.audioCtx.destination);
+          this.startTime = this.audioCtx.currentTime;
+
+          setInterval(this.play.bind(this), this.flushTime);
+        }
+        play() {
+          const length = this.audioSamples.length;
+
+          if (0 == length) {
+            return
+          }
+
+          const audioBuffer = this.audioCtx.createBuffer(1, length, this.sampleRate);
+          const audioData = audioBuffer.getChannelData(0);
+          for (let i = 0; i < length; i++) {
+            audioData[i] = this.audioSamples[i];
+          }
+
+          if (this.startTime < this.audioCtx.currentTime) {
+            this.startTime = this.audioCtx.currentTime;
+          }
+          console.log('start vs current ' + this.startTime.toFixed(2) + ' vs ' + this.audioCtx.currentTime.toFixed(2) + ' duration: ' + audioBuffer.duration.toFixed(2));
+
+          var bufferSource = this.audioCtx.createBufferSource();
+          bufferSource.buffer = audioBuffer;
+          bufferSource.connect(this.gainNode);
+          bufferSource.start(this.startTime);
+          this.startTime += audioBuffer.duration;
+          this.audioSamples = new Float32Array();
         }
 
-        class PcmDataPlayer {
-          constructor() {
-              this.sampleRate = 8000;
-              this.flushTime = 1000;
-              this.audioSamples = new Float32Array();
-
-              this.audioCtx = new window.AudioContext();
-              this.gainNode = this.audioCtx.createGain();
-              this.gainNode.connect(this.audioCtx.destination);
-              this.startTime = this.audioCtx.currentTime;
-
-              setInterval(this.play.bind(this), this.flushTime);
-          }
-          play() {
-            const length = this.audioSamples.length;
-
-            if (0 == length) {
-              return
-            }
-
-            const audioBuffer = this.audioCtx.createBuffer(1, length, this.sampleRate);
-            const audioData = audioBuffer.getChannelData(0);
-            for (let i = 0; i < length; i++) {
-              audioData[i] = this.audioSamples[i];
-            }
-
-            if (this.startTime < this.audioCtx.currentTime) {
-              this.startTime = this.audioCtx.currentTime;
-            }
-            console.log('start vs current ' + this.startTime.toFixed(2) + ' vs ' + this.audioCtx.currentTime.toFixed(2) + ' duration: ' + audioBuffer.duration.toFixed(2));
-
-            var bufferSource = this.audioCtx.createBufferSource();
-            bufferSource.buffer = audioBuffer;
-            bufferSource.connect(this.gainNode);
-            bufferSource.start(this.startTime);
-            this.startTime += audioBuffer.duration;
-            this.audioSamples = new Float32Array();
+        putAudioData(data) {
+          let float32Data = new Float32Array(data.length);
+          for (let i = 0; i < data.length; i++) {
+            float32Data[i] = data[i] / (32768.0/5.0);
           }
 
-          putAudioData(data) {
-            let float32Data = new Float32Array(data.length);
-            for (let i = 0; i < data.length; i++) {
-              float32Data[i] = data[i] / (32768.0/5.0);
-            }
+          const tmp = new Float32Array(this.audioSamples.length + float32Data.length);
+          tmp.set(this.audioSamples, 0);
+          tmp.set(float32Data,       this.audioSamples.length);
+          this.audioSamples = tmp;
+        }
+      }
 
-            const tmp = new Float32Array(this.audioSamples.length + float32Data.length);
-            tmp.set(this.audioSamples, 0);
-            tmp.set(float32Data,       this.audioSamples.length);
-            this.audioSamples = tmp;
+      // play函数会初始化音频设备
+      // 浏览器要求必需要用户手动触发，不能自动播放
+      // 因此该函数通过网页上的按钮click调用，而不是网页加载完成后直接调用
+      function play() {
+        var player = new PcmDataPlayer();
+
+        function initWebsocket() {
+          ws = new WebSocket(wsURL);
+          ws.binaryType = 'arraybuffer';
+          ws.SendCmd = function(req) {
+            req = JSON.stringify(req);
+            ws.send(req);
           }
+
+          ws.onopen = function () {
+            Msg("websocket opened");
+          };
+
+          ws.onerror = function (event) {
+            Msg("websocket error: " + event);
+          };
+
+          ws.onclose = function (event) {
+            Msg("websocket closed with code: " + event.code + " reason: " + event.reason);
+          };
+
+          ws.onmessage = function (event) {
+            data = event.data;
+            frameCount++;
+            totalBytes += data.byteLength;
+
+            data = Array.prototype.slice.call(new Uint16Array(data));
+            player.putAudioData(data);
+          };
         }
 
-        // play函数会初始化音频设备
-        // 浏览器要求必需要用户手动触发，不能自动播放
-        // 因此该函数通过网页上的按钮click调用，而不是网页加载完成后直接调用
-        function play() {
-          var player = new PcmDataPlayer();
-
-          function initWebsocket() {
-              ws = new WebSocket(wsURL);
-              ws.binaryType = 'arraybuffer';
-              ws.SendCmd = function(req) {
-                  req = JSON.stringify(req);
-                  ws.send(req);
-              }
-
-              ws.onopen = function () {
-                  Msg("websocket opened");
-              };
-
-              ws.onerror = function (event) {
-                  Msg("websocket error: " + event);
-              };
-
-              ws.onclose = function (event) {
-                  Msg("websocket closed with code: " + event.code + " reason: " + event.reason);
-              };
-
-              ws.onmessage = function (event) {
-                  data = event.data;
-                  frameCount++;
-                  totalBytes += data.byteLength;
-
-                  data = Array.prototype.slice.call(new Uint16Array(data));
-                  player.putAudioData(data);
-              };
-          }
-
-          initWebsocket();
-        }
-
+        initWebsocket();
+      }
     </script>
 </body>
 
