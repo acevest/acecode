@@ -32,40 +32,9 @@ var upgrader = websocket.Upgrader{
 var frameChan chan []byte
 
 func init() {
-	frameChan = make(chan []byte, 8)
+	frameChan = make(chan []byte, 128)
 }
 
-const (
-	partBOUNDARY      = "123456789000000000000987654321"
-	streamContentType = "multipart/x-mixed-replace;boundary=" + partBOUNDARY
-	streamBoundary    = "\r\n--" + partBOUNDARY + "\r\n"
-	streamPart        = "Content-Type: image/jpeg\r\nContent-Length: %d\r\n\r\n"
-)
-
-func watchHandler(w http.ResponseWriter, r *http.Request) {
-	var err error
-	w.Header().Set("Content-Type", streamContentType)
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-
-	flusher, _ := w.(http.Flusher)
-
-	for i := 0; ; i++ {
-		var data []byte
-		select {
-		case data = <-frameChan:
-			fmt.Fprintf(w, "%v", streamBoundary)
-			fmt.Fprintf(w, streamPart, i)
-			_, err = w.Write(data)
-			flusher.Flush()
-			if err != nil {
-				break
-			}
-		default:
-			continue
-		}
-
-	}
-}
 
 func audioHandler(w http.ResponseWriter, r *http.Request) {
 	var err error
@@ -151,8 +120,8 @@ func streamHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func canvasHandler(w http.ResponseWriter, r *http.Request) {
-	tmpl := template.Must(template.ParseFiles("./canvas.html"))
+func playerHandler(w http.ResponseWriter, r *http.Request) {
+	tmpl := template.Must(template.ParseFiles("./player.html"))
 	var data = map[string]interface{}{}
 	tmpl.Execute(w, data)
 }
@@ -161,9 +130,8 @@ func main() {
 	defer fmt.Println("Program Exited...")
 
 	m := http.NewServeMux()
-	m.HandleFunc("/watch", watchHandler)
 	m.HandleFunc("/audio", audioHandler)
-	m.HandleFunc("/canvas", canvasHandler)
+	m.HandleFunc("/player", playerHandler)
 	m.HandleFunc("/stream", streamHandler)
 	server := http.Server{
 		Addr:    ":80",
