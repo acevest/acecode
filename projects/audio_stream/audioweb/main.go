@@ -60,19 +60,6 @@ func audioHandler(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-
-        /*
-        data := make([]byte, len(p)/2, len(p)/2)
-        k := 0
-        for i :=0; i<len(p); i++ {
-            if (i / 2) % 2 == 1 {
-                continue
-            }
-
-            data[k] = p[i]
-            k++
-        }*/
-
 		select {
 		case frameChan <- p:
 			log.Printf("put frame")

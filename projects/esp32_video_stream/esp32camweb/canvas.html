@@ -46,26 +46,26 @@
             msg = slice.join('\n')+'\n';
             Msg.innerHTML = msg;
         }
-    
+
         function initWebsocket() {
             ws = new WebSocket(wsURL);
             ws.SendCmd = function(req) {
                 req = JSON.stringify(req);
                 ws.send(req);
             }
-    
+
             ws.onopen = function () {
                 Msg("websocket opened");
             };
-    
+
             ws.onerror = function (event) {
                 Msg("websocket error: " + event);
             };
-    
+
             ws.onclose = function (event) {
                 Msg("websocket closed with code: " + event.code + " reason: " + event.reason);
             };
-    
+
             ws.onmessage = function (event) {
                 imageData = event.data;
                 frameCount++;
