@@ -12,7 +12,8 @@ export ZSH="/Users/ace/.oh-my-zsh"
 
 # 需要安装字体: https://github.com/powerline/fonts.git
 # 字体安装之后，需要将终端的字体设置为‘Roboto Mono for Powerline
-ZSH_THEME="agnoster"
+#ZSH_THEME="agnoster"
+ZSH_THEME="zhaoyanbai"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -76,6 +77,7 @@ ZSH_THEME="agnoster"
 # 将incr-0.2.zsh保存到~/.oh-my-zsh/custom/plugins/incr/并重命名为incr.plugin.zsh
 plugins=(
  git
+ zsh-autosuggestions
 # incr
 )
 
@@ -118,6 +120,7 @@ export PATH=$PATH:$HOME/Library/Arduino15/packages/arduino/tools/avrdude/6.0.1-a
 export PATH=$PATH:/usr/local/opt/go/libexec/bin
 export PATH=$PATH:/Users/ace/sys/gnu-mcu-eclipse/riscv-none-gcc/8.2.0-2.2-20190521-0004/bin
 export RTOS_PATH=$HOME/workspace/acecode/rtos/
+export PATH=$PATH:$HOME/go/bin
 
 export PATH=/usr/local/sbin:$PATH
 export PATH=$HOME/.local/bin:$PATH
