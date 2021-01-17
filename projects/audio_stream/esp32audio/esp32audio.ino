@@ -48,7 +48,7 @@ void setup_wifi() {
 
 
 
-void setup_max9841() {
+void setup_max9814() {
   i2s_config_t i2s_config = {
     .mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_RX | I2S_MODE_TX | I2S_MODE_DAC_BUILT_IN | I2S_MODE_ADC_BUILT_IN),
     .sample_rate = SAMPLE_RATE,
@@ -64,42 +64,37 @@ void setup_max9841() {
   Serial.println("using ADC_builtin");
   i2s_driver_install(I2S_NUM_0, &i2s_config, 0, NULL);
 
-  // GPIO36, VP
+  // 使用ESP32的GPIO36, 也就是ADC0、SVP引脚来采样
   i2s_set_adc_mode(ADC_UNIT_1, ADC1_CHANNEL_0);
 }
 
 const int audioBufSize = 1024;
-char audioBufA[audioBufSize];
-//char audioBufB[audioBufSize];
-char *curtAudioBuf = audioBufA;
-
+char audioBuf[audioBufSize];
 
 bool webSocketConnected = false;
 
-void capture_audio(void *args) {
-  //while(1) {
-    i2s_read_bytes(I2S_NUM_0, (char *)curtAudioBuf, audioBufSize, portMAX_DELAY);
+void capture_audio() {
+  i2s_read_bytes(I2S_NUM_0, (char *)audioBuf, audioBufSize, portMAX_DELAY);
 
-    // 只要单声道数据
-    uint16_t *buf = (uint16_t *)curtAudioBuf;
-    int to = 0;
-    for (int i = 0; i < audioBufSize / 2; i += 2) {
-      buf[to] = buf[i];
-      to++;
+  // 只要单声道数据
+  uint16_t *buf = (uint16_t *)audioBuf;
+  int to = 0;
+  for (int i = 0; i < audioBufSize / 2; i += 2) {
+    buf[to] = buf[i];
+    to++;
+  }
+  if (webSocketConnected && client.available()) {
+    Serial.println("before send");
+    client.sendBinary((const char *)audioBuf, audioBufSize / 2);
+    Serial.println("read and send audio data");
+  } else {
+    if (!webSocketConnected) {
+      Serial.println("websocket not connected");
     }
-    if (webSocketConnected && client.available()) {
-      Serial.println("before send");
-      client.sendBinary((const char *)curtAudioBuf, audioBufSize / 2);
-      Serial.println("read and send audio data");
-    } else {
-      if(!webSocketConnected) {
-        Serial.println("websocket not connected");
-      }
-      if(client.available()) {
-        Serial.println("client not available");
-      }
+    if (client.available()) {
+      Serial.println("client not available");
     }
-  //}
+  }
 }
 
 
@@ -107,7 +102,7 @@ void capture_audio(void *args) {
 void setup() {
   Serial.begin(115200);
 
-  setup_max9841();
+  setup_max9814();
 
   setup_wifi();
 }
@@ -122,7 +117,7 @@ void loop() {
   }
 
   if (client.available()) {
-    capture_audio(0);
+    capture_audio();
     client.poll();
   } else {
     Serial.println("Connected to Wifi, Connecting to server.");
