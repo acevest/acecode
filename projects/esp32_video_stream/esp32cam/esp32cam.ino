@@ -10,10 +10,11 @@ typedef struct {
   const char *pwd;
 } WiFiItem_t;
 
-const char* websockets_server_host = "10.0.0.10";
+const char* websockets_server_host = "10.0.0.6";
 const uint16_t websockets_server_port = 80;
 
 WiFiItem_t WiFiTable[] = {
+  { "AceNetGear2G", "acewifipwdis123" },
   { "WiFiName1", "" },
   { "WiFiName2", "12345678" },
   { "WiFiName3", "87654321" }
@@ -65,10 +66,10 @@ void setup_camera() {
   config.pin_reset = RESET_GPIO_NUM;
   config.xclk_freq_hz = 20000000;
   config.pixel_format = PIXFORMAT_JPEG;
-  config.frame_size = FRAMESIZE_QVGA;
-  config.jpeg_quality = 10;
+  config.frame_size = FRAMESIZE_QQVGA;
+  config.jpeg_quality = 24;
   config.fb_count = 1;
-  
+
 
   esp_err_t err = esp_camera_init(&config);
   if (err != ESP_OK) {
@@ -112,6 +113,7 @@ void capture_video() {
     Serial.println(F("Camera capture failed"));
   } else {
     client.sendBinary((const char *)fb->buf, fb->len);
+    Serial.printf("send %u bytes\n", fb->len);
     esp_camera_fb_return(fb);
     fb = NULL;
   }
