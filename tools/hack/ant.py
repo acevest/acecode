@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 # ------------------------------------------------------------------------
 #   File Name: ant.py
@@ -123,22 +123,31 @@ def ClientHandler(cs, ca) :
 
 def ServerEntry() :
     global gArgs
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
-    s.bind((gArgs.host, gArgs.port))
-    s.listen(10)
-    s.setblocking(True)
+    if gArgs.udp :
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.bind((gArgs.host, gArgs.port))
+        while True :
+            data = s.recv(1024)
+            sys.stdout.write(data)
+            sys.stdout.flush()
 
-    while True :
-        cs, ca = s.accept()
-        Print('[*] Accept connection from {0}:{1}'.format(ca[0], ca[1]))
+    else :
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
+        s.bind((gArgs.host, gArgs.port))
+        s.listen(10)
+        s.setblocking(True)
+
+        while True :
+            cs, ca = s.accept()
+            Print('[*] Accept connection from {0}:{1}'.format(ca[0], ca[1]))
 
 
-        client_thread = threading.Thread(target=ClientHandler, args=(cs, ca, ))
-        client_thread.start()
+            client_thread = threading.Thread(target=ClientHandler, args=(cs, ca, ))
+            client_thread.start()
 
-        if not gArgs.keepopen :
-            break
+            if not gArgs.keepopen :
+                break
 
 def ParseArguments() :
     global gArgs
