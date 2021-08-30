@@ -13,7 +13,8 @@ import (
 	"fmt"
 	"image"
 	"image/color"
-	"image/jpeg"
+	"image/png"
+	//"image/jpeg"
 	"log"
 	"os"
 )
@@ -100,5 +101,6 @@ func main() {
 	f, err := os.OpenFile(dst, os.O_WRONLY|os.O_CREATE, 0600)
 	defer f.Close()
 
-	jpeg.Encode(f, img, nil)
+	//jpeg.Encode(f, img, nil)
+	png.Encode(f, img)
 }

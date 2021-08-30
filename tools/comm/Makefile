@@ -1,7 +1,7 @@
 CC	= gcc
 CPP	= g++
 BINS	= countc htc
-SCRIPTS = cls cs
+SCRIPTS = cls cs int2ip
 DST	= $(HOME)/.local/bin/ 
 
 %.o : %.c
