@@ -14,3 +14,4 @@ dvwa
 build
 Debug
 OneNetMiniBoard
+**/rust/**/target
