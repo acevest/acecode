@@ -44,3 +44,4 @@ export GREP_OPTIONS="--exclude-dir=\.svn"
 export LC_ALL=zh_CN.UTF-8
 export LANG=zh_CN.UTF-8
 export LC_CTYPE=zh_CN.UTF-8
+. "$HOME/.cargo/env"
