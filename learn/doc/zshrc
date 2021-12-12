@@ -3,6 +3,7 @@
 export PATH=$HOME/go/bin:$PATH
 export PATH=$HOME/.cargo/bin:$PATH
 export PATH=$PATH:/usr/local/`whoami`/bochs-2.7/bin/
+export PATH=$PATH:/usr/local/ace/nasm-2.15.05/bin/
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/ace/.oh-my-zsh"
@@ -120,9 +121,6 @@ source $ZSH/oh-my-zsh.sh
 
 export PATH=/usr/local/sbin:$PATH
 export PATH=$HOME/.local/bin:$PATH
-export PATH=$PATH:$HOME/workspace/esp/xtensa-esp32-elf/bin
-export PATH=$PATH:$HOME/workspace/esp/xtensa-lx106-elf/bin
-export IDF_PATH=$HOME/workspace/esp/esp-idf
 export PATH=$PATH:/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin/
 export PATH=$PATH:$HOME/Library/Arduino15/packages/arduino/tools/avrdude/6.0.1-arduino5/bin
 export PATH=$PATH:/usr/local/opt/go/libexec/bin
@@ -130,19 +128,7 @@ export PATH=$PATH:/Users/ace/sys/gnu-mcu-eclipse/riscv-none-gcc/8.2.0-2.2-201905
 export RTOS_PATH=$HOME/workspace/acecode/rtos/
 export PATH=$PATH:$HOME/go/bin
 
-#. $HOME/workspace/esp/esp-idf/export.sh
-alias getidf='. $HOME/workspace/esp/esp-idf/export.sh'
+export IDF_PATH=$HOME/workspace/esp/idf
+
+alias getidf='. $HOME/workspace/esp/idf/export.sh'
 alias idf='idf.py'
-#export IDF_TARGET=esp32c3
-
-
-#export PATH=/usr/local/sbin:$PATH
-#export PATH=$HOME/.local/bin:$PATH
-#export PATH=$PATH:$HOME/workspace/esp/xtensa-esp32-elf/bin
-#export PATH=$PATH:$HOME/workspace/esp/xtensa-lx106-elf/bin
-#export PATH=$PATH:/Applications/Arduino.app/Contents/Java/hardware/tools/avr/bin/
-#export PATH=$PATH:$HOME/Library/Arduino15/packages/arduino/tools/avrdude/6.0.1-arduino5/bin
-#export PATH=$PATH:/usr/local/opt/go/libexec/bin
-#export PATH=$PATH:/Users/ace/sys/gnu-mcu-eclipse/riscv-none-gcc/8.2.0-2.2-20190521-0004/bin
-#export RTOS_PATH=$HOME/workspace/acecode/rtos/
-#
